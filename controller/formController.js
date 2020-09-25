@@ -1,0 +1,140 @@
+const Form = require("../models/Form");
+
+/**
+ * @description formDets contains name, obj of json form 
+ */
+const formCreate = async (formDets, res) => {
+  try {
+    // Validate the INN mast be uniq
+    let NameNotTaken = await validateFormName(formDets.name);
+    if (!NameNotTaken) {
+      return res.status(400).json({
+        message: `form name is already taken.`,
+        success: false,
+      });
+    }
+
+    const form = new Form({
+      name: formDets.name,
+      content: formDets.content,
+    });
+
+    let newForm = await form.save();
+
+    return res.status(201).json({
+      message: "form was create",
+      result: newForm,
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    // Implement logger function (winston)
+    return res.status(500).json({
+      message: "Error on form create.",
+      success: false,
+      error: err,
+    });
+  }
+};
+const formEdit = async (formDets, res) => {
+  try {
+    // Validate the username
+    let NameNotTaken = await validateFormName(formDets.name);
+    if (!NameNotTaken) {
+      return res.status(400).json({
+        message: `form name is already taken.`,
+        success: false,
+      });
+    }
+
+    const newForm = Form({
+      name: formDets.name,
+      content: formDets.content,
+    });
+
+    await newForm.findOneAndUpdate(
+      { _id: formDets._id },
+      { newForm },
+      (err, doc, res) => {
+        if (err) {
+          console.log("error on editing form ");
+          throw err;
+        }
+      }
+    );
+
+    return res.status(201).json({
+      message: "Form was edite",
+      result: newForm,
+      success: true,
+    });
+  } catch (err) {
+    console.log("Form editing finish by error");
+    // Implement logger function (winston)
+    return res.status(500).json({
+      message: "Unable to edit form.",
+      success: false,
+      error: err,
+    });
+  }
+};
+const formGetAll = async (res) => {
+  try {
+    let allForm = await Form.find();
+
+    return res.status(201).json({
+      message: "form get all complited",
+      result: allForm,
+      success: true,
+    });
+  } catch (err) {
+    console.log("Form get all finish by error");
+    // Implement logger function (winston)
+    return res.status(500).json({
+      message: "Unable to get all Froms.",
+      success: false,
+      error: err,
+    });
+  }
+};
+const formGetByName = async (formDets, res) => {
+  try {
+    console.log(formDets)
+    let allForm = await Form.findOne({ name: formDets.name });
+    if (!allForm) {
+      return res.status(400).json({
+        message: `Can't find form name.`,
+        success: false,
+      });
+    }
+    return res.status(201).json({
+      message: "Form get by name was complited",
+      result: allForm.content,
+      success: true,
+    });
+
+  } catch (err) {
+    console.log("Form get by name finish by error");
+    // Implement logger function (winston)
+    return res.status(500).json({
+      message: "Unable to get form by name.",
+      success: false,
+      error: err,
+    });
+  }
+};
+
+const validateFormName = async (name, isEdit = false) => {
+  let form = await Form.find({ name });
+  if (isEdit) {
+    return form.length != 1 ? false : true;
+  }
+  return form.length != 0 ? false : true;
+};
+
+module.exports = {
+  formCreate,
+  formEdit,
+  formGetAll,
+  formGetByName,
+};

@@ -1,0 +1,11 @@
+<nb-card  [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+    <nb-card-header>
+        Пользователи 
+    </nb-card-header>
+  
+    <nb-card-body>
+      <ng2-smart-table class="my-table"  [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (createConfirm)="onCreateConfirm($event)" (editConfirm)="onEditConfirm($event)">
+      </ng2-smart-table>
+    </nb-card-body>
+  </nb-card>
+  

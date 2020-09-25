@@ -1,0 +1,24 @@
+<div class="card-row">
+  <div class="card-col">
+    <nb-card [size]="'medium'">
+      <nb-card-header>Последние добавление</nb-card-header>
+      <nb-card-body>
+        <nb-list>
+          <nb-list-item *ngFor="let item of history">
+            <p>
+              Операция: {{item.name}} <br>
+              Описание: {{ item.description }} <br>
+              Дата: {{item.date.toLocaleString()}} <br>
+              Пользователь: {{item.userlogin}} <br>
+              </p>
+          </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="card-col">
+    <nb-card size="medium">
+      <nb-card-header></nb-card-header>
+    </nb-card>
+  </div>
+</div>

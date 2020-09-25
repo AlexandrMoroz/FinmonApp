@@ -1,0 +1,20 @@
+<div class="row justify-content-end">
+  <button
+    *ngIf="!authService.isLogged()"
+    nbButton
+    hero
+    status="primary"
+    (click)="login()"
+  >
+    Вхід
+  </button>
+  <button
+    *ngIf="authService.isLogged()"
+    nbButton
+    hero
+    status="primary"
+    (click)="logout()"
+  >
+    Вихід
+  </button>
+</div>
