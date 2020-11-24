@@ -38,7 +38,7 @@ const helperCreate = async (helperDets, res) => {
 
 const helperGetByName = async (helperDets, res) => {
   try {
-    console.log(helperDets.name);
+
     let helper = await Helper.findOne({ name: helperDets.name });
 
     if (!helper) {

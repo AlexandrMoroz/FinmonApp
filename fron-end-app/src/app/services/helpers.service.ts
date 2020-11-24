@@ -33,7 +33,7 @@ export class HelperService {
     }
   }
 
-  getTranslateByName(name) {
+  getTranslate(name) {
     if (!localStorage.getItem(name)) {
       return this.http
         .get(`${environment.apiUrl}/api/helper/by-name`, {

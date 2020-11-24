@@ -1,6 +1,6 @@
 const router = require("express").Router();
 // Bring in the User Registration function
-const { userAuth, checkRole } = require("../utils/Auth");
+const { userAuth, checkRole,checkIsBaned } = require("../utils/Auth");
 const {
   userCreater,
   userEditer,

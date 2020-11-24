@@ -9,15 +9,15 @@ const userAuth = passport.authenticate("jwt", { session: false });
  * @DESC Check Role Middleware
  */
 const checkRole = (roles) => (req, res, next) => {
-  console.log(req.user.role);
   !roles.includes(req.user.role)
     ? res.status(401).json("Unauthorized")
     : next();
 };
+
 const serializeUser = (user) => {
   return {
     _id: user._id,
-    block:user.block,
+    block: user.block,
     username: user.username,
     role: user.role,
     email: user.email,
@@ -32,4 +32,5 @@ module.exports = {
   userAuth,
   checkRole,
   serializeUser,
+
 };

@@ -22,7 +22,7 @@ export class HistoryService {
       .pipe(
         tap((ev) => {
           this.helpers
-            .getTranslateByName(`${obj.translate}Translation`)
+            .getTranslate(`Translation`)
             .subscribe(
               (data: any) => {
                 this.Translation = data;

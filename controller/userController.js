@@ -113,7 +113,7 @@ const userLogin = async (userCreds, res) => {
     });
   }
   const isBlock = await User.findOne({ username });
-  if (isBlock.Block) {
+  if (isBlock.block) {
     return res.status(403).json({
       message: "You are being block by admin",
       success: false,
