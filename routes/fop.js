@@ -6,6 +6,7 @@ const {
   FOPCreate,
   FOPEdit,
 } = require("../controller/fopController");
+
 router.post(
   "/create",
   userAuth,
@@ -29,17 +30,12 @@ router.post(
 /**
  * @DECS get all persons in name, family, surname, INN format
  */
-router.get(
-  "/all",
-  userAuth,
-  checkRole(["user", "admin"]),
-  async (req, res) => {
-    console.log(`get all FOPs`);
-    return getFOPs(res);
-  }
-);
+router.get("/all", userAuth, checkRole(["user", "admin"]), async (req, res) => {
+  console.log(`get all FOPs`);
+  return getFOPs(res);
+});
 /**
- * @DECS get person form object by id of object 
+ * @DECS get person form object by id of object
  */
 router.get(
   "/form-data",
@@ -47,7 +43,7 @@ router.get(
   checkRole(["user", "admin"]),
   async (req, res) => {
     console.log(`get FOP form data by id`);
-    return getFOPFormDataById(req.query,res);
+    return getFOPFormDataById(req.query, res);
   }
 );
 module.exports = router;

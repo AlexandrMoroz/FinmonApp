@@ -30,6 +30,4 @@ const PersonSchema = new Schema(
   },
   { timestamps: true }
 );
-PersonSchema.plugin(mongoose_fuzzy_searching, { fields: ['name', 'family','surname',"INN"] });
-
 module.exports = model("persons", PersonSchema);

@@ -19,7 +19,7 @@
         </nb-card> 
     </div>
     <div class=" col">
-        <nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary" class="nd-card-form" [size]="'large'">
+        <nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary" class="nd-card-form" >
             <nb-card-header>Анкета: <button class="btn btn-success" (click)="NewPerson()">Новий клієнт</button>
                 <span *ngIf="SelectedItem"> 
                     {{ SelectedItem.family }} {{SelectedItem.name}} {{SelectedItem.surname}}  {{SelectedItem.INN}}

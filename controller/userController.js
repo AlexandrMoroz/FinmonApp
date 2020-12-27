@@ -23,7 +23,14 @@ const userCreater = async (userDets, res) => {
     const password = await bcrypt.hash(userDets.password, 12);
     // create a new user
     const newUser = new User({
-      ...userDets,
+      block: false,
+      name: userDets.name,
+      family: userDets.family,
+      surname: userDets.surname,
+      cashboxAdress: userDets.cashboxAdress,
+      email: userDets.email,
+      role: "user",
+      username: userDets.username,
       password,
     });
 
@@ -143,7 +150,6 @@ const userLogin = async (userCreds, res) => {
       token: `Bearer ${token}`,
       expiresIn: 28800,
     };
-    console.log(result.username + " " + result.role + " is login");
     return res.status(200).json({
       ...result,
       message: "Hurray! You are now logged in.",
@@ -171,7 +177,7 @@ const validateUsernameOnEdit = async (user) => {
   if (findUsers.length == 1) {
     console.log(findUsers);
     console.log(user);
-    return findUsers[0]._id.toString() === user._id ?  true: false;
+    return findUsers[0]._id.toString() === user._id ? true : false;
   }
   return true;
 };

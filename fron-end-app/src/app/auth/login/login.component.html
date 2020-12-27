@@ -9,7 +9,7 @@
       <nb-card-body>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label for="username">Username</label>
+            <label for="username">Логин</label>
             <input
               type="text"
               formControlName="username"
@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password">Пароль</label>
             <input
               type="password"
               formControlName="password"
@@ -35,7 +35,7 @@
               *ngIf="submitted && f.password.errors"
               class="invalid-feedback"
             >
-              <div *ngIf="f.password.errors.required">Password is required</div>
+              <div *ngIf="f.password.errors.required">Пароль обязательный</div>
             </div>
           </div>
           <button [disabled]="loading" class="btn btn-primary">
@@ -43,7 +43,7 @@
               *ngIf="loading"
               class="spinner-border spinner-border-sm mr-1"
             ></span>
-            Login
+            Войти
           </button>
           <div *ngIf="error" class="alert alert-danger mt-3 mb-0">
             {{ error }}

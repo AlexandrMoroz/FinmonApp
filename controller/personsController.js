@@ -143,14 +143,16 @@ const searchPersons = async (Dets, res) => {
       success: true,
     });
   }
-  console.log(Dets);
-  let persons = await Person.fuzzySearch(Dets.searchText);
-  // ({
-  //   INN: { $regex: 123123, $options: "i" },
-  //   // family: { $regex: Dets.searchText, $options: "i" },
-  //   // name: { $regex: Dets.searchText, $options: "i" },
-  //   // surname: { $regex: Dets.searchText, $options: "i" },
-  // });
+
+  let persons = await Person.find({
+    $or: [
+      { name: Dets.searchText },
+      { family: Dets.searchText },
+      { surname: Dets.searchText },
+      { INN: Dets.searchText },
+    ],
+  });
+
   console.log(persons);
   return res.status(201).json({
     message: "Persons get all succcesed",
