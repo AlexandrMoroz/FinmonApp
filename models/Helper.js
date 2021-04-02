@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model,models } = require("mongoose");
 
 const Helper = new Schema(
   {
@@ -11,7 +11,7 @@ const Helper = new Schema(
       required: true,
     },
   },
-  { timestamps: true }
 );
 
-module.exports = model("helpers", Helper);
+module.exports = models['helpers'] || model('helpers', Helper);
+

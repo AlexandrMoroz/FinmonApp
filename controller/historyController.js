@@ -1,24 +1,25 @@
 const diffHistory = require("mongoose-diff-history/diffHistory");
-const PersonResult = require("../models/PersonFormResult");
-const FopResult = require("../models/FOPFormResult");
-const Helper = require("../models/Helper");
-const getXmls = require("../utils/xmlshistory");
+const PersonResult = require("../models/PersonFormData");
+const { Formater } = require("../utils/formater");
+const XLSXHistory = require("../utils/history");
+const Helper = require("../models/helper");
 
-const PeopleForm = "peopleFormResults";
-const FopForm = "FOPFormResults";
+const PersonFormCollection = "PersonFormData";
 
-const PersonHistoryGetById = async (Dets, res) => {
-  return getHistory(Dets, PersonResult, PeopleForm, res);
+const PersonHistoryGetById = async (body, res) => {
+  return getHistory(body, PersonResult, PersonFormCollection, res);
 };
-const FopHistoryGetById = async (Dets, res) => {
-  return getHistory(Dets, FopResult, FopForm, res);
+const PersonXMLSHistoryGetById = async (body, res) => {
+  return getHistoryXmls(body, PersonResult, PersonFormCollection, res);
 };
-const PersonXMLSHistoryGetById = async (Dets, res) => {
-  return getHistoryXmls(Dets, PersonResult, PeopleForm, res);
-};
-const getHistory = async (Dets, collection, collectionName, res) => {
+
+/**
+ * @DESC get history on json format
+ */
+const getHistory = async (body, collection, collectionName, res) => {
   try {
-    let Result = await collection.findOne({ _id: Dets.id });
+    let Result = await collection.findById(body.id);
+    console.error(body);
     if (!Result) {
       return res.status(400).json({
         message: `Wrong Id.`,
@@ -26,23 +27,26 @@ const getHistory = async (Dets, collection, collectionName, res) => {
       });
     }
 
-    let history = await diffHistory.getDiffs(collectionName, Dets.id);
+    let history = await diffHistory.getDiffs(collectionName, body.id);
 
+    let translate_arr = await Helper.findOne({ name: "translate" });
+    let formater = new Formater(translate_arr.data);
+
+    let temp_history = history.map((item) => {
+      return {
+        diff: formater.format(item.diff),
+        user: item.user,
+        createdAt: item.createdAt,
+      };
+    });
     return res.status(201).json({
       message: "History get by name was complited",
-      result: history.map((item) => {
-        return {
-          diff: item.diff.result,
-          user: item.user,
-          createdAt: item.createdAt,
-        };
-      }),
+      result: temp_history,
       success: true,
     });
   } catch (err) {
     console.log("History get by name finish by error");
     console.log(err);
-
     return res.status(500).json({
       message: "History get by name finish by error.",
       success: false,
@@ -51,22 +55,29 @@ const getHistory = async (Dets, collection, collectionName, res) => {
   }
 };
 
-const getHistoryXmls = async (Dets, collection, collectionName, res) => {
+/**
+ * @DESC get history to excel file
+ */
+const getHistoryXmls = async (body, collection, collectionName, res) => {
   try {
-    let Result = await collection.findOne({ _id: Dets.id });
+    let Result = await collection.exists({ _id: body.id });
     if (!Result) {
       return res.status(400).json({
         message: `Wrong Id.`,
         success: false,
       });
     }
+    let history = await diffHistory.getDiffs(collectionName, body.id);
+    let translate_arr = await Helper.findOne({ name: "translate" });
 
-    let history = await diffHistory.getDiffs(collectionName, Dets.id);
-    let translate = await Helper.findOne({ name: "Translation" });
+    let xmls = new XLSXHistory(translate_arr.data);
+    let buf = xmls.createHistoryBuf(history);
 
-    let xmls = getXmls(history, translate.data);
-    return res.status(201).send(xmls);
-
+    return res.status(201).json({
+      message: "History File was created success",
+      result: buf,
+      success: true
+    });
   } catch (err) {
     console.log("History get by name finish by error");
     console.log(err);
@@ -81,5 +92,5 @@ const getHistoryXmls = async (Dets, collection, collectionName, res) => {
 
 module.exports = {
   PersonHistoryGetById,
-  FopHistoryGetById,
+  PersonXMLSHistoryGetById,
 };

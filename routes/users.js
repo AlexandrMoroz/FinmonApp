@@ -7,6 +7,7 @@ const {
   userLogin,
   getUsers,
 } = require("../controller/userController");
+
 // Users Registeration Route
 router.post(
   "/create-user",

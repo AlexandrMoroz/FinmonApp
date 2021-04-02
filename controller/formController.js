@@ -100,19 +100,20 @@ const formGetAll = async (res) => {
 const formGetByName = async (formDets, res) => {
   try {
     console.log(formDets)
-    let allForm = await Form.findOne({ name: formDets.name });
-    if (!allForm) {
-      return res.status(400).json({
-        message: `Can't find form name.`,
-        success: false,
-      });
-    }
+    // let form = await Form.findOne({ name: formDets.name });
+    // if (!form) {
+    //   return res.status(400).json({
+    //     message: `Can't find form name.`,
+    //     success: false,
+    //   });
+    // }
+    let form = require('../mock/peopleForm.json');
+
     return res.status(201).json({
       message: "Form get by name was complited",
-      result: allForm.content,
+      result: form.content,
       success: true,
     });
-
   } catch (err) {
     console.log("Form get by name finish by error");
     // Implement logger function (winston)

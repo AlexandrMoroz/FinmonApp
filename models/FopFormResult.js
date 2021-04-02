@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const FOPFormResultSchema = new Schema(
+const FOPFormDataSchema = new Schema(
   {
     result: {
       type: Object,
@@ -10,4 +10,4 @@ const FOPFormResultSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model("FOPFormResults", FOPFormResultSchema);
+module.exports = model("FOPFormData", FOPFormDataSchema);

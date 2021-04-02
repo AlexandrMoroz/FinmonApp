@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const { userAuth, checkRole } = require("../utils/Auth");
 const {
-  getPersons,
   getPersonFormDataById,
   personCreate,
   personEdit,
-  searchPersons
+  searchPersons,
+  getPersonXLMS
 } = require("../controller/personsController");
 router.post(
   "/create",
@@ -36,7 +36,7 @@ router.get(
   checkRole(["user", "admin"]),
   async (req, res) => {
     console.log(`get all persons`);
-    return getPersons(res);
+    return getAllPersons(res);
   }
 );
 /**
@@ -61,6 +61,19 @@ router.get(
   async (req, res) => {
     console.log(`search for persons`);
     return searchPersons(req.query,res);
+  }
+);
+
+/**
+ * @DECS get person XLSX buffer
+ */
+ router.get(
+  "/file",
+  userAuth,
+  checkRole(["admin"]),
+  async (req, res) => {
+    console.log(`get person file`);
+    return getPersonXLMS(req.query,res);
   }
 );
 module.exports = router;

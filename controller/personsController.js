@@ -1,50 +1,54 @@
 const Person = require("../models/Person");
-const PersonResult = require("../models/PersonFormResult");
+const PersonFormData = require("../models/PersonFormData");
+const XLSXAnceta = require("../utils/anceta");
+const Helper = require("../models/helper");
+const { success, error } = require("consola");
 const mongoose = require("mongoose");
 /**
  * @DESC person create 1. create form result. 2 create person documen with result id
+ * body: {
+ *  result: {} - form data model
+ *  user: ""
+ * }
  */
-const personCreate = async (Dets, res) => {
+const personCreate = async (body, res) => {
   try {
     // Validate the INN mast be uniq
-    let INNNotTaken = await validateINN(Dets.result.INN);
+    let INNNotTaken = await validateINN(body.result.INN);
     if (!INNNotTaken) {
+      error("INN is already taken.");
       return res.status(400).json({
-        message: `INN is already taken.`,
+        message: "INN is already taken.",
         success: false,
       });
     }
 
     // Validate the INN mast be uniq
-    if (Dets.result.INN.toString().length != 10) {
+    if (body.result.INN.toString().length != 10) {
+      error("INN must have 10 digits");
       return res.status(400).json({
-        message: `INN must have 10 digits`,
+        message: "INN must have 10 digits",
         success: false,
       });
     }
 
     // create a new user
-    const PersonFromResult = new PersonResult({
-      result: Dets.result,
-    });
+    const newPersonForm = await new PersonFormData({
+      result: body.result,
+    }).save();
 
-    const newPersonFOrmResult = await PersonFromResult.save();
-
-    console.log(newPersonFOrmResult._id);
-
-    const person = new Person({
-      name: Dets.result.name,
-      family: Dets.result.family,
-      surname: Dets.result.surname ? Dets.result.surname : "",
-      INN: Dets.result.INN.toString(),
-      user: Dets.user,
-      FormDataResultId: newPersonFOrmResult._id,
-    });
-    let newPerson = await person.save();
+    const person = await new Person({
+      name: body.result.name,
+      family: body.result.family,
+      surname: body.result.surname ? body.result.surname : "",
+      INN: body.result.INN.toString(),
+      user: body.user,
+      FormDataResultId: newPersonForm._id,
+    }).save();
 
     return res.status(201).json({
       message: "Person was create",
-      result: newPerson,
+      result: person,
       success: true,
     });
   } catch (err) {
@@ -61,11 +65,10 @@ const personCreate = async (Dets, res) => {
 /**
  * @DESC To edit the person
  */
-const personEdit = async (Dets, res) => {
+const personEdit = async (body, res) => {
   try {
-    console.log(Dets._id);
     // Validate the username
-    let INNNotTaken = await validateINN(Dets.result.INN, true);
+    let INNNotTaken = await validateINN(body.result.INN, true);
     if (!INNNotTaken) {
       return res.status(400).json({
         message: `INN is already taken.`,
@@ -74,13 +77,13 @@ const personEdit = async (Dets, res) => {
     }
 
     //find person form and edit it
-    await PersonResult.findOneAndUpdate(
-      { _id: Dets.FormDataResultId },
-      { result: Dets.result },
+    await PersonFormData.findOneAndUpdate(
+      { _id: body.FormDataResultId },
+      { result: body.result },
       {
         new: true,
-        __user: Dets.user,
-        __reason: `${Dets.user} updated`,
+        __user: body.user,
+        __reason: `${body.user} updated`,
       },
       (err, doc, res) => {
         if (err) {
@@ -91,14 +94,14 @@ const personEdit = async (Dets, res) => {
     );
 
     let newPerson = {
-      name: Dets.result.name,
-      family: Dets.result.family,
-      surname: Dets.result.surname,
-      INN: Dets.result.INN.toString(),
+      name: body.result.name,
+      family: body.result.family,
+      surname: body.result.surname,
+      INN: body.result.INN.toString(),
     };
 
     let person = await Person.findOneAndUpdate(
-      { _id: Dets._id },
+      { _id: body._id },
       { ...newPerson },
       (err, doc, res) => {
         if (err) {
@@ -127,54 +130,75 @@ const personEdit = async (Dets, res) => {
 /**
  * @DESC To get all users
  */
-const getPersons = async (res) => {
-  let persons = await Person.find();
+const searchPersons = async (body, res) => {
+  try {
+    if (body.searchText.toString().length <= 3) {
+      return res.status(400).json({
+        message: "Search text must be minimum 3 letter or digit",
+        success: true,
+      });
+    }
 
-  return res.status(201).json({
-    message: "Persons get all succcesed",
-    result: persons,
-    success: true,
-  });
-};
-const searchPersons = async (Dets, res) => {
-  if (Dets.searchText.toString().length <= 3) {
-    return res.status(400).json({
-      message: "Search text must be minimum 3 letter or digit",
+    let persons = await Person.find({
+      $or: [
+        { name: body.searchText },
+        { family: body.searchText },
+        { surname: body.searchText },
+        { INN: body.searchText },
+      ],
+    });
+
+    return res.status(201).json({
+      message: "Persons get all succcesed",
+      result: persons,
       success: true,
     });
-  }
-
-  let persons = await Person.find({
-    $or: [
-      { name: Dets.searchText },
-      { family: Dets.searchText },
-      { surname: Dets.searchText },
-      { INN: Dets.searchText },
-    ],
-  });
-
-  console.log(persons);
-  return res.status(201).json({
-    message: "Persons get all succcesed",
-    result: persons,
-    success: true,
-  });
-};
-
-const getPersonFormDataById = async (Dets, res) => {
-  let person = await PersonResult.findOne({ _id: Dets.id });
-
-  if (person.length == 0) {
-    return res.status(400).json({
-      message: `Person not found`,
+  } catch (err) {
+    console.log("Person search finish by error");
+    // Implement logger function (winston)
+    return res.status(500).json({
+      message: "Unable to search person.",
       success: false,
+      error: err,
     });
   }
+};
+/**
+ * @DESC To get person from data by personFromData id
+ */
+const getPersonFormDataById = async (body, res) => {
+  let person = await PersonFormData.findOne({ _id: body.id });
+  IfNullOrEmpty(person, res);
+
   return res.status(201).json({
     message: "Person get by id succcesed",
     result: person,
     success: true,
   });
+};
+
+const getPersonXLMS = async (body, res) => {
+  let person = await PersonFormData.findOne({ _id: body.id });
+  IfNullOrEmpty(person, res);
+
+  let translate = await Helper.findOne({ name: "translate" });
+  let xmls = new XLSXAnceta(translate.data);
+  let buf = xmls.createFormBuf(person);
+
+  return res.status(201).json({
+    message: "Person get XLSX doc by id succcesed",
+    result: buf,
+    success: true,
+  });
+};
+
+const IfNullOrEmpty = (person, res) => {
+  if (person == null || !person) {
+    return res.status(400).json({
+      message: `Person not found`,
+      success: false,
+    });
+  }
 };
 
 const validateINN = async (INN, isEdit = false) => {
@@ -186,9 +210,9 @@ const validateINN = async (INN, isEdit = false) => {
 };
 
 module.exports = {
-  getPersons,
   getPersonFormDataById,
   personCreate,
   personEdit,
   searchPersons,
+  getPersonXLMS,
 };

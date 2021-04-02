@@ -1,6 +1,4 @@
 const { Schema, model, Types } = require("mongoose");
-const mongoose_fuzzy_searching = require('mongoose-fuzzy-searching');
-
 
 const PersonSchema = new Schema(
   {

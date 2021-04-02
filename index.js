@@ -21,7 +21,7 @@ require("./middlewares/passport")(passport);
 // User Router Middleware
 app.use("/api/users", require("./routes/users"));
 app.use("/api/person", require("./routes/person"));
-app.use("/api/FOP", require("./routes/fop"));
+//app.use("/api/FOP", require("./routes/fop"));
 app.use("/api/form", require("./routes/form"));
 app.use("/api/helper", require("./routes/helper"));
 app.use("/api/history", require("./routes/history"));
@@ -41,7 +41,7 @@ const startApp = async () => {
     });
 
     // Start Listenting for the server on PORT
-    app.listen(PORT, () =>
+    app.listen(PORT,'0.0.0.0', () =>
       success({ message: `Server started on PORT ${PORT}`, badge: true })
     );
   } catch (err) {
