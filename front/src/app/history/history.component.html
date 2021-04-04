@@ -1,22 +1,13 @@
 <div class="row">
-  <div class="col-3">
+  <div class="col-sm col-md-3 ">
     <nb-card
       *ngIf="selectedService"
       [nbSpinner]="isLoading"
       nbSpinnerSize="giant"
       nbSpinnerStatus="primary"
-      [size]="'small'"
+      class="nd-card-select-group col search-card" 
     >
       <nb-card-header>Результат поиска</nb-card-header>
-      <input
-        type="text"
-        [ngModelOptions]="{ standalone: true }"
-        [(ngModel)]="SearchText"
-        (keyup)="onKey($event)"
-        nbInput
-        fieldSize="medium"
-        placeholder="Поиск"
-      />
       <nb-card-body>
         <nb-list>
           <nb-list-item
@@ -32,6 +23,15 @@
           </nb-list-item>
         </nb-list>
       </nb-card-body>
+      <input
+        type="text"
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="SearchText"
+        (keyup)="onKey($event)"
+        nbInput
+        class="search-card__input col w-100 input-full-width"
+        placeholder="Поиск"
+      />
     </nb-card>
     <nb-card
       nbSpinnerSize="giant"
@@ -54,12 +54,12 @@
       </nb-card-body>
     </nb-card>
   </div>
-  <div class="col-9">
+  <div class="col-sm col-md-9 ">
     <nb-card
       [nbSpinner]="isLoading"
       nbSpinnerSize="giant"
       nbSpinnerStatus="primary"
-      [size]="'large'"
+      class="history-card"
     >
       <nb-card-header
         >История:
@@ -67,7 +67,9 @@
           {{ selectedItem.family }} {{ selectedItem.name }}
           {{ selectedItem.surname }} {{ selectedItem.INN }}
         </span>
-        <button (click)="downloadHistory($event, selectedItem)" nbButton>Завантажити</button>
+        <button (click)="downloadHistory($event, selectedItem)" nbButton>
+          Завантажити
+        </button>
       </nb-card-header>
       <nb-card-body>
         <div class="container">

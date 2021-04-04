@@ -1,35 +1,41 @@
 
-  ::ng-deep .nb-theme-dark .my-table .ng2-smart-action.ng2-smart-action-add-add {
+  ::ng-deep .nb-theme-dark .user-table .ng2-smart-action.ng2-smart-action-add-add {
     font-size: 1rem !important;
   }
   
-  ::ng-deep .nb-theme-dark .my-table .ng2-smart-action.ng2-smart-action-add-create {
+  ::ng-deep .nb-theme-dark .user-table .ng2-smart-action.ng2-smart-action-add-create {
     font-size: 1rem !important;
   }
   
-  ::ng-deep .nb-theme-dark .my-table .ng2-smart-action.ng2-smart-action-add-cancel {
+  ::ng-deep .nb-theme-dark .user-table .ng2-smart-action.ng2-smart-action-add-cancel {
     font-size: 1rem !important;
   }
   
-  ::ng-deep .nb-theme-dark .my-table .ng2-smart-actions .ng2-smart-action-edit-edit {
+  ::ng-deep .nb-theme-dark .user-table .ng2-smart-actions .ng2-smart-action-edit-edit {
     font-size: 1rem !important;
   }
   
-  ::ng-deep .nb-theme-dark .my-table .ng2-smart-actions .ng2-smart-action-delete-delete {
+  ::ng-deep .nb-theme-dark .user-table .ng2-smart-actions .ng2-smart-action-delete-delete {
     font-size: 1rem !important;
   }
   
-  ::ng-deep .nb-theme-dark .my-table .ng2-smart-actions .ng2-smart-action-edit-save {
+  ::ng-deep .nb-theme-dark .user-table .ng2-smart-actions .ng2-smart-action-edit-save {
     font-size: 1rem !important;
   }
   
-  ::ng-deep .nb-theme-dark .my-table .ng2-smart-actions .ng2-smart-action-edit-cancel {
+  ::ng-deep .nb-theme-dark .user-table .ng2-smart-actions .ng2-smart-action-edit-cancel {
     font-size: 1rem !important;
  
   }
-  ::ng-deep .nb-theme-dark .my-table  input{
+  ::ng-deep .nb-theme-dark .user-table  input{
     color: #495057 !important;
   }
-  ::ng-deep .nb-theme-dark .my-table  input[type='checkbox']{
+  ::ng-deep .nb-theme-dark .user-table  input[type='checkbox']{
     height: 1.5rem !important;
+  }
+  ::ng-deep .user-table tr th:first-child{
+    width: 90px;
+  }
+  ::ng-deep .user-table .user-table__block-column{
+    width: 50px;
   }

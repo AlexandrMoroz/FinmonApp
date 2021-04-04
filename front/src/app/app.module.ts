@@ -42,7 +42,6 @@ import {
   NbInputModule,
   NbSpinnerModule,
 } from '@nebular/theme';
-import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -78,7 +77,6 @@ import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component
     NbSidebarModule.forRoot(),
     NbThemeModule.forRoot({ name: 'dark' }),
     NbLayoutModule,
-    NbEvaIconsModule,
     NbIconModule,
     NbButtonModule,
     NbMenuModule.forRoot(),

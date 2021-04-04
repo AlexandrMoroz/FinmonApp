@@ -1,7 +1,7 @@
 const Form = require("../models/Form");
 
 /**
- * @description formDets contains name, obj of json form 
+ * @description formDets contains name, obj of json form
  */
 const formCreate = async (formDets, res) => {
   try {
@@ -78,28 +78,10 @@ const formEdit = async (formDets, res) => {
     });
   }
 };
-const formGetAll = async (res) => {
-  try {
-    let allForm = await Form.find();
 
-    return res.status(201).json({
-      message: "form get all complited",
-      result: allForm,
-      success: true,
-    });
-  } catch (err) {
-    console.log("Form get all finish by error");
-    // Implement logger function (winston)
-    return res.status(500).json({
-      message: "Unable to get all Froms.",
-      success: false,
-      error: err,
-    });
-  }
-};
+
 const formGetByName = async (formDets, res) => {
   try {
-    console.log(formDets)
     // let form = await Form.findOne({ name: formDets.name });
     // if (!form) {
     //   return res.status(400).json({
@@ -107,7 +89,7 @@ const formGetByName = async (formDets, res) => {
     //     success: false,
     //   });
     // }
-    let form = require('../mock/peopleForm.json');
+    let form = require("../mock/peopleForm.json");
 
     return res.status(201).json({
       message: "Form get by name was complited",
@@ -136,6 +118,5 @@ const validateFormName = async (name, isEdit = false) => {
 module.exports = {
   formCreate,
   formEdit,
-  formGetAll,
   formGetByName,
 };

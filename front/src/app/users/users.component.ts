@@ -10,6 +10,8 @@ import { UserModel } from '../shared/models';
 })
 export class UsersComponent implements OnInit {
   settings = {
+    actions: { columnTitle: ''},
+    class:"user-table",
     add: {
       addButtonContent: '<i class="fas fa-plus"></i>',
       createButtonContent: '<i class="fas fa-check"></i>',

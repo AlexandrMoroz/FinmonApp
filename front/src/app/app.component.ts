@@ -12,7 +12,6 @@ export class AppComponent {
   flag: boolean = false;
   constructor(
     public authService: AuthService,
-    private sidebarService: NbSidebarService,
     private iconLibraries: NbIconLibraries
   ) {
     this.iconLibraries.registerFontPack('font-awesome', {packClass:"fas", iconClassPrefix: 'fa' });
