@@ -1,12 +1,12 @@
 const Form = require("../models/Form");
 
 /**
- * @description formDets contains name, obj of json form
+ * @description body contains name, obj of json form
  */
-const formCreate = async (formDets, res) => {
+const formCreate = async (body, res) => {
   try {
     // Validate the INN mast be uniq
-    let NameNotTaken = await validateFormName(formDets.name);
+    let NameNotTaken = await validateFormName(body.name);
     if (!NameNotTaken) {
       return res.status(400).json({
         message: `form name is already taken.`,
@@ -15,8 +15,8 @@ const formCreate = async (formDets, res) => {
     }
 
     const form = new Form({
-      name: formDets.name,
-      content: formDets.content,
+      name: body.name,
+      content: body.content,
     });
 
     let newForm = await form.save();
@@ -36,10 +36,10 @@ const formCreate = async (formDets, res) => {
     });
   }
 };
-const formEdit = async (formDets, res) => {
+const formEdit = async (body, res) => {
   try {
     // Validate the username
-    let NameNotTaken = await validateFormName(formDets.name);
+    let NameNotTaken = await validateFormName(body.name);
     if (!NameNotTaken) {
       return res.status(400).json({
         message: `form name is already taken.`,
@@ -48,12 +48,12 @@ const formEdit = async (formDets, res) => {
     }
 
     const newForm = Form({
-      name: formDets.name,
-      content: formDets.content,
+      name: body.name,
+      content: body.content,
     });
 
     await newForm.findOneAndUpdate(
-      { _id: formDets._id },
+      { _id: body._id },
       { newForm },
       (err, doc, res) => {
         if (err) {
@@ -79,17 +79,22 @@ const formEdit = async (formDets, res) => {
   }
 };
 
-
-const formGetByName = async (formDets, res) => {
+const formGetByName = async (body, res) => {
   try {
-    // let form = await Form.findOne({ name: formDets.name });
+    // let form = await Form.findOne({ name: body.name });
     // if (!form) {
     //   return res.status(400).json({
     //     message: `Can't find form name.`,
     //     success: false,
     //   });
     // }
-    let form = require("../mock/peopleForm.json");
+    let form = "";
+    console.log(body.name)
+    if (body.name == "personForm") {
+      form = require("../mock/personForm.json");
+    } else if (body.name == "companyForm") {
+      form = require("../mock/companyForm.json");
+    }
 
     return res.status(201).json({
       message: "Form get by name was complited",

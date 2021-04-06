@@ -36,6 +36,6 @@
   ::ng-deep .user-table tr th:first-child{
     width: 90px;
   }
-  ::ng-deep .user-table .user-table__block-column{
-    width: 50px;
-  }
+  ::ng-deep .user-table  tr th:nth-child(2){
+    width: 140px;
+    }

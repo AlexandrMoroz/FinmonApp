@@ -1,0 +1,22 @@
+.formly-field {
+    width: 100%;
+  }
+  nb-card {
+    height: calc(100vh - 7rem) !important;
+    margin-bottom: 0 !important;
+  }
+  nb-layout-column {
+    padding: 2.25rem 2.25rem 0rem 2.25rem !important;
+  }
+  formly-field-radio .custom-radio {
+    margin-bottom: 1rem !important;
+  }
+  .search-card__input{
+    position: absolute;
+    bottom:0;
+    left: 0;
+  }
+  .nd-card-select-group{
+    padding-bottom: 38px;
+  
+  }

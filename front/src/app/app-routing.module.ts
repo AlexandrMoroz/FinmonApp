@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { PeopleComponent } from './people/people.component';
+import { PersonComponent } from './person/person.component';
 import { UsersComponent } from './users/users.component';
-import { CompaniesComponent } from './companies/companies.component';
+import { CompanyComponent } from './company/company.component';
 import { AuthGuard } from './guards/auth.guard';
 import { Role } from './shared/models';
 import { SettingsComponent } from './settings/settings.component';
@@ -35,18 +35,18 @@ const routes: Routes = [
     component: HistoryComponent,
   },
   {
-    path: 'companies',
+    path: 'company',
     canActivate: [AuthGuard],
-    component: CompaniesComponent,
+    component: CompanyComponent,
   },
   {
-    path: 'people',
+    path: 'person',
     canActivate: [AuthGuard],
-    component: PeopleComponent,
+    component: PersonComponent,
   },
   {
     path: '',
-    redirectTo: 'people',
+    redirectTo: 'person',
     pathMatch: 'full',
   },
   {

@@ -12,30 +12,14 @@ export class MenuComponent implements OnInit {
   userLinks: Array<NbMenuItem> = [
     {
       title: 'Фізична особи',
-      link: '/people',
+      link: '/person',
       icon: 'user-alt',
     },
-
-    // {
-    //   title: 'Фоп',
-    //   link: '/people-fop',
-    //   icon: 'person-outline',
-    // },
-    // {
-    //   title: 'Компании резиденты',
-    //   link: '/companies',
-    //   icon: 'briefcase-outline',
-    // },
-    // {
-    //   title: 'Компании не резиденты',
-    //   link: '/companies-not-resident',
-    //   icon: 'briefcase-outline',
-    // },
-    // {
-    //   title: 'Представители не резидента',
-    //   link: '/companies-representative',
-    //   icon: 'briefcase-outline',
-    // },
+    {
+      title: 'Компанії',
+      link: '/company',
+      icon: 'suitcase',
+    },
     {
       title: 'Згорнути',
       icon: 'arrow-left',
@@ -53,12 +37,7 @@ export class MenuComponent implements OnInit {
       link: '/users',
       icon: 'user-friends',
     },
-    // {
-    //   title: 'Настройки',
-    //   link: '/settings',
-    //   icon: 'settings-2-outline',
-    // },
-    {
+      {
       title: 'Історія',
       link: '/history',
       icon: 'history',
@@ -66,7 +45,6 @@ export class MenuComponent implements OnInit {
   ];
   items: Array<NbMenuItem> = [];
   constructor(
-    private router: Router,
     public authService: AuthService,
     private menuService: NbMenuService
   ) {

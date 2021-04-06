@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Person } from '../shared/models';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class PeopleService {
+export class CompanyService {
   constructor(private http: HttpClient) {}
 
   edit(personModel: any) {

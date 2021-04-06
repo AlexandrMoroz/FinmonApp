@@ -11,9 +11,9 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { MenuComponent } from './menu/menu.component';
-import { PeopleComponent } from './people/people.component';
+import { PersonComponent } from './person/person.component';
 import { UsersComponent } from './users/users.component';
-import { CompaniesComponent } from './companies/companies.component';
+import { CompanyComponent } from './company/company.component';
 
 import { HistoryComponent } from './history/history.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -55,9 +55,9 @@ import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component
     HeaderComponent,
     HomeComponent,
      MenuComponent,
-    PeopleComponent,
+    PersonComponent,
     UsersComponent,
-    CompaniesComponent,
+    CompanyComponent,
     RepeatComponent,
     SettingsComponent,
     HistoryComponent,

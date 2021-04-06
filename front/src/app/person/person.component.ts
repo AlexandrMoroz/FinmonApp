@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { PeopleService } from '../services/people.service';
+import { PersonService } from '../services/person.service';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FormGroup } from '@angular/forms';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -10,11 +10,11 @@ import { AuthService } from '../services/auth.service';
 import { SearchService } from '../services/search.service';
 import * as XLSX from 'xlsx';
 @Component({
-  selector: 'app-people',
-  templateUrl: './people.component.html',
-  styleUrls: ['./people.component.scss'],
+  selector: 'app-person',
+  templateUrl: './person.component.html',
+  styleUrls: ['./person.component.scss'],
 })
-export class PeopleComponent {
+export class PersonComponent {
   SearchText: string;
   list: Array<any> = [];
   SelectedItem: any = null;
@@ -23,9 +23,9 @@ export class PeopleComponent {
   model = {};
   fields: FormlyFieldConfig[];
   formName = 'personForm';
-  @Output() sidebarToggle: EventEmitter<any> = new EventEmitter();
+
   constructor(
-    private dataService: PeopleService,
+    private dataService: PersonService,
     private searchService: SearchService,
     private helperService: HelperService,
     private formservice: FormService,
@@ -33,7 +33,6 @@ export class PeopleComponent {
     private authService: AuthService
   ) {
     this.isLoading = true;
-    this.sidebarToggle.emit();
     this.formservice.getFormByName(this.formName).subscribe(
       (data: any) => {
         this.fields = this.mapFormFields(data);
@@ -65,7 +64,7 @@ export class PeopleComponent {
         if (item.key === 'Country') {
           let cout = this.helperService.getCountries();
           item.templateOptions.options = cout;
-          item.defaultValue="Україна";
+          item.defaultValue = 'Україна';
         }
         if (item.key === 'Telephone') {
           item.templateOptions.keypress = this.onTelInputPress.bind(this);
@@ -298,12 +297,15 @@ export class PeopleComponent {
         );
     }
   }
-  download(){
+  download() {
     this.isLoading = true;
     this.dataService.getFile(this.SelectedItem.FormDataResultId).subscribe(
       (data: any) => {
-        const wb = XLSX.read(data.result, {type: 'base64'});
-        XLSX.writeFile(wb, `${this.SelectedItem.family}_${this.SelectedItem.name}_${this.SelectedItem.surname}.xlsx`);        
+        const wb = XLSX.read(data.result, { type: 'base64' });
+        XLSX.writeFile(
+          wb,
+          `${this.SelectedItem.family}_${this.SelectedItem.name}_${this.SelectedItem.surname}.xlsx`
+        );
         this.isLoading = false;
       },
       (error) => {
