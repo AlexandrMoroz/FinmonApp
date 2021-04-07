@@ -28,7 +28,6 @@ import { FilterFlagsPipe } from './pipes/filter-flags.pipe';
 import { AuthGuard } from './guards/auth.guard';
 import { ErrorInterceptor } from './error.interceptor';
 import { JwtInterceptor } from './jwt.interceptor';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
   NbSidebarModule,
@@ -75,12 +74,11 @@ import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component
     BrowserAnimationsModule,
     ReactiveFormsModule,
     NbSidebarModule.forRoot(),
-    NbThemeModule.forRoot({ name: 'dark' }),
+    NbThemeModule.forRoot({name: 'dark'}),
     NbLayoutModule,
     NbIconModule,
     NbButtonModule,
     NbMenuModule.forRoot(),
-    NbMenuModule,
     NbCardModule,
     NbListModule,
     Ng2SmartTableModule,
@@ -99,7 +97,6 @@ import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component
       ],
     }),
     FormlyBootstrapModule,
-    FontAwesomeModule
   ],
   providers: [
     AuthService,

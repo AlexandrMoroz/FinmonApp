@@ -136,7 +136,7 @@
       "fieldGroupClassName": "row",
       "fieldGroup": [
         {
-          "className": "col-6",
+          "className": "col-4",
           "key": "Name",
           "type": "input",
           "templateOptions": {
@@ -146,7 +146,7 @@
           }
         },
         {
-          "className": "col-6",
+          "className": "col-4",
           "key": "FullName",
           "type": "input",
           "templateOptions": {
@@ -325,31 +325,6 @@
       }
     },
     {
-      "fieldGroupClassName": "row align-items-end justify-content-center",
-      "fieldGroup": [
-        {
-          "className": "col-4",
-          "key": "RegistDate",
-          "type": "input",
-          "templateOptions": {
-            "type": "date",
-            "label": "Дата державної реєстрації",
-            "placeholder": "Дата державної реєстрації"
-          }
-        },
-        {
-          "className": "col-4",
-          "key": "GovRegDocNumber",
-          "type": "input",
-          "templateOptions": {
-            "label": "Номер документу",
-            "placeholder": "Номер документу"
-          }
-        }
-      ]
-    },
-
-    {
       "key": "Owner",
       "type": "repeat",
       "templateOptions": {
@@ -398,7 +373,7 @@
             "fieldGroupClassName": "row",
             "fieldGroup": [
               {
-                "className": "col-6",
+                "className": "col-4",
                 "key": "INN",
                 "type": "input",
                 "templateOptions": {
@@ -411,7 +386,7 @@
                 }
               },
               {
-                "className": "col-6",
+                "className": "col-4",
                 "key": "Birthday",
                 "type": "input",
                 "templateOptions": {
@@ -419,6 +394,15 @@
                   "label": "Дата нарождения",
                   "placeholder": "Дата нарождения",
                   "required": true
+                }
+              },
+              {
+                "className": "col-4",
+                "key": "IsResident",
+                "type": "checkbox",
+                "templateOptions": {
+                  "label": "Чи резидент",
+                  "placeholder": "Чи резидент"
                 }
               }
             ]
@@ -662,55 +646,43 @@
               }
             ]
           },
-          { "template": "<h2> Документ що підтверджує повноваження: </h2>" },
           {
-            "fieldGroupClassName": "col",
+            "fieldGroupClassName": "row align-items-end justify-content-center",
             "fieldGroup": [
               {
-                "fieldGroupClassName": "row ",
-                "fieldGroup": [
-                  {
-                    "className": "col-8",
-                    "key": "ConfirmAuthority",
-                    "type": "select",
-                    "templateOptions": {
-                      "label": "Документ що засвідчує особу",
-                      "required": true,
-                      "options": [
-                        { "label": "довіреність", "value": 1 },
-                        { "label": "договір-доручення", "value": 2 },
-                        { "label": "Адвокатський ордер + договір", "value": 3 }
-                      ]
-                    }
-                  },
-                  {
-                    "className": "col-4",
-                    "key": "ConfirmAuthoritySerias",
-                    "type": "input",
-                    "templateOptions": { "label": "Серія" }
-                  }
-                ]
+                "className": "col-4",
+                "key": "ConfirmAuthorityDocument",
+                "type": "select",
+                "templateOptions": {
+                  "label": "Документ що підтверджує повноваження",
+                  "options": [
+                    { "label": "протокол", "value": 0 },
+                    { "label": "наказ", "value": 1 },
+                    { "label": "постанова", "value": 2 },
+                    { "label": "рішення", "value": 3 },
+                    { "label": "довіреність", "value": 4 },
+                    { "label": "договір", "value": 5 }
+                  ]
+                }
               },
               {
-                "fieldGroupClassName": "row ",
-                "fieldGroup": [
-                  {
-                    "className": "col-6",
-                    "key": "ConfirmAuthorityNumber",
-                    "type": "input",
-                    "templateOptions": { "label": "Номер", "required": true }
-                  },
-                  {
-                    "className": "col-6",
-                    "key": "ConfirmAuthorityDate",
-                    "type": "input",
-                    "templateOptions": {
-                      "type": "date",
-                      "label": "дата документу",
-                      "required": true
-                    }
-                  }
-                ]
+                "className": "col-4",
+                "key": "ConfirmAuthorityDocDate",
+                "type": "input",
+                "templateOptions": {
+                  "type": "date",
+                  "label": "Дата державної реєстрації",
+                  "placeholder": "Дата державної реєстрації"
+                }
+              },
+              {
+                "className": "col-4",
+                "key": "ConfirmAuthorityDocNum",
+                "type": "input",
+                "templateOptions": {
+                  "label": "Номер документу",
+                  "placeholder": "Номер документу"
+                }
               }
             ]
           },
@@ -722,9 +694,19 @@
             "templateOptions": {
               "label": "Належність до осіб, пов'язаних із здійсненням терористичної діяльності або щодо яких застосовано міжнародні санкції"
             }
+          },
+          {
+            "className": "col",
+            "key": "IsTerrorist",
+            "type": "checkbox",
+            "defaultValue": false,
+            "templateOptions": {
+              "label": "належність до національних, іноземних публічних діячів, або пов'язаних з ними осіб"
+            }
           }
         ]
       }
+      
     },
     {
       "key": "ClienReputations",

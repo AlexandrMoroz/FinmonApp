@@ -1348,7 +1348,7 @@
                 "fieldGroup": [
                   {
                     "className": "col-8",
-                    "key": "ConfirmAuthority",
+                    "key": "ConfirmAuthorityDocument",
                     "type": "select",
                     "templateOptions": {
                       "label": "Документ що засвідчує особу",
