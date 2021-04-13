@@ -45,6 +45,9 @@ import { FormlyModule } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component';
+import { TabsType } from './tabstype/tabs.type';
+import { TabsComponent } from './tabs/tabs.component';
+import { TabComponent } from './tabs/tab/tab.component';
 
 
 
@@ -53,7 +56,7 @@ import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component
     AppComponent,
     HeaderComponent,
     HomeComponent,
-     MenuComponent,
+    MenuComponent,
     PersonComponent,
     UsersComponent,
     CompanyComponent,
@@ -63,6 +66,9 @@ import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component
     FilterFlagsPipe,
     SearchPipe,
     RepeatOneRowComponent,
+    TabsType,
+    TabsComponent,
+    TabComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,14 +95,17 @@ import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component
         {
           name: 'repeat',
           component: RepeatComponent,
-        },
-        {
+        },{
           name: 'repeat-one-row',
           component:RepeatOneRowComponent,
+        },{
+          name:'tabs',
+          component:TabsType,
         }
       ],
     }),
     FormlyBootstrapModule,
+  
   ],
   providers: [
     AuthService,

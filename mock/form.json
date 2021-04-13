@@ -1,0 +1,75 @@
+{
+  "_id": { "$oid": "5f63695d0961e8249062b87e" },
+  "name": "form",
+  "content": [
+    {
+      "type": "tabs",
+      "active":"true",
+      "fieldGroup": [
+        {
+          "templateOptions": { "label": "Дати" },
+          "fieldGroupClassName": "row justify-content-center align-items-end",
+          "fieldGroup": [
+            {
+              "className": "col-4",
+              "key": "DateOfFirstSigned",
+              "type": "input",
+              "templateOptions": {
+                "type": "date",
+                "label": "Дата первинного заповнення анкети",
+                "required": true
+              }
+            },
+            {
+              "className": "col-4",
+              "key": "DateOfFirstBissnesContact",
+              "type": "input",
+              "templateOptions": {
+                "type": "date",
+                "label": "Дата встановлення ділових відносин / здійснення першої разової фінансової операції на значну суму",
+                "required": true
+              }
+            },
+            {
+              "className": "col-4",
+              "key": "DateOffContact",
+              "type": "input",
+              "templateOptions": {
+                "type": "date",
+                "label": "Дата відмови від встановлення/підтримання (розірвання) ділових (договірних) відносин",
+                "required": true
+              }
+            }
+          ]
+        },
+        {
+          "templateOptions": { "label": "ФИО" },
+          "fieldGroupClassName": "row align-items-end",
+          "fieldGroup": [
+            {
+              "className": "col-4",
+              "key": "Name",
+              "type": "input",
+              "templateOptions": {
+                "label": "Скорочене найменування (за наявності)",
+                "placeholder": "Скорочене найменування (за наявності)",
+                "required": true
+              }
+            },
+            {
+              "className": "col-4",
+              "key": "FullName",
+              "type": "input",
+              "templateOptions": {
+                "label": "Повне найменування",
+                "placeholder": "Повне найменування",
+                "required": true
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "__v": 0
+}
