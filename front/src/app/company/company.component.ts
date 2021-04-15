@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CompanyService } from '../services/company.service';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FormGroup } from '@angular/forms';
@@ -15,7 +15,7 @@ import * as XLSX from 'xlsx';
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.scss'],
 })
-export class CompanyComponent  {
+export class CompanyComponent implements AfterContentInit {
   SearchText: string;
   list: Array<any> = [];
   SelectedItem: any = null;
@@ -33,10 +33,14 @@ export class CompanyComponent  {
     private flashMessagesService: FlashMessagesService,
     private authService: AuthService
   ) {
+  
+  }
+  ngAfterContentInit(): void {
     this.isLoading = true;
     this.formservice.getFormByName(this.formName).subscribe(
       (data: any) => {
         this.fields = this.mapFormFields(data);
+        console.log(this.fields);
         this.isLoading = false;
       },
       (error) => {
@@ -44,6 +48,7 @@ export class CompanyComponent  {
       }
     );
   }
+
 
   showError(err){
     console.log(err);

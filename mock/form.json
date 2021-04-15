@@ -4,22 +4,11 @@
   "content": [
     {
       "type": "tabs",
-      "active":"true",
       "fieldGroup": [
         {
           "templateOptions": { "label": "Дати" },
           "fieldGroupClassName": "row justify-content-center align-items-end",
           "fieldGroup": [
-            {
-              "className": "col-4",
-              "key": "DateOfFirstSigned",
-              "type": "input",
-              "templateOptions": {
-                "type": "date",
-                "label": "Дата первинного заповнення анкети",
-                "required": true
-              }
-            },
             {
               "className": "col-4",
               "key": "DateOfFirstBissnesContact",

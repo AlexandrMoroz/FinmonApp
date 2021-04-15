@@ -43,11 +43,11 @@ import {
 } from '@nebular/theme';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
+import { MatTabsModule } from '@angular/material/tabs';
+
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component';
 import { TabsType } from './tabstype/tabs.type';
-import { TabsComponent } from './tabs/tabs.component';
-import { TabComponent } from './tabs/tab/tab.component';
 
 
 
@@ -60,15 +60,13 @@ import { TabComponent } from './tabs/tab/tab.component';
     PersonComponent,
     UsersComponent,
     CompanyComponent,
-    RepeatComponent,
     SettingsComponent,
     HistoryComponent,
     FilterFlagsPipe,
     SearchPipe,
+    RepeatComponent,
     RepeatOneRowComponent,
     TabsType,
-    TabsComponent,
-    TabComponent,
   ],
   imports: [
     BrowserModule,
@@ -105,6 +103,7 @@ import { TabComponent } from './tabs/tab/tab.component';
       ],
     }),
     FormlyBootstrapModule,
+    MatTabsModule
   
   ],
   providers: [
