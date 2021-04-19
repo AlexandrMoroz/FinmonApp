@@ -93,7 +93,7 @@ const formGetByName = async (body, res) => {
     if (body.name == "personForm") {
       form = require("../mock/personForm.json");
     } else if (body.name == "companyForm") {
-      form = require("../mock/form.json");
+      form = require("../mock/companyForm.json");
     }
 
     return res.status(201).json({

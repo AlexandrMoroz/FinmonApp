@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './services/auth.service';
-import { NbIconLibraries,NbSidebarService } from '@nebular/theme';
+import { NbIconLibraries } from '@nebular/theme';
 
 @Component({
   selector: 'app-root',

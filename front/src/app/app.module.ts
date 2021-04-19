@@ -47,7 +47,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component';
-import { TabsType } from './tabstype/tabs.type';
+import { TabsType } from './tabstype/tabs.component';
 
 
 
