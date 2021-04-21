@@ -51,16 +51,6 @@ export class PersonComponent {
   mapFormFields(fields) {
     return cloneDeepWith(fields, (item) => {
       if (item !== undefined) {
-        if (item.key == 'FOP') {
-          item.hideExpression = (model: any, formState: any) => {
-            return !this.model['isFOP'];
-          };
-        }
-        if (item.key == 'PEP') {
-          item.hideExpression = (model: any, formState: any) => {
-            return !this.model['isPEP'];
-          };
-        }
         if (item.key === 'Country') {
           let cout = this.helperService.getCountries();
           item.templateOptions.options = cout;

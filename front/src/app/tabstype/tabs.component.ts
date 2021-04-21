@@ -5,6 +5,7 @@ import { FieldType } from '@ngx-formly/core';
 @Component({
   selector: 'tabs-component',
   template: `
+  
     <mat-tab-group>
       <mat-tab
         *ngFor="let tab of field.fieldGroup; let i = index; let last = last"

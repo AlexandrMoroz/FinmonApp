@@ -120,7 +120,7 @@
           ]
         },
         {
-          "templateOptions": { "label": "Регистраційні данні" },
+          "templateOptions": { "label": "Регистраційні дані" },
           "fieldGroupClassName": "d-flex flex-wrap justify-content-center align-items-end",
           "fieldGroup": [
             {
@@ -802,13 +802,14 @@
                     ]
                   },
                   {
-                    "className": "col-6",
+                    "className": "col-10",
                     "key": "ConnectedPerson",
                     "type": "repeat-one-row",
                     "templateOptions": {
                       "title": "Пов’язані особи",
                       "addButtonClass": "justify-content-center col-3",
-                      "cancelButtonClass": "ml-1 align-self-end form-group"
+                      "cancelButtonClass": "ml-1 align-self-end form-group",
+                      "inputClass": "col"
                     },
                     "fieldArray": {
                       "fieldGroupClassName": "row align-items-end justify-content-center",
@@ -1341,7 +1342,8 @@
                           "templateOptions": {
                             "title": "Пов’язані особи",
                             "addButtonClass": "justify-content-center col-3",
-                            "cancelButtonClass": "ml-1 align-self-end form-group"
+                            "cancelButtonClass": "ml-1 align-self-end form-group",
+                            "inputClass": "col"
                           },
                           "fieldArray": {
                             "fieldGroupClassName": "row align-items-end justify-content-center",
@@ -1383,7 +1385,7 @@
                 "title": "Кінцевий бенефіціарний власник:"
               },
               "fieldArray": {
-                "fieldGroupClassName": "d-flex flex-wrap justify-content-center align-items-end",
+                "fieldGroupClassName": "d-flex flex-wrap align-items-end",
                 "fieldGroup": [
                   {
                     "className": "col-4",
@@ -1582,7 +1584,7 @@
                   {
                     "key": "UNIR",
                     "type": "input",
-                    "className": "col-4",
+                    "className": "col-6",
                     "templateOptions": {
                       "label": "Унікальний номер запису в реєстрі",
                       "placeholder": "Унікальний номер запису в реєстрі"
@@ -1591,17 +1593,17 @@
                   {
                     "key": "Citizen",
                     "type": "select",
-                    "className": "col-4",
+                    "className": "col-6",
                     "templateOptions": {
                       "label": "Громадянство",
                       "placeholder": "Громадянство"
                     }
                   },
+                  { "template": "<h2 class='col'> Місце реєстрації: </h2>" },
                   {
                     "key": "Regist",
-                    "fieldGroupClassName": "col",
+                    "fieldGroupClassName": "d-flex flex-wrap justify-content-center align-items-end",
                     "fieldGroup": [
-                      { "template": "<h2> Місце реєстрації: </h2>" },
                       {
                         "className": "col-4",
                         "key": "Country",
@@ -1628,6 +1630,7 @@
                         }
                       },
                       {
+                        "className": "col",
                         "key": "Adress",
                         "type": "input",
                         "templateOptions": {
@@ -1638,10 +1641,12 @@
                     ]
                   },
                   {
+                    "template": "<h2 class='col'> Місце перебування: </h2>"
+                  },
+                  {
                     "key": "Live",
-                    "fieldGroupClassName": "col",
+                    "fieldGroupClassName": "d-flex flex-wrap justify-content-center align-items-end",
                     "fieldGroup": [
-                      { "template": "<h2> Місце перебування: </h2>" },
                       {
                         "className": "col-4",
                         "key": "Country",
@@ -1668,6 +1673,7 @@
                         }
                       },
                       {
+                        "className": "col",
                         "key": "Adress",
                         "type": "input",
                         "templateOptions": {
@@ -1679,7 +1685,7 @@
                   },
 
                   {
-                    "className": "col-4",
+                    "className": "col-6",
                     "key": "ShareInCompany",
                     "type": "input",
                     "templateOptions": {
@@ -1729,16 +1735,17 @@
                     }
                   },
                   {
-                    "className": "col-6",
+                    "className": "col-12",
                     "key": "ConnectedPerson",
                     "type": "repeat-one-row",
                     "templateOptions": {
                       "title": "Пов’язані особи",
                       "addButtonClass": "justify-content-center col-3",
-                      "cancelButtonClass": "ml-1 align-self-end form-group"
+                      "cancelButtonClass": "ml-1 align-self-end form-group",
+                      "inputClass": "col"
                     },
                     "fieldArray": {
-                      "fieldGroupClassName": "row align-items-end justify-content-center",
+                      "fieldGroupClassName": "d-flex flex-wrap align-items-end justify-content-center",
                       "fieldGroup": [
                         {
                           "key": "NameOfCompany",
@@ -1758,6 +1765,7 @@
                     }
                   },
                   {
+                    "className": "col-12",
                     "key": "Representative",
                     "type": "repeat",
                     "templateOptions": {
@@ -1765,7 +1773,7 @@
                       "title": "Довірена особа від КБВ :"
                     },
                     "fieldArray": {
-                      "fieldGroupClassName": "col",
+                      "fieldGroupClassName": "d-flex flex-wrap align-items-end ",
                       "fieldGroup": [
                         {
                           "className": "col-4",
@@ -1964,7 +1972,7 @@
                         {
                           "key": "UNIR",
                           "type": "input",
-                          "className": "col-4",
+                          "className": "col-6",
                           "templateOptions": {
                             "label": "Унікальний номер запису в реєстрі",
                             "placeholder": "Унікальний номер запису в реєстрі"
@@ -1973,18 +1981,19 @@
                         {
                           "key": "Citizen",
                           "type": "select",
-                          "className": "col-4",
+                          "className": "col-6",
                           "templateOptions": {
                             "label": "Громадянство",
                             "placeholder": "Громадянство"
                           }
                         },
                         {
+                          "template": "<h2 class='col-12'> Місце реєстрації: </h2>"
+                        },
+                        {
                           "key": "Regist",
-                          "fieldGroupClassName": "col",
+                          "fieldGroupClassName": "d-flex flex-wrap justify-content-center align-items-end",
                           "fieldGroup": [
-                            { "template": "<h2> Місце реєстрації: </h2>" },
-
                             {
                               "className": "col-4",
                               "key": "Country",
@@ -2011,6 +2020,7 @@
                               }
                             },
                             {
+                              "className": "col",
                               "key": "Adress",
                               "type": "input",
                               "templateOptions": {
@@ -2021,11 +2031,12 @@
                           ]
                         },
                         {
+                          "template": "<h2 class='col-12'> Місце перебування: </h2>"
+                        },
+                        {
                           "key": "Live",
-                          "fieldGroupClassName": "col",
+                          "fieldGroupClassName": "d-flex flex-wrap justify-content-center align-items-end",
                           "fieldGroup": [
-                            { "template": "<h2> Місце перебування: </h2>" },
-
                             {
                               "className": "col-4",
                               "key": "Country",
@@ -2052,6 +2063,7 @@
                               }
                             },
                             {
+                              "className": "col",
                               "key": "Adress",
                               "type": "input",
                               "templateOptions": {
@@ -2132,6 +2144,7 @@
           "key": "ExecutiveDepartment",
           "type": "repeat",
           "templateOptions": {
+            "label": "Виконавчий орган",
             "addText": "Додати виконавчий орган (назва органу / ПІБ):",
             "title": "Дані про виконавчий орган (назва органу / ПІБ):"
           },
@@ -2139,10 +2152,9 @@
             "fieldGroupClassName": "row justify-content-center align-items-center mb-0",
             "fieldGroup": [
               {
-                "className": "col-4",
+                "className": "col-6",
                 "key": "Name",
                 "type": "input",
-                "defaultValue": true,
                 "templateOptions": {
                   "label": "Назва органу",
                   "placeholder": "Назва органу",
@@ -2150,7 +2162,7 @@
                 }
               },
               {
-                "className": "col-4",
+                "className": "col-6",
                 "key": "Credential",
                 "type": "textarea",
                 "templateOptions": {
@@ -2161,6 +2173,20 @@
               }
             ]
           }
+        },
+        {
+          "templateOptions": { "label": "Дані про структуру власності" },
+          "fieldGroupClassName": "d-flex flex-wrap align-items-end justify-content-center",
+          "fieldGroup": [
+            {
+              "className": "col",
+              "key": "CreateDate",
+              "type": "textarea",
+              "templateOptions": {
+                "label": "Дані про структуру власності (пряме володіння) із зазначенням частки володіння"
+              }
+            }
+          ]
         },
         {
           "key": "ClienReputations",

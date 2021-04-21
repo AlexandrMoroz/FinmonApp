@@ -10,3 +10,7 @@
 ::ng-deep .mat-ripple{
   color: #3366ff;
 }
+::ng-deep nb-tabset > ul { overflow-x: auto; overflow-y: hidden; }
+::ng-deep nb-tabset .tab{
+  white-space: nowrap;
+}

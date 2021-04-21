@@ -37,6 +37,7 @@ import {
   NbThemeModule,
   NbMenuModule,
   NbListModule,
+  NbTabsetModule,
   NbIconModule,
   NbInputModule,
   NbSpinnerModule,
@@ -88,6 +89,7 @@ import { TabsType } from './tabstype/tabs.component';
     Ng2SmartTableModule,
     NbInputModule,
     NbSpinnerModule,
+    NbTabsetModule,
     FormlyModule.forRoot({
       types: [
         {
