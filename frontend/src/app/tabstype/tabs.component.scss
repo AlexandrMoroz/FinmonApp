@@ -1,0 +1,17 @@
+::ng-deep .mat-ink-bar {
+  background-color: #3366ff !important;
+}
+::ng-deep .mat-tab-label-content {
+  color: white !important;
+}
+::ng-deep .mat-tab-body-content {
+  padding: 3rem 0 !important;
+}
+::ng-deep .mat-tab-header-pagination-chevron {
+  border-color: rgba(255, 255, 255, 0.87);
+}
+.invalid .mat-ripple {
+  border: 2px solid red;
+  border-radius: 10px 10px 0 0;
+  z-index: 1000;
+}

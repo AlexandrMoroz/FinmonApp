@@ -1,0 +1,17 @@
+<nb-layout windowMode>
+  <nb-layout-header fixed>
+    <app-header></app-header>
+  </nb-layout-header>
+  <nb-sidebar
+    *ngIf="authService.isLogged()"
+    class="menu-sidebar"
+    tag="menu-sidebar"
+    responsive
+  >
+    <app-menu autoCollapse="true" (sidebarToggle)="toggle()"></app-menu>  
+  </nb-sidebar>
+  <nb-layout-column>
+    <flash-messages></flash-messages>
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+</nb-layout>

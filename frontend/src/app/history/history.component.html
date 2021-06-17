@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-sm col-md-3">
+    <nb-card
+      *ngIf="selectedService"
+      [nbSpinner]="isLoading"
+      nbSpinnerSize="giant"
+      nbSpinnerStatus="primary"
+      class="nd-card-select-group col search-card"
+    >
+      <nb-card-header>Результат пошуку</nb-card-header>
+      <nb-card-body>
+        <nb-list>
+          <nb-list-item
+            *ngFor="let item of list"
+            (click)="ItemOnClick($event, item)"
+          >
+           <p [innerHTML]="item.toHTMLString()"></p> 
+          </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+      <input
+        type="text"
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="SearchText"
+        (keyup)="onKey($event)"
+        nbInput
+        class="search-card__input col w-100 input-full-width"
+        placeholder="Поиск"
+      />
+    </nb-card>
+    <nb-card
+      nbSpinnerSize="giant"
+      nbSpinnerStatus="primary"
+      class="nd-card-select-group"
+    >
+      <nb-card-header>Пошук в категорії</nb-card-header>
+      <nb-card-body>
+        <nb-list>
+          <nb-list-item
+            *ngFor="let item of dataServices"
+            (click)="DataServiceItemOnClick(item)"
+            [ngClass]="{ active: item.active }"
+          >
+            <div>
+              {{ item.name }}
+            </div>
+          </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-sm col-md-9">
+    <nb-card
+      [nbSpinner]="isLoading"
+      nbSpinnerSize="giant"
+      nbSpinnerStatus="primary"
+      class="history-card"
+    >
+      <nb-card-header
+        >Історія:
+        <span *ngIf="selectedItem">
+          {{ selectedItem.family }} {{ selectedItem.name }}
+          {{ selectedItem.surname }} {{ selectedItem.INN }}
+        </span>
+        <button
+          *ngIf="selectedItem"
+          (click)="downloadHistory($event, selectedItem)"
+          nbButton
+        >
+          Завантажити
+        </button>
+      </nb-card-header>
+      <nb-card-body>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h4 *ngIf="selectedItem">
+                Анкета створенна: {{ selectedItem.createdAt }}
+                <br />
+                Користувачем: {{ selectedItem.user }}
+              </h4>
+              <h2 *ngIf="!selectedItem">Виберіть анкету</h2>
+              <ul class="timeline" #historyContainer></ul>
+            </div>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

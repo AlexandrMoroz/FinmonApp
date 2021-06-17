@@ -1,0 +1,42 @@
+import { Injectable } from '@angular/core';
+import {
+  HttpClient,
+  HttpParams,
+} from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PersonService {
+  constructor(
+    private http: HttpClient,
+  ) {}
+
+  edit(personModel: any) {
+    
+    return this.http.put(`${environment.apiUrl}/api/person/edit`, personModel);
+  }
+
+  create(personModel: any) {
+    
+    return this.http
+      .post(`${environment.apiUrl}/api/person/create`, personModel)
+     
+  }
+
+  getFormData(id) {
+    
+    return this.http.get(`${environment.apiUrl}/api/person/form-data`, {
+      params: new HttpParams().set('id', id),
+    });
+  }
+  getFile(id) {
+    
+    return this.http.get(`${environment.apiUrl}/api/person/file`, {
+      params: new HttpParams().set('id', id),
+    });
+  }
+
+}

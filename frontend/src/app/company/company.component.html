@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-sm col-md-3 col-lg-3 col-xl-3">
+    <nb-card
+      [nbSpinner]="isLoading"
+      nbSpinnerSize="giant"
+      nbSpinnerStatus="primary"
+      class="nd-card-select-group col search-card"
+    >
+      <nb-card-header>Юридична особи</nb-card-header>
+      <nb-card-body>
+        <nb-list class="col flex-grow-1 align-self-stretch">
+          <nb-list-item
+            *ngFor="let item of list"
+            (click)="SearchListItemOnClick($event, item)"
+          >
+            <div>
+              Ім'я: {{ item.shortName }} <br />
+              ЄДР: {{ item.registNumber }} <br />
+            </div>
+          </nb-list-item>
+        </nb-list>
+      </nb-card-body>
+      <input
+        class="search-card__input col w-100 input-full-width"
+        type="text"
+        [ngModelOptions]="{ standalone: true }"
+        [(ngModel)]="searchText"
+        (keyup)="Search($event)"
+        nbInput
+        placeholder="Поиск"
+      />
+    </nb-card>
+  </div>
+  <div class="col-sm col-md-9 col-lg-9 col-xl-9">
+    <nb-card
+      [nbSpinner]="isLoading"
+      nbSpinnerSize="giant"
+      nbSpinnerStatus="primary"
+      class="nd-card-form"
+    >
+      <nb-card-header
+        >Анкета:
+        <button class="btn btn-success" (click)="New()">Новий клієнт</button>
+        <span *ngIf="selectedItem">
+          {{ selectedItem.shortName }} {{ selectedItem.registNumber }}
+        </span>
+        <button
+          *ngIf="selectedItem"
+          class="btn btn-success"
+          (click)="DownloadXlSXFile()"
+        >
+          Завантажити
+        </button>
+      </nb-card-header>
+
+      <nb-card-body>
+        <form [formGroup]="form" (ngSubmit)="Submit(model)">
+          <formly-form [form]="form" [model]="model" [fields]="fields" [options]="options" >
+          </formly-form>
+          <button type="submit" class="btn btn-success">Затвердити</button>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

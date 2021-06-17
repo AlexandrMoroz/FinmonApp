@@ -1,0 +1,52 @@
+<div class="row justify-content-center align-items-center">
+  <div class="col-6">
+    <!-- <div class="alert alert-info">
+        <strong>Normal User</strong> - U: user P: user<br />
+        <strong>Administrator</strong> - U: admin P: admin
+    </div> -->
+    <nb-card class="nd-card-select-group">
+      <nb-card-header>Вход</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="username">Логин</label>
+            <input
+              type="text"
+              formControlName="username"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+            />
+            <div
+              *ngIf="submitted && f.username.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.username.errors.required">Username is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Пароль</label>
+            <input
+              type="password"
+              formControlName="password"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+            />
+            <div
+              *ngIf="submitted && f.password.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.password.errors.required">Пароль обязательный</div>
+            </div>
+          </div>
+          <button [disabled]="loading" class="btn btn-primary">
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span>
+            Войти
+          </button>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
