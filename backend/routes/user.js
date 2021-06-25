@@ -15,7 +15,7 @@ router.post(
   checkSchema(UserValidator.getCreateValidation()),
   validate,
   async (req, res) => {
-    await Create(req.body, res);
+    return Create(req.body, res);
   }
 );
 // Users Registeration Route
@@ -26,8 +26,7 @@ router.put(
   checkSchema(UserValidator.getEditValidation()),
   validate,
   async (req, res) => {
-  
-    await Edit(req.body, res);
+    return Edit(req.body, res);
   }
 );
 
@@ -37,7 +36,7 @@ router.post(
   checkSchema(UserValidator.getLoginValidation()),
   validate,
   async (req, res) => {
-    await Login(req.body, res);
+    return Login(req.body, res);
   }
 );
 

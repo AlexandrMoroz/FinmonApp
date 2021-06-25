@@ -73,7 +73,6 @@ router.get(
   checkSchema(PersonValidator.getFileValidation()),
   validate,
   async (req, res) => {
-    cccc();
     return XLMS(req, res);
   }
 );

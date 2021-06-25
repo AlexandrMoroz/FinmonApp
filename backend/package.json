@@ -23,6 +23,7 @@
     "lodash.clonedeepwith": "^4.5.0",
     "mongoose": "^5.12.8",
     "mongoose-diff-history": "^2.1.0",
+    "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "winston": "^3.3.3",

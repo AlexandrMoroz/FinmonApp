@@ -672,7 +672,6 @@ let test = () => {
           .set("Authorization", token)
           .query({ id: newPerson._id.toString() })
           .end(async (err, res) => {
-            console.log(err)
             const wb = XLSX.read(res.body.result, { type: "base64" });
             let obj = {
               Анкета: {

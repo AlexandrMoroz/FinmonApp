@@ -2,103 +2,81 @@ const cors = require("cors");
 const exp = require("express");
 const passport = require("passport");
 const { connect } = require("mongoose");
-const winston = require("winston"),
-  expressWinston = require("express-winston");
+var winston = require("./config/winston");
+var morgan = require("morgan");
 let initServer = (config) => {
   // Initialize the application
   const app = exp();
+
+  function isEmpty(obj) {
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        return false;
+      }
+    }
+    return JSON.stringify(obj) === JSON.stringify({});
+  }
   // Middlewares
   app.use(cors());
   app.use(exp.json());
   app.use(passport.initialize());
   require("./middlewares/passport")(passport, config.SECRET);
-  new winston.transports.File({ filename: "info.log", dirname: "logs",handleExceptions: true }),
-  // app.use(
-  //   expressWinston.logger({
-  //     transports: [
-  //       new winston.transports.Console({ handleExceptions: true }),
-       
-  //     ],
-  //     exceptionHandlers: [
-  //       new winston.transports.Console({ handleExceptions: true }),
-  //       new winston.transports.File({
-  //         filename: "exceptions.log",
-  //         dirname: "logs",
-  //       }),
-  //     ],
-  //     format: winston.format.combine(
-  //       winston.format.errors({ stack: true }),
-  //       winston.format.colorize(),
-  //       winston.format.json()
-  //     ),
-  //     meta: true, // optional: control whether you want to log the meta data about the request (default to true)
-  //     msg: "HTTP {{req.url}} {{req.body}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
-  //     expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
-  //     colorize: false, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
-  //     ignoreRoute: function (req, res) {
-  //       return false;
-  //     }, // optional: allows to skip some log messages based on request and/or response
-  //   })
-  // );
-  // User Router Middleware
+  morgan.token("custom", "RESPONSE: :method;  url::url => :status ");
+  app.use(morgan("custom", { stream: winston.stream }));
+  app.use((req, res, next) => {
+    winston.info(
+      `REQUEST: ${req.method}; url:${req.url} - ${
+        !isEmpty(req.body)
+          ? JSON.stringify(req.body)
+          : JSON.stringify(req.query)
+      }`
+    );
+
+    next();
+  });
+
+  // Router Middleware
   app.use("/api/user", require("./routes/user"));
-  app.use("/api/person", require("./routes/person"));
   app.use("/api/company", require("./routes/company"));
   app.use("/api/form", require("./routes/form"));
   app.use("/api/helper", require("./routes/helper"));
   app.use("/api/history", require("./routes/history"));
-  process.on('uncaughtException', function(err) {
-    console.log('Caught exception: ' + err);
+  app.use("/api/person", require("./routes/person"));
+  process.on("unhandledRejection", function (reason, p) {
+    throw new Error(reason);
   });
-  
-  //   expressWinston.errorLogger({
-  //      transports: [
-  //       new winston.transports.Console({ handleExceptions: true }),
-  //       new winston.transports.File({ filename: "error.log", dirname: "logs",handleExceptions: true }),
-  //     ],
-  //     exceptionHandlers: [
-  //       new winston.transports.Console({ handleExceptions: true }),
-  //       new winston.transports.File({
-  //         filename: "exceptions.log",
-  //         dirname: "logs",
-  //       }),
-  //     ],
-  //     format: winston.format.combine(
-  //       winston.format.errors({ stack: true }),
-  //       winston.format.colorize(),
-  //       winston.format.json()
-  //     ),
-  //     meta: true, // optional: control whether you want to log the meta data about the request (default to true)
-  //     msg: "HTTP {{req.url}} {{req.body}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
-  //     expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
-  //     colorize: false, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
-  //     ignoreRoute: function (req, res) {
-  //       return false;
-  //     }, // optional: allows to skip some log messages based on request and/or response
-  //   })
-  // );
+
+  // process.on('uncaughtException', function(err) {
+  //   console.log('Caught exception: ' + err);
+  // });
   const server = async () => {
-    try {
-      // Connection With DB
-      await connect(config.DB, {
-        useFindAndModify: false,
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-      });
+    // Connection With DB
+    await connect(config.DB, {
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    });
 
-      // console.log({
-      //   message: `Successfully connected with the Database \n${config.DB}`,
-      //   badge: true,
-      // });
+    // console.log({
+    //   message: `Successfully connected with the Database \n${config.DB}`,
+    //   badge: true,
+    // });
+    app.use((err, req, res, next) => {
+      console.log(err);
+      // set locals, only providing error in development
+      res.locals.message = err.message;
+      res.locals.error = req.app.get("env") === "development" ? err : {};
+      // add this line to include winston logging
 
-      // Start Listenting for the server on PORT
-      return app.listen(config.PORT, "0.0.0.0", () => {
-        console.log(`Server started on PORT ${config.PORT}`);
-      });
-    } catch (err) {
-      //add login
-      server();
-    }
+      // render the error page
+      res.status(err.status || 500);
+      res.render("error");
+      next();
+    });
+    // Start Listenting for the server on PORT
+    return app.listen(config.PORT, "0.0.0.0", () => {
+      console.log(`Server started on PORT ${config.PORT}`);
+    });
   };
   server();
 };
