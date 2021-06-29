@@ -16,15 +16,5 @@ WORKDIR /app
 # Get all the code needed to run the app
 COPY . /app/
 
-# Build server side bundles
-RUN npm run build:ssr
-
-FROM node:16-alpine
-## From 'builder' copy published folder
-COPY --from=builder /app /app
-
-WORKDIR /app
-# Expose the port the app runs in
-EXPOSE 4000
-
-CMD ["node", "dist/frontend/server/main.js"]
+# Build app
+RUN npm run build
