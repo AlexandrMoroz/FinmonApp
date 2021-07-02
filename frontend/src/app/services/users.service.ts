@@ -9,16 +9,16 @@ export class UsersService {
   constructor(private http: HttpClient) {}
 
   getAll() {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/user/all`);
+    return this.http.get<any[]>(`${environment.apiUrl}user/all`);
   }
 
   createUser(user: any) {
     
-    return this.http.post(`${environment.apiUrl}/api/user/create`, { ...user });
+    return this.http.post(`${environment.apiUrl}user/create`, { ...user });
   }
 
   editUser(user: any) {
     
-    return this.http.put(`${environment.apiUrl}/api/user/edit`, { ...user });
+    return this.http.put(`${environment.apiUrl}user/edit`, { ...user });
   }
 }

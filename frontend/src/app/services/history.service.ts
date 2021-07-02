@@ -21,7 +21,7 @@ export class HistoryService {
 
   getHistory(obj, id) {
     return this.http
-      .get(`${environment.apiUrl}/api/history/${obj.service}`, {
+      .get(`${environment.apiUrl}history/${obj.service}`, {
         params: new HttpParams().set('id', id),
       })
       .pipe(
@@ -47,7 +47,7 @@ export class HistoryService {
 
   getXLSXFile(obj, id) {
     return this.http.get(
-      `${environment.apiUrl}/api/history/${obj.file_service}`,
+      `${environment.apiUrl}history/${obj.file_service}`,
       {
         params: new HttpParams().set('id', id),
       }

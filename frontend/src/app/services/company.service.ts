@@ -10,26 +10,26 @@ export class CompanyService {
 
   edit(companyModel: any) {
     
-    return this.http.put(`${environment.apiUrl}/api/company/edit`, companyModel);
+    return this.http.put(`${environment.apiUrl}company/edit`, companyModel);
   }
 
   create(companyModel: any) {
     
     return this.http.post(
-      `${environment.apiUrl}/api/company/create`,
+      `${environment.apiUrl}company/create`,
       companyModel
     );
   }
 
   getFormData(id) {
     
-    return this.http.get(`${environment.apiUrl}/api/company/form-data`, {
+    return this.http.get(`${environment.apiUrl}company/form-data`, {
       params: new HttpParams().set('id', id),
     });
   }
   getFile(id) {
     
-    return this.http.get(`${environment.apiUrl}/api/company/file`, {
+    return this.http.get(`${environment.apiUrl}company/file`, {
       params: new HttpParams().set('id', id),
     });
   }

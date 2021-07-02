@@ -19,7 +19,9 @@ services:
       - "3000:3000" #specify ports forewarding
       # Below database enviornment variable for api is helpful when you have to use database as managed service
     environment:
-      - SECRET=Thisismysecret
+      - APP_DB=mongodb://mongo:27017/node-auth
+      - APP_SECRET=qwertyuiop
+      - APP_PORT=5000
       - MONGO_DB_USERNAME=admin-user
       - MONGO_DB_PASSWORD=admin-password
       - MONGO_DB_HOST=database

@@ -14,7 +14,7 @@ export class HelperService {
   getCountries(){
     if (!localStorage.getItem(this.countryHelper)) {
       return this.http
-        .get(`${environment.apiUrl}/api/helper/by-name`, {
+        .get(`${environment.apiUrl}helper/by-name`, {
           params: new HttpParams().set('name', this.countryHelper),
         })
         .pipe(
@@ -34,7 +34,7 @@ export class HelperService {
   getTranslate(name) {
     if (!localStorage.getItem(name)) {
       return this.http
-        .get(`${environment.apiUrl}/api/helper/by-name`, {
+        .get(`${environment.apiUrl}helper/by-name`, {
           params: new HttpParams().set('name', name),
         })
         .pipe(

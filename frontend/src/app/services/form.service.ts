@@ -20,7 +20,7 @@ export class FormService {
   getFormByName(name) {
     if (!localStorage.getItem(name)) {
       return this.http
-        .get(`${environment.apiUrl}/api/form/`, {
+        .get(`${environment.apiUrl}form/`, {
           params: new HttpParams().set('name', name),
         })
         .pipe(
