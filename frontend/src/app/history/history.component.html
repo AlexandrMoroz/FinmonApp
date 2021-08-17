@@ -14,7 +14,7 @@
             *ngFor="let item of list"
             (click)="ItemOnClick($event, item)"
           >
-           <p [innerHTML]="item.toHTMLString()"></p> 
+           <p [innerHTML]="item.toHTMLSearchString()"></p> 
           </nb-list-item>
         </nb-list>
       </nb-card-body>
@@ -25,7 +25,7 @@
         (keyup)="onKey($event)"
         nbInput
         class="search-card__input col w-100 input-full-width"
-        placeholder="Поиск"
+        placeholder="Пошук"
       />
     </nb-card>
     <nb-card
@@ -59,8 +59,7 @@
       <nb-card-header
         >Історія:
         <span *ngIf="selectedItem">
-          {{ selectedItem.family }} {{ selectedItem.name }}
-          {{ selectedItem.surname }} {{ selectedItem.INN }}
+          <span [innerHTML]="selectedItem.toHTMLHeaderString()"></span> 
         </span>
         <button
           *ngIf="selectedItem"

@@ -1,5 +1,5 @@
 {
-  "_id": { "$oid": "5f63695d0961e8249062b87e" },
+  "_id": { "$oid": "60ed603a89a8bd29e811d502" },
   "name": "personForm",
   "content": [
     {
@@ -38,9 +38,17 @@
             },
             {
               "className": "col-6",
-              "key": "IdentificationЕype",
+              "key": "IdentificationDate",
+              "type": "input",
+              "templateOptions": {
+                "type": "date",
+                "label": "Дата проведення верифікації клієнта (представника клієнта)"
+              }
+            },
+            {
+              "className": "col-6",
+              "key": "IdentificationType",
               "type": "select",
-
               "templateOptions": {
                 "label": "Спосіб проведення верифікації клієнта (представника клієнта)",
                 "options": [
@@ -52,8 +60,9 @@
             {
               "className": "col-6",
               "key": "ServiceType",
-              "type": "select",
+              "type": "multicheckbox",
               "templateOptions": {
+                "type": "array",
                 "label": "Види послуг, якими користується клієнт",
                 "multiple": true,
                 "options": [
@@ -79,16 +88,9 @@
                 "cancelButtonClass": "ml-1"
               },
               "fieldArray": {
-                "fieldGroupClassName": "justify-content-center",
-                "fieldGroup": [
-                  {
-                    "key": "date",
-                    "type": "input",
-                    "templateOptions": {
-                      "type": "date"
-                    }
-                  }
-                ]
+                "className": "justify-content-center",
+                "type": "input",
+                "templateOptions": { "type": "date" }
               }
             },
             {
@@ -100,35 +102,17 @@
                 "cancelButtonClass": "ml-1"
               },
               "fieldArray": {
-                "fieldGroupClassName": "justify-content-center",
-                "fieldGroup": [
-                  {
-                    "key": "date",
-                    "type": "input",
-                    "templateOptions": {
-                      "type": "date"
-                    }
-                  }
-                ]
+                "className": "justify-content-center",
+                "type": "input",
+                "templateOptions": { "type": "date" }
               }
             }
           ]
         },
-
         {
           "templateOptions": { "label": "Паспортні дані" },
           "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
           "fieldGroup": [
-            {
-              "className": "col-4",
-              "key": "Name",
-              "type": "input",
-              "templateOptions": {
-                "label": "Ім'я",
-                "placeholder": "Ім'я",
-               "required": true
-              }
-            },
             {
               "className": "col-4",
               "key": "Family",
@@ -136,7 +120,17 @@
               "templateOptions": {
                 "label": "Прізвище",
                 "placeholder": "Прізвище",
-               "required": true
+                "required": true
+              }
+            },
+            {
+              "className": "col-4",
+              "key": "Name",
+              "type": "input",
+              "templateOptions": {
+                "label": "Ім'я",
+                "placeholder": "Ім'я",
+                "required": true
               }
             },
             {
@@ -153,11 +147,8 @@
               "key": "INN",
               "type": "input",
               "templateOptions": {
-                "type": "number",
                 "label": "ІНПП",
-                "placeholder": "ІНПП",
-                "min": 10,
-                "maxLength": 10
+                "placeholder": "ІНПП"
               }
             },
             {
@@ -168,7 +159,7 @@
                 "type": "date",
                 "label": "Дата нарождения",
                 "placeholder": "Дата нарождения",
-               "required": true
+                "required": true
               }
             },
             {
@@ -185,8 +176,8 @@
               "key": "IDDocument",
               "type": "select",
               "templateOptions": {
-               "required": true,
-                "label": "Документ що засвідчує особу",
+                "required": true,
+                "label": "Документ що посвідчує особу",
                 "options": [
                   { "label": "свідоцтво про народження (України)", "value": 1 },
                   { "label": "паспорт громадянина України", "value": 2 },
@@ -247,10 +238,7 @@
               "className": "col-3",
               "key": "IDSeries",
               "type": "input",
-              "templateOptions": {
-                "label": "Серія",
-                "placeholder": "Серія"
-              }
+              "templateOptions": { "label": "Серія", "placeholder": "Серія" }
             },
             {
               "className": "col-3",
@@ -259,7 +247,7 @@
               "templateOptions": {
                 "label": "Номер",
                 "placeholder": "Номер",
-               "required": true
+                "required": true
               }
             },
             {
@@ -269,7 +257,7 @@
               "templateOptions": {
                 "label": "Орган що видав документ",
                 "placeholder": "Орган що видав документ",
-               "required": true
+                "required": true
               }
             },
             {
@@ -280,7 +268,7 @@
                 "type": "date",
                 "label": "Дата видачі документу",
                 "placeholder": "Дата видачі документу",
-               "required": true
+                "required": true
               }
             },
             {
@@ -288,8 +276,8 @@
               "type": "input",
               "className": "col-6",
               "templateOptions": {
-                "label": "Унікальний номер запису в реєстрі",
-                "placeholder": "Унікальний номер запису в реєстрі"
+                "label": "Унікальний номер запису в демографичному реєстрі реєстрі",
+                "placeholder": "Унікальний номер запису в демографичному реєстрі реєстрі"
               }
             },
             {
@@ -300,11 +288,30 @@
                 "label": "Громадянство",
                 "placeholder": "Громадянство"
               }
+            },
+            {
+              "className": "col-6",
+              "key": "Telephone",
+              "type": "input",
+              "templateOptions": { "type": "tel", "label": "Телефон" }
+            },
+            {
+              "className": "col-6",
+              "key": "Email",
+              "type": "input",
+              "templateOptions": { "type": "email", "label": "Email" }
+            },
+            {
+              "key": "IsResident",
+              "type": "checkbox",
+              "className": "col-6",
+              "templateOptions": { "label": "Резидент ?" },
+              "defaultValue": true
             }
           ]
         },
         {
-          "templateOptions": { "label": "Місце реєстрації:" },
+          "templateOptions": { "label": "Місце проживання:" },
           "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
           "key": "Regist",
           "fieldGroup": [
@@ -330,8 +337,14 @@
               "className": "col-12",
               "key": "Adress",
               "type": "input",
+              "templateOptions": { "label": "Адреса" }
+            },
+            {
+              "className": "col-12",
+              "key": "IsEqualsToLive",
+              "type": "checkbox",
               "templateOptions": {
-                "label": "Адреса"
+                "label": "Адреса реєстрації співпадає з місцем перебування"
               }
             }
           ]
@@ -363,9 +376,7 @@
               "className": "col-12",
               "key": "Adress",
               "type": "input",
-              "templateOptions": {
-                "label": "Адреса"
-              }
+              "templateOptions": { "label": "Адреса" }
             }
           ]
         },
@@ -408,11 +419,13 @@
             {
               "className": "col-4",
               "key": "BusinessType",
-              "type": "input",
+              "type": "repeat-one-row",
               "templateOptions": {
-                "label": "Вид підприємницької діяльності",
-                "placeholder": "Вид підприємницької діяльності"
-              }
+                "title": "Вид підприємницької діяльності",
+                "cancelButtonClass": "ml-1",
+                "type": "array"
+              },
+              "fieldArray": { "type": "input" }
             },
             {
               "className": "col-4",
@@ -497,16 +510,11 @@
                 "placeholder": "Категорія посад політично значущої особи"
               }
             },
-
             {
               "className": "col-4",
               "key": "Name",
               "type": "input",
-              "templateOptions": {
-                "label": "Им'я",
-                "placeholder": "Им'я"
-           
-              }
+              "templateOptions": { "label": "Им'я", "placeholder": "Им'я" }
             },
             {
               "className": "col-4",
@@ -515,7 +523,6 @@
               "templateOptions": {
                 "label": "Призвище",
                 "placeholder": "Призвище"
-            
               }
             },
             {
@@ -547,27 +554,11 @@
             },
             {
               "className": "col-4",
-              "key": "DateOffContact",
+              "key": "DateOffContactWithPEP",
               "type": "input",
               "templateOptions": {
                 "type": "date",
                 "label": "Дата, з якої установа припинила вживати заходи, визначені в частині тринадцятій статті 11 Закону про ПВК/ФТ"
-              }
-            },
-            {
-              "className": "col-6",
-              "key": "IsSanction",
-              "type": "checkbox",
-              "templateOptions": {
-                "label": "Належність до осіб, щодо яких застосовано санкції України"
-              }
-            },
-            {
-              "className": "col-6",
-              "key": "IsTerrorist",
-              "type": "checkbox",
-              "templateOptions": {
-                "label": "Клієнт включений до Переліку осіб, пов’язаних із провадженням терористичної діяльності або стосовно яких застосовано міжнародні санкції"
               }
             }
           ]
@@ -579,17 +570,33 @@
             {
               "className": "col-6",
               "key": "EmploymentType",
-              "type": "textarea",
+              "type": "multicheckbox",
               "templateOptions": {
-                "label": "Вид (види) зайнятості:"
+                "type": "array",
+                "label": "Вид (види) зайнятості:",
+                "multiple": true,
+                "options": [
+                  { "label": "найманий працівник", "value": 1 },
+                  { "label": "власник бізнеса", "value": 2 },
+                  { "label": "безробітний", "value": 3 },
+                  { "label": "студент/пенсіонер", "value": 4 },
+                  { "label": "суспільний активіст/волонтер", "value": 4 }
+                ]
               }
+            },
+            {
+              "className": "col-6",
+              "key": "EmploymentTypeDescribe",
+              "type": "textarea",
+              "templateOptions": { "label": "Опис виду зайнятості", "rows": 2 }
             },
             {
               "className": "col-12",
               "key": "Licenses",
               "type": "textarea",
               "templateOptions": {
-                "label": "Ліцензії (дозволи) на право здійснення певних операцій (діяльності) (найменування, серії, номери, ким видані, термін дії)"
+                "label": "Ліцензії (дозволи) на право здійснення певних операцій (діяльності) (найменування, серії, номери, ким видані, термін дії)",
+                "rows": 4
               }
             }
           ]
@@ -605,7 +612,7 @@
               "templateOptions": {
                 "title": "Майно (активи) клієнта у власності/оренді/суборенді",
                 "addButtonClass": "justify-content-center col-3",
-                "cancelButtonClass": "ml-2 align-self-end form-group",
+                "cancelButtonClass": "ml-2 align-self-center",
                 "inputClass": "col"
               },
               "fieldArray": {
@@ -613,9 +620,11 @@
                 "fieldGroup": [
                   {
                     "key": "PropertyType",
-                    "type": "select",
+                    "type": "multicheckbox",
+                    "className": "col-6",
                     "templateOptions": {
                       "label": "Тип майна",
+                      "type": "array",
                       "multiple": true,
                       "options": [
                         { "label": "не має", "value": 1 },
@@ -624,7 +633,11 @@
                           "label": "транспортні засоби, що належать державній реєстрації",
                           "value": 3
                         },
-                        { "label": "нерухомість", "value": 4 }
+                        { "label": "нерухомість", "value": 4 },
+                        {
+                          "label": "грошові кошти на рахунку в банках",
+                          "value": "5"
+                        }
                       ]
                     }
                   },
@@ -637,7 +650,6 @@
                 ]
               }
             },
-       
             {
               "className": "col-4",
               "key": "MounthIncome",
@@ -654,24 +666,6 @@
               "templateOptions": {
                 "type": "number",
                 "label": "Кількість найманих працівників, чол."
-              }
-            },
-            {
-              "className": "col-4",
-              "key": "Telephone",
-              "type": "input",
-              "templateOptions": {
-                "type": "tel",
-                "label": "Телефон"
-              }
-            },
-            {
-              "className": "col-4",
-              "key": "Email",
-              "type": "input",
-              "templateOptions": {
-                "type": "email",
-                "label": "Email"
               }
             }
           ]
@@ -715,9 +709,8 @@
             }
           ]
         },
-
         {
-          "key":"CheckList",
+          "key": "CheckList",
           "templateOptions": { "label": "Чек-лист:" },
           "fieldGroupClassName": "d-flex flex-wrap  align-items-start",
           "fieldGroup": [
@@ -725,6 +718,7 @@
               "className": "col-6",
               "key": "HasQuestionFromPolice",
               "type": "checkbox",
+              "defaultValue": false,
               "templateOptions": {
                 "label": "Наявність відкритих кримінальних проваджень, запитів правоохоронних органів, виїмки документів клієнта"
               }
@@ -733,6 +727,7 @@
               "className": "col-6",
               "key": "HasQuestionFromFinmon",
               "type": "checkbox",
+              "defaultValue": false,
               "templateOptions": {
                 "label": "Наявність по клієнту запитів/рішень ДСФМУ або відповідального працівника"
               }
@@ -741,6 +736,7 @@
               "className": "col-6",
               "key": "HasBadReputation",
               "type": "checkbox",
+              "defaultValue": false,
               "templateOptions": {
                 "label": "Наявність негативних фактів співпраці з клієнтом"
               }
@@ -749,6 +745,7 @@
               "className": "col-6",
               "key": "ClientProfessionIsDifferent",
               "type": "checkbox",
+              "defaultValue": false,
               "templateOptions": {
                 "label": "Попередня діяльність та професійний досвід клієнта суттєво відрізняються від того, що клієнт планує здійснювати, використовуючи послуги установи"
               }
@@ -757,6 +754,7 @@
               "className": "col-6",
               "key": "ClientHideFromCheck",
               "type": "checkbox",
+              "defaultValue": false,
               "templateOptions": {
                 "label": "Клієнт невиправдано затягує строки надання інформації для здійснення НПК установою, намагається якомога більше приховати від установи деталі щодо своєї ділової діяльності"
               }
@@ -765,6 +763,7 @@
               "className": "col-6",
               "key": "HasNotIncome",
               "type": "checkbox",
+              "defaultValue": false,
               "templateOptions": {
                 "label": "Немає доходів або вони формуються переважно за рахунок непрофільних (неосновних) видів діяльності"
               }
@@ -773,6 +772,7 @@
               "className": "col-6",
               "key": "HasNegativeOperatingIncome",
               "type": "checkbox",
+              "defaultValue": false,
               "templateOptions": {
                 "label": "Операційні грошові потоки від'ємні протягом останніх кількох років та/або бізнес фінансується переважно за рахунок фінансової допомоги"
               }
@@ -781,19 +781,38 @@
               "className": "col-6",
               "key": "HasCreditThatGuarantedAnotherFinInstгuments",
               "type": "checkbox",
+              "defaultValue": false,
               "templateOptions": {
                 "label": "Клієнт отримує позики, що забезпечуються фінансовими інструментами або іншими гарантіями установи, за винятком випадків здійснення операцій репо"
               }
             },
             {
-              "className": "col-12",
+              "className": "col-6",
               "key": "ClientUseFiduciaryService",
               "type": "checkbox",
+              "defaultValue": false,
               "templateOptions": {
                 "label": "Клієнт використовує послуги з управління активами (фідуціарні послуги)"
               }
             },
-
+            {
+              "className": "col-6",
+              "key": "IsSanction",
+              "type": "checkbox",
+              "defaultValue": false,
+              "templateOptions": {
+                "label": "Належність до осіб, щодо яких застосовано санкції України"
+              }
+            },
+            {
+              "className": "col-12",
+              "key": "IsTerrorist",
+              "type": "checkbox",
+              "defaultValue": false,
+              "templateOptions": {
+                "label": "Клієнт включений до Переліку осіб, пов’язаних із провадженням терористичної діяльності або стосовно яких застосовано міжнародні санкції"
+              }
+            },
             {
               "className": "col-6 radio",
               "key": "ClientVIPService",
@@ -853,9 +872,7 @@
           ]
         },
         {
-          "templateOptions": {
-            "label": "Додаткові заходи НПК"
-          },
+          "templateOptions": { "label": "Додаткові заходи НПК" },
           "fieldGroupClassName": "d-flex flex-wrap align-items-end",
           "fieldGroup": [
             {
@@ -863,15 +880,20 @@
               "type": "textarea",
               "className": "col-12",
               "templateOptions": {
-                "label": "Додаткові заходи НПК (зокрема актуалізації даних про клієнта, ПЗНП результатів моніторингу фінансових операцій)"
+                "label": "Додаткові заходи НПК (зокрема актуалізації даних про клієнта, ПЗНП результатів моніторингу фінансових операцій)",
+                "rows": 4
               }
             }
           ]
         },
         {
           "key": "Operations",
-          "type": "repeat",
+          "type": "repeat-one-row",
+          "className": "col",
           "templateOptions": {
+            "addButtonClass": "justify-content-start col-3 mb-4",
+            "cancelButtonClass": "ml-1 align-self-end form-group",
+            "inputClass": "col",
             "label": "Операції",
             "addText": "Додати операцію ?",
             "title": "Ознаки (коди) фінансових операцій клієнта, що підлягають фінансовому моніторингу, за останні 6 місяців"
@@ -880,16 +902,13 @@
             "fieldGroupClassName": "row justify-content-center",
             "fieldGroup": [
               {
-                "className": "col-4",
+                "className": "col-9",
                 "key": "Operation",
                 "type": "input",
-                "templateOptions": {
-                  "label": "Назва",
-                  "placeholder": "Назва"
-                }
+                "templateOptions": { "label": "Назва", "placeholder": "Назва" }
               },
               {
-                "className": "col-4",
+                "className": "col-3",
                 "key": "CreateDate",
                 "type": "input",
                 "templateOptions": {
@@ -910,363 +929,272 @@
             "title": "Представник клієнта"
           },
           "fieldArray": {
-            "fieldGroupClassName": "col",
+            "fieldGroupClassName": "d-flex flex-wrap  align-items-start",
             "fieldGroup": [
               {
-                "fieldGroupClassName": "row",
-                "fieldGroup": [
-                  {
-                    "className": "col-4",
-                    "key": "Name",
-                    "type": "input",
-                    "templateOptions": {
-                      "label": "Ім'я",
-                      "placeholder": "Ім'я",
-                     "required": true
-                    }
-                  },
-                  {
-                    "className": "col-4",
-                    "key": "Family",
-                    "type": "input",
-                    "templateOptions": {
-                      "label": "Прізвище",
-                      "placeholder": "Прізвище",
-                     "required": true
-                    }
-                  },
-                  {
-                    "className": "col-4",
-                    "key": "Surname",
-                    "type": "input",
-                    "templateOptions": {
-                      "label": "По батькові",
-                      "placeholder": "По батькові"
-                    }
-                  }
-                ]
+                "className": "col-4",
+                "key": "Family",
+                "type": "input",
+                "templateOptions": {
+                  "label": "Прізвище",
+                  "placeholder": "Прізвище",
+                  "required": true
+                }
               },
               {
-                "fieldGroupClassName": "row",
-                "fieldGroup": [
-                  {
-                    "className": "col-6",
-                    "key": "INN",
-                    "type": "input",
-                    "templateOptions": {
-                      "type": "number",
-                      "label": "ІНПП",
-                      "placeholder": "ІНПП",
-                      "min": 10,
-                      "maxLength": 10
-                    }
-                  },
-                  {
-                    "className": "col-6",
-                    "key": "Birthday",
-                    "type": "input",
-                    "templateOptions": {
-                      "type": "date",
-                      "label": "Дата нарождения",
-                      "placeholder": "Дата нарождения",
-                     "required": true
-                    }
-                  }
-                ]
+                "className": "col-4",
+                "key": "Name",
+                "type": "input",
+                "templateOptions": {
+                  "label": "Ім'я",
+                  "placeholder": "Ім'я",
+                  "required": true
+                }
               },
               {
-                "fieldGroupClassName": "row",
-                "fieldGroup": [
-                  {
-                    "className": "col-6",
-                    "key": "IDDocument",
-                    "type": "select",
-
-                    "templateOptions": {
-                      "label": "Документ що засвідчує особу",
-                      "options": [
-                        {
-                          "label": "свідоцтво про народження (України)",
-                          "value": 1
-                        },
-                        { "label": "паспорт громадянина України", "value": 2 },
-                        {
-                          "label": "паспорт громадянина України для виїзду за кордон",
-                          "value": 3
-                        },
-                        {
-                          "label": "дипломатичний паспорт України",
-                          "value": 4
-                        },
-                        { "label": "службовий паспорт України", "value": 5 },
-                        {
-                          "label": "посвідчення особи моряка (України)",
-                          "value": 6
-                        },
-                        {
-                          "label": "посвідчення члена екіпажу (України)",
-                          "value": 7
-                        },
-                        {
-                          "label": "посвідчення особи на повернення в Україну (України)",
-                          "value": 8
-                        },
-                        {
-                          "label": "тимчасове посвідчення громадянина України",
-                          "value": 9
-                        },
-                        { "label": "посвідчення водія (України)", "value": 10 },
-                        {
-                          "label": "посвідчення особи без громадянства для виїзду за кордон (України)",
-                          "value": 11
-                        },
-                        {
-                          "label": "посвідка на постійне проживання (України)",
-                          "value": 12
-                        },
-                        {
-                          "label": "посвідка на тимчасове проживання (України)",
-                          "value": 13
-                        },
-                        { "label": "картка мігранта (України)", "value": 14 },
-                        {
-                          "label": "посвідчення біженця (України)",
-                          "value": 15
-                        },
-                        {
-                          "label": "проїзний документ біженця (України)",
-                          "value": 16
-                        },
-                        {
-                          "label": "посвідчення особи яка потребує додаткового захисту (України)",
-                          "value": 17
-                        },
-                        {
-                          "label": "посвідчення особи якій надано тимчасовий захист (України)",
-                          "value": 18
-                        },
-                        {
-                          "label": "паспортний документ іноземця (іноземна держава)",
-                          "value": 19
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "className": "col-3",
-                    "key": "IDSeries",
-                    "type": "input",
-                    "templateOptions": {
-                      "label": "Серія",
-                      "placeholder": "Серія"
-                    }
-                  },
-                  {
-                    "className": "col-3",
-                    "key": "IDNumber",
-                    "type": "input",
-                    "templateOptions": {
-                      "label": "Номер",
-                      "placeholder": "Номер"
-                    }
-                  }
-                ]
+                "className": "col-4",
+                "key": "Surname",
+                "type": "input",
+                "templateOptions": {
+                  "label": "По батькові",
+                  "placeholder": "По батькові"
+                }
               },
               {
-                "fieldGroupClassName": "row",
-                "fieldGroup": [
-                  {
-                    "className": "col-6",
-                    "key": "IDGovAgency",
-                    "type": "input",
-                    "templateOptions": {
-                      "label": "Орган що видав документ",
-                      "placeholder": "Орган що видав документ"
-                    }
-                  },
-                  {
-                    "className": "col-6",
-                    "key": "IDDateRelise",
-                    "type": "input",
-                    "templateOptions": {
-                      "type": "date",
-                      "label": "Дата видачі документу",
-                      "placeholder": "Дата видачі документу"
-                    }
-                  }
-                ]
+                "className": "col-6",
+                "key": "INN",
+                "type": "input",
+                "templateOptions": {
+                  "label": "ІНПП",
+                  "placeholder": "ІНПП"
+                }
               },
               {
-                "fieldGroupClassName": "row ",
-                "fieldGroup": [
-                  {
-                    "key": "UNIR",
-                    "type": "input",
-                    "className": "col-6",
-                    "templateOptions": {
-                      "label": "Унікальний номер запису в реєстрі",
-                      "placeholder": "Унікальний номер запису в реєстрі"
-                    }
-                  },
-                  {
-                    "key": "Citizen",
-                    "type": "select",
-                    "className": "col-6",
-                    "templateOptions": {
-                      "label": "Громадянство",
-                      "placeholder": "Громадянство"
-                    }
-                  }
-                ]
+                "className": "col-6",
+                "key": "Birthday",
+                "type": "input",
+                "templateOptions": {
+                  "type": "date",
+                  "label": "Дата нарождения",
+                  "placeholder": "Дата нарождения",
+                  "required": true
+                }
               },
               {
+                "className": "col-6",
+                "key": "IDDocument",
+                "type": "select",
+                "templateOptions": {
+                  "label": "Документ що посвідчує особу",
+                  "options": [
+                    {
+                      "label": "свідоцтво про народження (України)",
+                      "value": 1
+                    },
+                    { "label": "паспорт громадянина України", "value": 2 },
+                    {
+                      "label": "паспорт громадянина України для виїзду за кордон",
+                      "value": 3
+                    },
+                    { "label": "дипломатичний паспорт України", "value": 4 },
+                    { "label": "службовий паспорт України", "value": 5 },
+                    {
+                      "label": "посвідчення особи моряка (України)",
+                      "value": 6
+                    },
+                    {
+                      "label": "посвідчення члена екіпажу (України)",
+                      "value": 7
+                    },
+                    {
+                      "label": "посвідчення особи на повернення в Україну (України)",
+                      "value": 8
+                    },
+                    {
+                      "label": "тимчасове посвідчення громадянина України",
+                      "value": 9
+                    },
+                    { "label": "посвідчення водія (України)", "value": 10 },
+                    {
+                      "label": "посвідчення особи без громадянства для виїзду за кордон (України)",
+                      "value": 11
+                    },
+                    {
+                      "label": "посвідка на постійне проживання (України)",
+                      "value": 12
+                    },
+                    {
+                      "label": "посвідка на тимчасове проживання (України)",
+                      "value": 13
+                    },
+                    { "label": "картка мігранта (України)", "value": 14 },
+                    { "label": "посвідчення біженця (України)", "value": 15 },
+                    {
+                      "label": "проїзний документ біженця (України)",
+                      "value": 16
+                    },
+                    {
+                      "label": "посвідчення особи яка потребує додаткового захисту (України)",
+                      "value": 17
+                    },
+                    {
+                      "label": "посвідчення особи якій надано тимчасовий захист (України)",
+                      "value": 18
+                    },
+                    {
+                      "label": "паспортний документ іноземця (іноземна держава)",
+                      "value": 19
+                    }
+                  ]
+                }
+              },
+              {
+                "className": "col-3",
+                "key": "IDSeries",
+                "type": "input",
+                "templateOptions": { "label": "Серія", "placeholder": "Серія" }
+              },
+              {
+                "className": "col-3",
+                "key": "IDNumber",
+                "type": "input",
+                "templateOptions": { "label": "Номер", "placeholder": "Номер" }
+              },
+              {
+                "className": "col-6",
+                "key": "IDGovAgency",
+                "type": "input",
+                "templateOptions": {
+                  "label": "Орган що видав документ",
+                  "placeholder": "Орган що видав документ"
+                }
+              },
+              {
+                "className": "col-6",
+                "key": "IDDateRelise",
+                "type": "input",
+                "templateOptions": {
+                  "type": "date",
+                  "label": "Дата видачі документу",
+                  "placeholder": "Дата видачі документу"
+                }
+              },
+              {
+                "key": "UNIR",
+                "type": "input",
+                "className": "col-6",
+                "templateOptions": {
+                  "label": "Унікальний номер запису в реєстрі",
+                  "placeholder": "Унікальний номер запису в реєстрі"
+                }
+              },
+              {
+                "key": "Citizen",
+                "type": "select",
+                "className": "col-6",
+                "templateOptions": {
+                  "label": "Громадянство",
+                  "placeholder": "Громадянство"
+                }
+              },
+              { "template": "<h2> Місце проживання: </h2>" },
+              {
+                "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
                 "key": "Regist",
-                "fieldGroupClassName": "col",
                 "fieldGroup": [
-                  { "template": "<h2> Місце реєстрації: </h2>" },
                   {
-                    "fieldGroupClassName": "row ",
-                    "fieldGroup": [
-                      {
-                        "className": "col-4",
-                        "key": "Country",
-                        "type": "select",
-                        "templateOptions": {
-                          "label": "Країна"
-                        }
-                      },
-                      {
-                        "className": "col-4",
-                        "key": "State",
-                        "type": "input",
-                        "templateOptions": { "label": "Область (за наявності)" }
-                      },
-                      {
-                        "className": "col-4",
-                        "key": "District",
-                        "type": "input",
-                        "templateOptions": { "label": "Район (за наявності)" }
-                      }
-                    ]
+                    "className": "col-4",
+                    "key": "Country",
+                    "type": "select",
+                    "templateOptions": { "label": "Країна" }
                   },
                   {
-                    "fieldGroupClassName": "col ",
-                    "fieldGroup": [
-                      {
-                        "key": "Adress",
-                        "type": "input",
-                        "templateOptions": {
-                          "label": "Адреса"
-                        }
-                      }
-                    ]
+                    "className": "col-4",
+                    "type": "input",
+                    "key": "State",
+                    "templateOptions": { "label": "Область (за наявності)" }
+                  },
+                  {
+                    "className": "col-4",
+                    "type": "input",
+                    "key": "District",
+                    "templateOptions": { "label": "Район (за наявності)" }
+                  },
+                  {
+                    "className": "col-12",
+                    "key": "Adress",
+                    "type": "input",
+                    "templateOptions": { "label": "Адреса" }
                   }
                 ]
               },
+              { "template": "<h2> Місце перебування: </h2>" },
               {
+                "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
                 "key": "Live",
-                "fieldGroupClassName": "col",
                 "fieldGroup": [
-                  { "template": "<h2> Місце перебування: </h2>" },
                   {
-                    "fieldGroupClassName": "row ",
-                    "fieldGroup": [
-                      {
-                        "className": "col-4",
-                        "key": "Country",
-                        "type": "select",
-                        "templateOptions": {
-                          "label": "Країна"
-                        }
-                      },
-                      {
-                        "className": "col-4",
-                        "key": "State",
-                        "type": "input",
-                        "templateOptions": { "label": "Область (за наявності)" }
-                      },
-                      {
-                        "className": "col-4",
-                        "key": "District",
-                        "type": "input",
-                        "templateOptions": { "label": "Район (за наявності)" }
-                      }
-                    ]
+                    "className": "col-4",
+                    "key": "Country",
+                    "type": "select",
+                    "templateOptions": { "label": "Країна" }
                   },
                   {
-                    "fieldGroupClassName": "col",
-                    "fieldGroup": [
-                      {
-                        "key": "Adress",
-                        "type": "input",
-                        "templateOptions": {
-                          "label": "Адреса"
-                        }
-                      }
-                    ]
+                    "className": "col-4",
+                    "type": "input",
+                    "key": "State",
+                    "templateOptions": { "label": "Область (за наявності)" }
+                  },
+                  {
+                    "className": "col-4",
+                    "type": "input",
+                    "key": "District",
+                    "templateOptions": { "label": "Район (за наявності)" }
+                  },
+                  {
+                    "className": "col-12",
+                    "key": "Adress",
+                    "type": "input",
+                    "templateOptions": { "label": "Адреса" }
                   }
                 ]
               },
-              { "template": "<h2> Документы уповноважений: </h2>" },
+              { "template": "<h2> Документи представника: </h2>" },
               {
-                "fieldGroupClassName": "col",
-                "fieldGroup": [
-                  {
-                    "fieldGroupClassName": "row ",
-                    "fieldGroup": [
-                      {
-                        "className": "col-8",
-                        "key": "ConfirmAuthorityDocument",
-                        "type": "select",
-                        "templateOptions": {
-                          "label": "Документ що засвідчує особу",
-                          "options": [
-                            { "label": "довіреність", "value": 1 },
-                            { "label": "договір-доручення", "value": 2 },
-                            {
-                              "label": "Адвокатський ордер + договір",
-                              "value": 3
-                            }
-                          ]
-                        }
-                      },
-                      {
-                        "className": "col-4",
-                        "key": "ConfirmAuthoritySerias",
-                        "type": "input",
-                        "templateOptions": { "label": "Серія" }
-                      }
-                    ]
-                  },
-                  {
-                    "fieldGroupClassName": "row ",
-                    "fieldGroup": [
-                      {
-                        "className": "col-6",
-                        "key": "ConfirmAuthorityNumber",
-                        "type": "input",
-                        "templateOptions": {
-                          "label": "Номер"
-                        }
-                      },
-                      {
-                        "className": "col-6",
-                        "key": "ConfirmAuthorityDate",
-                        "type": "input",
-                        "templateOptions": {
-                          "type": "date",
-                          "label": "дата документу"
-                        }
-                      }
-                    ]
-                  }
-                ]
+                "className": "col-8",
+                "key": "ConfirmAuthorityDocument",
+                "type": "select",
+                "templateOptions": {
+                  "label": "Документ що посвідчує особу",
+                  "options": [
+                    { "label": "довіреність", "value": 1 },
+                    { "label": "договір-доручення", "value": 2 },
+                    { "label": "Адвокатський ордер + договір", "value": 3 }
+                  ]
+                }
+              },
+              {
+                "className": "col-4",
+                "key": "ConfirmAuthoritySerias",
+                "type": "input",
+                "templateOptions": { "label": "Серія" }
+              },
+              {
+                "className": "col-6",
+                "key": "ConfirmAuthorityNumber",
+                "type": "input",
+                "templateOptions": { "label": "Номер" }
+              },
+              {
+                "className": "col-6",
+                "key": "ConfirmAuthorityDate",
+                "type": "input",
+                "templateOptions": { "type": "date", "label": "дата документу" }
               },
               {
                 "className": "col",
                 "key": "IsTerrorist",
                 "type": "checkbox",
-
                 "templateOptions": {
                   "label": "Належність до осіб, пов'язаних із здійсненням терористичної діяльності або щодо яких застосовано міжнародні санкції"
                 }
@@ -1279,22 +1207,25 @@
           "key": "ClienReputations",
           "type": "repeat-one-row",
           "templateOptions": {
-            "label": "История репутация",
-            "addButtonClass": "justify-content-start col-3 mb-4",
+            "label": "Репутація клієнта",
+            "addButtonClass": "justify-content-center col-3 mb-4",
             "cancelButtonClass": "ml-1 align-self-end form-group",
             "inputClass": "col-6",
-            "title": "История репутация"
+            "title": "Репутація клієнта"
           },
           "fieldArray": {
             "fieldGroupClassName": "row justify-content-center align-items-center mb-0",
             "fieldGroup": [
               {
                 "className": "col",
-                "key": "IsGood",
-                "type": "checkbox",
+                "key": "Reputation",
+                "type": "select",
                 "templateOptions": {
-                  "label": "Репутація добра?",
-                  "placeholder": "Репутація добра?"
+                  "label": "Репутація",
+                  "options": [
+                    { "label": "позитивна", "value": 1 },
+                    { "label": "негативна", "value": 2 }
+                  ]
                 }
               },
               {
@@ -1315,7 +1246,7 @@
           "type": "repeat-one-row",
           "templateOptions": {
             "label": "Фінансовий стан ",
-            "addButtonClass": "justify-content-start col-3 mb-4",
+            "addButtonClass": "justify-content-center col-3 mb-4",
             "cancelButtonClass": "ml-1 align-self-end form-group",
             "inputClass": "col-6",
             "title": "Фінансовий стан "
@@ -1325,11 +1256,14 @@
             "fieldGroup": [
               {
                 "className": "col",
-                "key": "IsGood",
-                "type": "checkbox",
-
+                "key": "FinancialStand",
+                "type": "select",
                 "templateOptions": {
-                  "label": "Фінансовий стан задовільний ?"
+                  "label": "Фінансовий стан",
+                  "options": [
+                    { "label": "задовільний", "value": 1 },
+                    { "label": "незадовільний", "value": 2 }
+                  ]
                 }
               },
               {
@@ -1350,7 +1284,7 @@
           "type": "repeat-one-row",
           "templateOptions": {
             "label": "Ризик клієнта",
-            "addButtonClass": "justify-content-start col-3 mb-4",
+            "addButtonClass": "justify-content-center col-3 mb-4",
             "cancelButtonClass": "ml-1 align-self-end form-group",
             "inputClass": "col-6",
             "title": "Ризик клієнта"

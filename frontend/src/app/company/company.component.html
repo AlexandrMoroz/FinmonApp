@@ -7,15 +7,15 @@
       class="nd-card-select-group col search-card"
     >
       <nb-card-header>Юридична особи</nb-card-header>
-      <nb-card-body>
-        <nb-list class="col flex-grow-1 align-self-stretch">
+      <nb-card-body class="p-2">
+        <nb-list class="col p-1 flex-grow-1 align-self-stretch">
           <nb-list-item
             *ngFor="let item of list"
             (click)="SearchListItemOnClick($event, item)"
           >
             <div>
               Ім'я: {{ item.shortName }} <br />
-              ЄДР: {{ item.registNumber }} <br />
+              ЄДР: {{ item.clientCode }} <br />
             </div>
           </nb-list-item>
         </nb-list>
@@ -24,7 +24,7 @@
         class="search-card__input col w-100 input-full-width"
         type="text"
         [ngModelOptions]="{ standalone: true }"
-        [(ngModel)]="searchText"
+        [(ngModel)]="SearchText"
         (keyup)="Search($event)"
         nbInput
         placeholder="Поиск"
@@ -38,26 +38,38 @@
       nbSpinnerStatus="primary"
       class="nd-card-form"
     >
-      <nb-card-header
-        >Анкета:
-        <button class="btn btn-success" (click)="New()">Новий клієнт</button>
-        <span *ngIf="selectedItem">
-          {{ selectedItem.shortName }} {{ selectedItem.registNumber }}
+      <nb-card-header>
+        <span *ngIf="SelectedItem">
+          Анкета: {{ SelectedItem.shortName }} {{ SelectedItem.clientCode }}
         </span>
-        <button
-          *ngIf="selectedItem"
-          class="btn btn-success"
-          (click)="DownloadXlSXFile()"
-        >
-          Завантажити
-        </button>
       </nb-card-header>
 
       <nb-card-body>
         <form [formGroup]="form" (ngSubmit)="Submit(model)">
-          <formly-form [form]="form" [model]="model" [fields]="fields" [options]="options" >
+          <formly-form
+            [form]="form"
+            [model]="model"
+            [fields]="fields"
+            [options]="options"
+          >
           </formly-form>
-          <button type="submit" class="btn btn-success">Затвердити</button>
+          <button type="submit" nbButton hero status="success">
+            Затвердити
+          </button>
+          <button nbButton hero status="success" type="button" class="ml-2" (click)="New()">
+            Новий клієнт
+          </button>
+          <button
+            *ngIf="SelectedItem"
+            nbButton
+            hero
+            status="success"
+            class="ml-2"
+            type="button"
+            (click)="Download()"
+          >
+            Завантажити
+          </button>
         </form>
       </nb-card-body>
     </nb-card>

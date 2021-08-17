@@ -31,9 +31,8 @@ export class UsersComponent implements OnInit {
     columns: {
       block: {
         title: 'Заблокирован',
-           editor: {
-          type: 'checkbox',
-
+        editor: {
+           type: 'checkbox',
         },
       },
       name: {
@@ -76,13 +75,11 @@ export class UsersComponent implements OnInit {
     private flashMessagesService: FlashMessagesService
   ) {
     this.isLoading = true;
-    this.service.getAll().subscribe(
-      (data: any) => {
-        this.users = data.users as UserModel[];
-        this.source.load(this.users);
-        this.isLoading = false;
-      },
-    );
+    this.service.getAll().subscribe((data: any) => {
+      this.users = data.users as UserModel[];
+      this.source.load(this.users);
+      this.isLoading = false;
+    });
   }
   ngOnInit(): void {}
   removeEmpty(obj) {
@@ -94,37 +91,33 @@ export class UsersComponent implements OnInit {
   }
   onCreateConfirm(event): void {
     if (!this.validate(event.newData)) return;
-    this.service.createUser(event.newData).subscribe(
-      (data: any) => {
-        this.flashMessagesService.show('Пользователь успешно добавлен', {
-          cssClass: 'alert-success',
-          timeout: 7000,
-        });
-        event.newData.password = '';
-        event.newData.confirmPassword = '';
-        this.users = [event.newData, ...this.users];
-        this.source.load(this.users);
-      },
-    );
+    this.service.createUser(event.newData).subscribe((data: any) => {
+      this.flashMessagesService.show('Пользователь успешно добавлен', {
+        cssClass: 'alert-success',
+        timeout: 7000,
+      });
+      event.newData.password = '';
+      event.newData.confirmPassword = '';
+      this.users = [event.newData, ...this.users];
+      this.source.load(this.users);
+    });
   }
   onEditConfirm(event): void {
     let editUser = this.removeEmpty(event.newData);
-    
+
     if (!this.validate(editUser, true)) return;
 
-    this.service.editUser(editUser).subscribe(
-      (data: any) => {
-        this.flashMessagesService.show('Пользователь успешно изменен', {
-          cssClass: 'alert-success',
-          timeout: 7000,
-        });
-        event.newData.password = '';
-        event.newData.confirmPassword = '';
-        this.users = this.users.filter((item) => item.id !== event.newData.id);
-        this.users = [event.newData, ...this.users];
-        this.source.load(this.users);
-      },
-    );
+    this.service.editUser(editUser).subscribe((data: any) => {
+      this.flashMessagesService.show('Пользователь успешно изменен', {
+        cssClass: 'alert-success',
+        timeout: 7000,
+      });
+      event.newData.password = '';
+      event.newData.confirmPassword = '';
+      this.users = this.users.filter((item) => item.id !== event.newData.id);
+      this.users = [event.newData, ...this.users];
+      this.source.load(this.users);
+    });
   }
   onDeleteConfirm(event): void {
     if (window.confirm('Ви впевнені що хочете видалити користувача?')) {

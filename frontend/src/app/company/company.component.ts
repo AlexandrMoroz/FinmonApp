@@ -1,21 +1,19 @@
 import {
-  AfterContentInit,
+  
   Component,
-  EventEmitter,
   OnInit,
-  Output,
-} from '@angular/core';
+  } from '@angular/core';
 import { CompanyService } from '../services/company.service';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FormGroup } from '@angular/forms';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { FormService } from '../services/form.service';
 import cloneDeepWith from 'lodash.clonedeepwith';
-import { HelperService } from '../services/helpers.service';
 import { AuthService } from '../services/auth.service';
 import { SearchService } from '../services/search.service';
 import * as XLSX from 'xlsx';
 import { FormlyFormOptions } from '@ngx-formly/core';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-company',
@@ -23,31 +21,33 @@ import { FormlyFormOptions } from '@ngx-formly/core';
   styleUrls: ['./company.component.scss'],
 })
 export class CompanyComponent implements OnInit {
-  searchText: string;
+  SearchText: string;
   list: Array<any> = [];
-  selectedItem: any = null;
+  SelectedItem: any = null;
   isLoading: boolean = false;
   form = new FormGroup({});
   model = {};
-  fields: FormlyFieldConfig[];
-  formName = 'companyForm';
   options: FormlyFormOptions = {
     formState: {
       disabled: false,
+      MoutherCompanyHide: false,
     },
   };
+  fields: FormlyFieldConfig[];
+  formName = 'companyForm';
   constructor(
     private dataService: CompanyService,
     private searchService: SearchService,
     private formservice: FormService,
-    private flashMessagesService: FlashMessagesService
+    private flashMessagesService: FlashMessagesService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.isLoading = true;
     this.formservice.getFormByName(this.formName).subscribe(
       (data: any) => {
-        this.fields = this.mapfield(data);
+        this.fields = this.mapfield(data as FormlyFieldConfig[]);
         this.isLoading = false;
       },
       (error) => {
@@ -58,78 +58,72 @@ export class CompanyComponent implements OnInit {
 
   mapfield(fields) {
     return cloneDeepWith(fields, (item) => {
-      if (item.templateOptions?.label === 'Місце реєстрації') {
-        item.fieldGroup = item.fieldGroup.map((element) => {
-          if (element.key == 'Country') {
-            element.templateOptions.change = (
-              field: FormlyFieldConfig,
-              event?: any
-            ) => {
-              if (
-                event.target.selectedOptions[0].value.split(':')[1].trim() ==
-                'Україна'
-              ) {
-                this.options.formState.disabled = false;
-              } else {
-                delete this.model['RegistNumber'];
-                delete this.model['ClientCode'];
-                this.model = { ...this.model };
-                this.options.formState.disabled = true;
-              }
-            };
+      if (item?.type == 'radio') {
+        item.templateOptions.click = (field, event) => {
+          let state = this.options.formState[field.key.toString()];
+          this.options.formState[field.key.toString()] =
+            state == null ? false : true;
+          if (this.options.formState[field.key.toString()]) {
+            this.options.formState[field.key.toString()] = false;
+            delete this.model[item.key];
+            this.model = { ...this.model };
           }
-          return element;
+        };
+      }
+      if (item?.templateOptions?.label == 'Регистраційні дані') {
+        let resident = item.fieldGroup.find((e) => {
+          return e.key == 'IsResident';
         });
+        resident.hooks = {
+          onInit: (field?: FormlyFieldConfig) => {
+            field.formControl.valueChanges
+              .pipe(
+                tap((value) => {
+                  if (value) {
+                    console.log(this.model);
+                    delete this.model["MoutherCompany"]["MoutherCompanyInfoForNonResident"]
+                     console.log(this.model);
+                  }
+                  field.parent.parent.fieldGroup.find((e) => {
+                    return e.key == 'MoutherCompany';
+                  }).fieldGroup[1].hide = value;
+                })
+              )
+              .subscribe();
+          },
+        };
       }
     });
   }
 
-  cheakObjectIsEmpty(obj) {
-    return Object.keys(obj).length === 0 && obj.constructor === Object;
-  }
-  cheakArrayIsEmpty(obj) {
-    return obj?.length == 0;
-  }
-  isObject(a) {
-    return !!a && a.constructor === Object;
-  }
-
-  deleteAllEmptyElement(model) {
-    
-    for (let [key, value] of Object.entries(model)) {
-      if (this.isObject(value)) {
-        this.cheakObjectIsEmpty(value)
-          ? delete model[key]
-          : this.deleteAllEmptyElement(value);
+  cleanObject(object) {
+    Object.entries(object).forEach(([k, v]) => {
+      if (v && typeof v === 'object') {
+        this.cleanObject(v);
       }
-      //if arr[] delete it
-      if (Array.isArray(value)) {
-        if (this.cheakArrayIsEmpty(value)) {
-          delete model[key];
+      if (
+        (v && typeof v === 'object' && !Object.keys(v).length) ||
+        v === null ||
+        v === undefined
+      ) {
+        if (Array.isArray(object)) {
+          object.splice(k as any, 1);
+        } else {
+          delete object[k];
         }
-        //if arr[null,1,null] => arr[1]
-        else {
-          model[key] = value.map((item) => {
-            if (item != null || item != undefined) {
-              return item;
-            }
-          });
-        }
-      } else {
-        this.cheakArrayIsEmpty(value) || this.cheakObjectIsEmpty(value)
-          ? delete model[key]
-          : '';
       }
-    }
+    });
+    return object;
   }
   Submit(model) {
+    console.log(model);
     //if selected item true than create person
-    if (!this.selectedItem) {
-      this.deleteAllEmptyElement(model);
+    if (!this.SelectedItem) {
+      this.cleanObject(model);
       let tempModel = {
         result: model,
+        user: this.authService.currentUserValue.username,
       };
-
       this.dataService.create(tempModel).subscribe(
         (data: any) => {
           this.flashMessagesService.show('Анкета успешно добавлена', {
@@ -140,42 +134,39 @@ export class CompanyComponent implements OnInit {
             data.result,
             ...this.list.filter((item) => item._id !== data.result._id),
           ];
-          this.selectedItem = data.result;
+          this.SelectedItem = data.result;
         },
-        (error) => {
+        (err) => {
           this.isLoading = false;
         }
       );
     }
-    //if selected item true than create person
+    //if selected item true than edit person
     else {
-      this.deleteAllEmptyElement(model);
+      this.cleanObject(model);
       let submitModel = {
-        _id: this.selectedItem._id,
-        formDataResultId: this.selectedItem.formDataResultId,
+        _id: this.SelectedItem._id,
+        formDataResultId: this.SelectedItem.formDataResultId,
+        user: this.authService.currentUserValue.username,
         result: model,
       };
-      this.dataService.edit(submitModel).subscribe(
-        (data: any) => {
-          this.flashMessagesService.show('Анкета успешно обновлена', {
-            cssClass: 'alert-success',
-            timeout: 5000,
-          });
-          this.list = [
-            data.result,
-            ...this.list.filter((item) => item._id !== data.result._id),
-          ];
-          this.selectedItem = data.result;
-        },
-        (error) => {
-          this.isLoading = false;
-        }
-      );
+
+      this.dataService.edit(submitModel).subscribe((data: any) => {
+        this.flashMessagesService.show('Анкета успешно обновлена', {
+          cssClass: 'alert-success',
+          timeout: 5000,
+        });
+        this.list = [
+          data.result,
+          ...this.list.filter((item) => item._id !== data.result._id),
+        ];
+        this.SelectedItem = data.result;
+      });
     }
   }
   New() {
     this.model = {};
-    this.selectedItem = null;
+    this.SelectedItem = null;
   }
   SearchListItemOnClick(event, selectedItem) {
     this.isLoading = true;
@@ -184,7 +175,10 @@ export class CompanyComponent implements OnInit {
         this.model = {
           ...data.result,
         };
-        this.selectedItem = selectedItem;
+        this.options.formState = {
+          MoutherCompanyHide: this.model['IsResident'],
+        };
+        this.SelectedItem = selectedItem;
         this.isLoading = false;
       },
       (error) => {
@@ -209,15 +203,15 @@ export class CompanyComponent implements OnInit {
         );
     }
   }
-  DownloadXlSXFile() {
+  Download() {
     this.isLoading = true;
-    this.dataService.getFile(this.selectedItem._id).subscribe(
+    this.dataService.getFile(this.SelectedItem._id).subscribe(
       (data: any) => {
         const wb = XLSX.read(data.result, { type: 'base64' });
-        
+
         XLSX.writeFile(
           wb,
-          `${this.selectedItem.shortName}_${this.selectedItem.registNumber}.xlsx`
+          `${this.SelectedItem.shortName}_${this.SelectedItem.registNumber}.xlsx`
         );
         this.isLoading = false;
       },

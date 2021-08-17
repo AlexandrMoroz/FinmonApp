@@ -10,15 +10,15 @@ import { FieldArrayType } from '@ngx-formly/core';
       <div class="col">
         <div class="d-flex justify-content-center align-items-center">
           <h2 class="mb-0">{{ to.title }} №{{ i+1 }}</h2>
-          <button class="btn btn-danger ml-2" type="button" (click)="remove(i)">
-            Удалить
+          <button nbButton hero status="danger" class="ml-2" type="button" (click)="remove(i)">
+            Видалити
           </button>
         </div>
         <formly-field class="col" [field]="field"></formly-field>
       </div>
     </div>
     <div style="margin:30px 0;">
-      <button class="btn btn-primary" type="button" (click)="add()">
+      <button nbButton hero status="primary" type="button" (click)="add()">
         {{ to.addText }}
       </button>
      

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable, ViewChild } from '@angular/core';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { iif, of } from 'rxjs';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import cloneDeepWith from 'lodash.clonedeepwith';
@@ -11,28 +11,31 @@ import { HelperService } from './helpers.service';
   providedIn: 'root',
 })
 export class FormService {
+
   constructor(
     private http: HttpClient,
     private flashMessagesService: FlashMessagesService,
     private helperService: HelperService
-  ) {}
+  ) {
+  
+  }
 
   getFormByName(name) {
-    if (!localStorage.getItem(name)) {
-      return this.http
-        .get(`${environment.apiUrl}form/`, {
-          params: new HttpParams().set('name', name),
+    // if (!localStorage.getItem(name)) {
+    return this.http
+      .get(`${environment.apiUrl}form/`, {
+        params: new HttpParams().set('name', name),
+      })
+      .pipe(
+        map((data) => {
+          //localStorage.setItem(name, JSON.stringify({result:data['result'],expiresIn: 28800}));
+
+          return this.mapFormFields(data['result'], name);
         })
-        .pipe(
-          map((data) => {
-            //localStorage.setItem(name, JSON.stringify({result:data['result'],expiresIn: 28800}));
-            let fields = this.mapFormFields(data['result'], name);
-            return fields;
-          })
-        );
-    } else {
-      return of(JSON.parse(localStorage.getItem(name)).result);
-    }
+      );
+    // } else {
+    //   return of(JSON.parse(localStorage.getItem(name)).result);
+    // }
   }
   mapFormFields(fields, name) {
     if (name == 'personForm') {
@@ -45,8 +48,10 @@ export class FormService {
   private personFieldsMap = (item) => {
     if (item !== undefined) {
       if (item.key === 'Country') {
-        let cout = this.helperService.getCountries();
-        item.templateOptions.options = cout;
+        item.templateOptions.options = this.helperService.getCountries();
+      }
+      if (item.key === 'Citizen') {
+        item.templateOptions.options = this.helperService.getCountries();
       }
       if (item.key === 'Telephone') {
         item.templateOptions.keypress = this.onTelInputPress;
@@ -54,46 +59,29 @@ export class FormService {
       if (item.key === 'Birthday') {
         item.templateOptions.change = this.cheakBirthDay.bind(this);
       }
-      if (item.type === 'textarea') {
-        item.templateOptions.keypress = this.ResizeTextarea;
+      if (item.type === 'radio') {
+        item.templateOptions.valueProp = (o) => o.label;
       }
       if (item.type === 'select') {
         item.templateOptions.valueProp = (o) => o.label;
       }
+      if (item.type === 'multicheckbox') {
+        item.templateOptions.valueProp = (o) => o.label;
+      }
     }
   };
+
   private companyFieldsMap = (item) => {
     if (item !== undefined) {
       if (item.key === 'Country') {
         let cout = this.helperService.getCountries();
         item.templateOptions.options = cout;
       }
+      if (item.key === 'Citizen') {
+        item.templateOptions.options = this.helperService.getCountries();
+      }
       if (item.key === 'Telephone') {
         item.templateOptions.keypress = this.onTelInputPress;
-      }
-      if (item.key === 'RegistNumber') {
-        item.expressionProperties = {
-          'templateOptions.disabled': (
-            model: any,
-            formState: any,
-            field: FormlyFieldConfig
-          ) => {
-            // access to the main model can be through `this.model` or `formState` or `model
-            return formState.disabled;
-          },
-        };
-      }
-      if (item.key === 'ClientCode') {
-        item.expressionProperties = {
-          'templateOptions.disabled': (
-            model: any,
-            formState: any,
-            field: FormlyFieldConfig
-          ) => {
-            // access to the main model can be through `this.model` or `formState` or `model
-            return formState.disabled;
-          },
-        };
       }
       if (item.key === 'BankAccounts') {
         item.validators = {
@@ -131,10 +119,13 @@ export class FormService {
       if (item.key === 'Birthday') {
         item.templateOptions.change = this.cheakBirthDay;
       }
-      if (item.type === 'textarea') {
-        item.templateOptions.keypress = this.ResizeTextarea;
-      }
       if (item.type === 'select') {
+        item.templateOptions.valueProp = (o) => o.label;
+      }
+      if (item.type === 'multicheckbox') {
+        item.templateOptions.valueProp = (o) => o.label;
+      }
+      if (item.type === 'radio') {
         item.templateOptions.valueProp = (o) => o.label;
       }
     }
@@ -165,11 +156,7 @@ export class FormService {
       );
     }
   }
-
-  private ResizeTextarea(field, event, useEvent) {
-    event.target.style.height = '1px';
-    event.target.style.height = 25 + event.target.scrollHeight + 'px';
-  }
+ 
   private onTelInputPress(field: FormlyFieldConfig, event?: any) {
     let newVal = event.target.value.replace(/\D/g, '');
     if (newVal.length === 0) {

@@ -71,5 +71,24 @@ class XLSXHistory {
     return XLSX.write(this.wb, { type: "base64", bookType: "xlsx" });
   }
 }
-
+const recursFormResult = (res, order, arr) => {
+  if (typeof res === "object" && !Array.isArray(res)) {
+    Object.entries(res).forEach(([key, value]) => {
+      if (order[key] !== undefined && order[key].c) {
+        arr[order[key].p] = {
+          [key]: recursFormResult(value, order[key].c, []),
+        };
+        if (key == "Regist") {
+          console.log(order);
+        }
+      } else if (order[key] && !order[key].d) {
+        arr[order[key].p] = { [key]: value };
+      }
+    });
+  } else if (Array.isArray(res)) {
+    return res.map((item) => recursFormResult(item, order, []));
+  }
+  return arr.filter((item) => item != null);
+};
 module.exports = XLSXHistory;
+module.exports.recursFormResult = recursFormResult;

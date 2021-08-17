@@ -23,7 +23,7 @@ const formater = printf(({ level, message, timestamp }) => {
 var logger = createLogger({
   transports: [
     new transports.File(options.file),
-    new transports.Console(options.console),
+   
   ],
   format: combine(
     timestamp(),
@@ -37,6 +37,8 @@ var logger = createLogger({
       timestamp: true,
       maxsize: 1000000,
     }),
+    new transports.Console(options.console),
+  
   ],
   exitOnError: false, // do not exit on handled exceptions
 });

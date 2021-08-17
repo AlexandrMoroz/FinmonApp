@@ -2,6 +2,7 @@ const Person = require("../models/person");
 const PersonFormData = require("../models/personFormData");
 const User = require("../models/user");
 const XLSXAnceta = require("../utils/anceta");
+const {recursFormResult} = require("../utils/history");
 const Helper = require("../models/helper");
 let order = require("../mock/personOrder.json");
 
@@ -58,8 +59,7 @@ const Edit = async (req, res) => {
         __reason: `${req.body.user} updated`,
       }
     );
-
-    let newPerson = {
+     let newPerson = {
       name: req.body.result.Name,
       family: req.body.result.Family,
       surname: req.body.result.Surname ? req.body.result.Surname : "",
@@ -140,6 +140,8 @@ const FormDataById = async (req, res) => {
     });
   }
 };
+
+
 /**
  * @DESC To get person from data.
  * req.body: {
@@ -154,22 +156,40 @@ const XLMS = async (req, res) => {
     let formdata = await PersonFormData.findOne({
       _id: person.formDataResultId,
     });
-
+    // reorganize EmploymentType arr if it has "найманий працівник" by replace it with obj {найманий працівник:EmploymentTypeDescribe}
+    if (
+      formdata.result["EmploymentType"] &&
+      formdata.result["EmploymentTypeDescribe"]
+    ) {
+      formdata.result = {
+        ...formdata.result,
+        EmploymentType: formdata.result["EmploymentType"].map((item) => {
+          if (item == "найманий працівник") {
+            return { [item]: formdata.result["EmploymentTypeDescribe"] };
+          }
+          return item;
+        }),
+      };
+    }
     //Sort of elemets by sort table
-    let arr = [];
-    Object.entries(formdata.result).forEach((item) => {
-      arr[order[item[0]].p] = item;
+    let arr = recursFormResult(formdata.result, order, []);
+    let result = {};
+    arr.forEach((item) => {
+      Object.entries(item).forEach(([key, value]) => {
+        result[key] = value;
+      });
     });
-    arr = arr.filter((item) => item != null);
-    arr = Object.fromEntries(arr);
-
+    //console.log(result);
     let translate = await Helper.findOne({ name: "translate" });
     let xmls = new XLSXAnceta(translate.content);
 
     let buf = xmls.createFormBuf({
+      title: `Анкета фізичной особи ${
+        formdata.result["IsResident"] ? "Резидента" : "Не резидента"
+      }`,
       user: `${user.family} ${user.name} ${user.surname}`,
-      createdAt: new Date(person.createdAt).toLocaleString(),
-      result: arr,
+      createdAt: new Date(person.createdAt).toLocaleString("en-GB"),
+      result,
     });
     return res.status(200).json({
       message: "Person get XLSX doc by id succcesed",
@@ -177,6 +197,7 @@ const XLMS = async (req, res) => {
       success: true,
     });
   } catch (err) {
+    console.log(err);
     // Implement logger function (winston)
     return res.status(500).json({
       message: "Unable get file from person.",

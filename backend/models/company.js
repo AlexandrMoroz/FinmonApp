@@ -1,4 +1,4 @@
-const { Schema, model, Types,models } = require("mongoose");
+const { Schema, model, Types, models } = require("mongoose");
 
 const CompanySchema = new Schema(
   {
@@ -6,9 +6,8 @@ const CompanySchema = new Schema(
       type: String,
       required: true,
     },
-    registNumber: {
+    clientCode: {
       type: String,
-      required: true,
     },
     username: {
       type: String,

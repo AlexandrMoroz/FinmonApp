@@ -15,7 +15,7 @@ const PersonSchema = new Schema(
     },
     INN: {
       type: String,
-      required: true,
+      //required: true,
     },
     username: {
       type: String,

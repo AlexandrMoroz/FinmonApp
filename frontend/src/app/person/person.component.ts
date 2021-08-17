@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PersonService } from '../services/person.service';
-import { FormlyFieldConfig } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { FormGroup } from '@angular/forms';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { FormService } from '../services/form.service';
@@ -15,13 +15,18 @@ import * as XLSX from 'xlsx';
   templateUrl: './person.component.html',
   styleUrls: ['./person.component.scss'],
 })
-export class PersonComponent {
+export class PersonComponent implements OnInit {
   SearchText: string;
   list: Array<any> = [];
   SelectedItem: any = null;
   isLoading: boolean = false;
   form = new FormGroup({});
   model = {};
+  options: FormlyFormOptions = {
+    formState: {
+      disabled: true,
+    },
+  };
   fields: FormlyFieldConfig[];
   formName = 'personForm';
 
@@ -31,19 +36,17 @@ export class PersonComponent {
     private formservice: FormService,
     private flashMessagesService: FlashMessagesService,
     private authService: AuthService
-  ) {
+  ) {}
+  ngOnInit(): void {
     this.isLoading = true;
-    this.formservice.getFormByName(this.formName).subscribe(
-      (data: any) => {
-        this.fields = this.mapfield(data);
-        this.isLoading = false;
-      },
-      this.ShowError
-    );
+    this.formservice.getFormByName(this.formName).subscribe((data: any) => {
+      this.fields = this.mapfield(data);
+      this.isLoading = false;
+    }, this.ShowError);
   }
+
   mapfield(fields) {
     return cloneDeepWith(fields, (item) => {
-      
       if (item?.key === 'GovRegDocDateRelise') {
         item.templateOptions.change = (
           field: FormlyFieldConfig,
@@ -57,8 +60,68 @@ export class PersonComponent {
           this.model = { ...this.model, FOP };
         };
       }
+      if (item?.key == 'IsEqualsToLive') {
+        item.templateOptions.change =
+          this.CopyRegistAdressToLiveAdress.bind(this);
+      }
+      if (item?.templateOptions?.label == 'Паспортні дані') {
+        let inn = item.fieldGroup.find((e) => {
+          return e.key == 'INN';
+        });
+        inn.expressionProperties = {
+          'templateOptions.disabled': (model: any) => {
+            return !model['IsResident'];
+          },
+        };
+        item.fieldGroup.find((e) => {
+          return e.key == 'IsResident';
+        }).templateOptions.change = (field: FormlyFieldConfig, event?: any) => {
+          if (!this.model['IsResident']) {
+            delete this.model['INN'];
+            this.model = { ...this.model };
+          }
+        };
+      }
+      if (item?.key == 'EmploymentType') {
+        item.templateOptions.change = (
+          field: FormlyFieldConfig,
+          event?: any
+        ) => {
+          if (event.target.value == 'найманий працівник') {
+            field.parent.fieldGroup.find((item) => {
+              return item.key == 'EmploymentTypeDescribe';
+            }).hide = !event.target.checked;
+            if (!event.target.checked) {
+              this.model['EmploymentTypeDescribe'] = null;
+            }
+          }
+        };
+      }
+      if (item?.key == 'CheckList') {
+        item.fieldGroup.map((i) => {
+          if (i.type == 'radio') {
+            i.templateOptions.click = (field, event) => {
+              let state = this.options.formState[field.key.toString()];
+              this.options.formState[field.key.toString()] =
+                state == null ? false : true;
+              console.log(this.options.formState);
+              if (this.options.formState[field.key.toString()]) {
+                this.options.formState[field.key.toString()] = false;
+                delete this.model[item.key][field.key.toString()];
+                this.model = { ...this.model };
+              }
+            };
+          }
+        });
+      }
     });
   }
+  private CopyRegistAdressToLiveAdress(field: FormlyFieldConfig, event?: any) {
+    if (event.target.checked) {
+      this.model = { ...this.model, Live: this.model['Regist'] };
+    }
+  }
+
   private CalDateBetween(date1, date2) {
     let diff = Math.floor(date1.getTime() - date2.getTime());
     let secs = Math.floor(diff / 1000);
@@ -84,38 +147,34 @@ export class PersonComponent {
 
     return message;
   }
-  private cheakObjectIsEmpty(obj) {
-    return Object.keys(obj).length === 0 && obj.constructor === Object;
-  }
-  private  cheakArrayIsEmpty(obj) {
-    return obj?.length == 0;
-  }
-  private  isObject(a) {
-    return !!a && a.constructor === Object;
-  }
-  private  deleteAllEmptyElement(model) {
-    for (const [key, value] of Object.entries(model)) {
-      if (this.isObject(value)) {
-        this.cheakObjectIsEmpty(value)
-          ? delete model[key]
-          : this.deleteAllEmptyElement(value);
+
+  cleanObject(object) {
+    Object.entries(object).forEach(([k, v]) => {
+      if (v && typeof v === 'object') {
+        this.cleanObject(v);
       }
-      if (Array.isArray(value) && !this.cheakArrayIsEmpty(value)) {
-        this.deleteAllEmptyElement(value);
-      } else {
-        this.cheakArrayIsEmpty(value) || this.cheakObjectIsEmpty(value)
-          ? delete model[key]
-          : '';
+      if (
+        (v && typeof v === 'object' && !Object.keys(v).length) ||
+        v === null ||
+        v === undefined
+      ) {
+        if (Array.isArray(object)) {
+          object.splice(k as any, 1);
+        } else {
+          delete object[k];
+        }
       }
-    }
+    });
+    return object;
   }
+
   Submit(model) {
+    console.log(model);
     //if selected item true than create person
     if (!this.SelectedItem) {
-      this.deleteAllEmptyElement(model);
+      this.cleanObject(model);
       let tempModel = {
         result: model,
-        user: this.authService.currentUserValue.username,
       };
       this.dataService.create(tempModel).subscribe(
         (data: any) => {
@@ -128,34 +187,32 @@ export class PersonComponent {
             ...this.list.filter((item) => item._id !== data.result._id),
           ];
           this.SelectedItem = data.result;
-        },(err)=>{
+        },
+        (err) => {
           this.isLoading = false;
         }
       );
     }
     //if selected item true than edit person
     else {
-      this.deleteAllEmptyElement(model);
+      this.cleanObject(model);
       let submitModel = {
         _id: this.SelectedItem._id,
         formDataResultId: this.SelectedItem.formDataResultId,
-        user: this.authService.currentUserValue.username,
         result: model,
       };
 
-      this.dataService.edit(submitModel).subscribe(
-        (data: any) => {
-          this.flashMessagesService.show('Анкета успешно обновлена', {
-            cssClass: 'alert-success',
-            timeout: 5000,
-          });
-          this.list = [
-            data.result,
-            ...this.list.filter((item) => item._id !== data.result._id),
-          ];
-          this.SelectedItem = data.result;
-        }
-      );
+      this.dataService.edit(submitModel).subscribe((data: any) => {
+        this.flashMessagesService.show('Анкета успешно обновлена', {
+          cssClass: 'alert-success',
+          timeout: 5000,
+        });
+        this.list = [
+          data.result,
+          ...this.list.filter((item) => item._id !== data.result._id),
+        ];
+        this.SelectedItem = data.result;
+      });
     }
   }
   NewPerson() {
@@ -164,16 +221,15 @@ export class PersonComponent {
   }
   SearchItemOnClick(event, selectedItem) {
     this.isLoading = true;
-    this.dataService.getFormData(selectedItem.formDataResultId).subscribe(
-      (data: any) => {
+    this.dataService
+      .getFormData(selectedItem.formDataResultId)
+      .subscribe((data: any) => {
         this.model = {
           ...data.result,
         };
         this.SelectedItem = selectedItem;
         this.isLoading = false;
-      },
-      this.ShowError
-    );
+      }, this.ShowError);
   }
   onKey(event: any) {
     // without type info
@@ -181,37 +237,28 @@ export class PersonComponent {
       this.isLoading = true;
       this.searchService
         .search('person', event.target.value.toString())
-        .subscribe(
-          (data: any) => {
-            this.list = data.result;
-            this.isLoading = false;
-          },
-          this.ShowError
-        );
+        .subscribe((data: any) => {
+          this.list = data.result;
+          this.isLoading = false;
+        }, this.ShowError);
     }
   }
   Download() {
-    
     this.isLoading = true;
-    this.dataService.getFile(this.SelectedItem._id).subscribe(
-      (data: any) => {
-        const wb = XLSX.read(data.result, { type: 'base64' });
-        XLSX.writeFile(
-          wb,
-          `${this.SelectedItem.family}_${this.SelectedItem.name}_${this.SelectedItem.surname}.xlsx`
-        );
-        this.isLoading = false;
-      },
-      this.ShowError.bind(this)
-    );
+    this.dataService.getFile(this.SelectedItem._id).subscribe((data: any) => {
+      const wb = XLSX.read(data.result, { type: 'base64' });
+      XLSX.writeFile(
+        wb,
+        `${this.SelectedItem.family}_${this.SelectedItem.name}_${this.SelectedItem.surname}.xlsx`
+      );
+      this.isLoading = false;
+    }, this.ShowError.bind(this));
   }
-  ShowError(data){
-    
+  ShowError(data) {
     this.flashMessagesService.show(`Ошибка ${JSON.stringify(data)}`, {
       cssClass: 'alert-danger',
       timeout: 5000,
     });
     this.isLoading = false;
-  };
-  
+  }
 }

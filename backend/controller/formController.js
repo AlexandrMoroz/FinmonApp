@@ -55,14 +55,14 @@ const Edit = async (body, res) => {
 };
 const GetByName = async (body, res) => {
   try {
-    // let form = "";
-    // if (body.name == "personForm") {
-    //   form = require("../mock/personForm.json");
-    // } else if (body.name == "companyForm") {
-    //   form = require("../mock/companyForm.json");
-    // }
-    // 
-    form = await Form.findOne({ name: body.name });
+    let form = "";
+    if (body.name == "personForm") {
+      form = require("../mock/personForm.json");
+    } else if (body.name == "companyForm") {
+      form = require("../mock/companyForm.json");
+    }
+    
+    // form = await Form.findOne({ name: body.name });
 
     return res.status(200).json({
       message: "Form get by name was complited",

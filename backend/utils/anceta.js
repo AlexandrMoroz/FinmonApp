@@ -3,8 +3,8 @@ const Cellwalker = require("./cellwalker.js");
 let XLSX = require("xlsx");
 
 class XLSXAnceta {
-  constructor(translate_arr) {
-    this.translate = Translate(translate_arr);
+  constructor(translateArr) {
+    this.translate = Translate(translateArr);
     this.cellwalker = new Cellwalker();
     this.wb = XLSX.utils.book_new();
     this.ws = XLSX.utils.aoa_to_sheet([]);
@@ -26,6 +26,11 @@ class XLSXAnceta {
           let newCell = cell.copy();
           this.recurceAdd(val, newCell);
           cell.setCurrentRow(newCell.getCurrentRow());
+        } else if (Array.isArray(val)) {
+          this.Add([key], cell, false);
+          let newCell = cell.copy();
+          this.recurceAdd(val, newCell);
+          cell.setCurrentRow(newCell.getCurrentRow());
         } else {
           this.Add([key, val], cell);
         }
@@ -42,43 +47,13 @@ class XLSXAnceta {
     }
   }
 
-  // createFormBufFromArr(json) {
-  //   
-  //   json.forEach((item) => {
-  //     this.Add(
-  //       [
-  //         "Створенно користувачем",
-  //         item.user,
-  //         "Дата створення:",
-  //         item.createdAt,
-  //       ],
-  //       this.cellwalker
-  //     );
-  //     this.format(item, this.cellwalker);
-  //     this.cellwalker.setCurrentColToFirst();
-  //   });
-  //   return XLSX.write(this.wb, { type: "base64", bookType: "xlsx" });
-  // }
-  // format(value,cell){
-
-  // }
   createFormBuf(json) {
-
-    XLSX.utils.sheet_add_aoa(
-      this.ws,
-      [
-        [
-          "Створенно користувачем",
-          json.user,
-          "Дата створення:",
-          json.createdAt,
-        ],
-      ],
-      {
-        origin: this.cellwalker.getCurrentCell(),
-      }
+    this.Add([json.title], this.cellwalker, true);
+    this.Add(
+      ["Створенно користувачем", json.user, "Дата створення:", json.createdAt],
+      this.cellwalker,
+      true
     );
-    this.cellwalker.goDown();
 
     Object.entries(json.result).forEach(([key, val]) => {
       this.Add([key], this.cellwalker, false);

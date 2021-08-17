@@ -13,7 +13,7 @@ export class HistoryService {
   OPERATIONS = {
     add: 'Додано',
     remove: 'Видаленно',
-    replace: 'Заменінно',
+    replace: 'Замінено',
     move: 'Переміщено',
   };
 
@@ -80,7 +80,7 @@ export class HistoryService {
     } else if (Array.isArray(value)) {
       return value.map((item) => {
         return this.mapDiffValue(item);
-      }).join('');
+      }).join(', ');
     } else {
       return `${value}`;
     }

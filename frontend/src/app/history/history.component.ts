@@ -32,9 +32,12 @@ class Company {
     this.registNumber = arg.registNumber;
     this.formDataResultId = arg.formDataResultId;
   }
-  toHTMLString() {
+  toHTMLSeachString() {
     return `Назва: ${this.shortName} <br>
             Реєстраціїний номер ${this.registNumber}<br>`;
+  }
+  toHTMLHeaderString() {
+    return `${this.shortName}  ${this.registNumber}`;
   }
   toFileNameString() {
     return `${this.shortName}_${this.registNumber}`;
@@ -68,14 +71,22 @@ class Person {
     this.inn = arg.INN;
     this.formDataResultId = arg.formDataResultId;
   }
-  toHTMLString() {
+  toHTMLSearchString() {
     return `Ім'я: ${this.name} <br>
             Призвище: ${this.family}<br>
             По батьковій: ${this.surname}<br>
-            ІПН: ${this.inn}<br>`;
+            ІПН: ${this.inn == undefined ? '' : this.inn}<br>`;
+  }
+  toHTMLHeaderString() {
+    return `${this.name} 
+            ${this.family}
+            ${this.surname == undefined ? '' : this.surname}
+            ${this.inn == undefined ? '' : this.inn}`;
   }
   toFileNameString() {
-    return `${this.name}_${this.family}_${this.surname}`;
+    return `${this.name}_${this.family}_${
+      this.surname == undefined ? '' : this.surname
+    }`;
   }
 }
 @Component({
@@ -117,7 +128,7 @@ export class HistoryComponent {
         (data: any) => {
           this.historyContainer.nativeElement.innerHTML = data;
           this.selectedItem = selectedItem;
-          
+
           this.isLoading = false;
         },
         (error) => {

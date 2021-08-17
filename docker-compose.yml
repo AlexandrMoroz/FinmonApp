@@ -16,7 +16,7 @@ services:
     container_name: mean_express
     restart: always
     ports:
-      - "3000:3000" #specify ports forewarding
+      - "5000:5000" #specify ports forewarding
       # Below database enviornment variable for api is helpful when you have to use database as managed service
     environment:
       - APP_DB=mongodb://mongo:27017/node-auth

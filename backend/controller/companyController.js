@@ -2,6 +2,7 @@ const Company = require("../models/company");
 const CompanyFormData = require("../models/companyFormData");
 const User = require("../models/user");
 const XLSXAnceta = require("../utils/anceta");
+const {recursFormResult} = require("../utils/history");
 const Helper = require("../models/helper");
 let order = require("../mock/companyOrder.json");
 /**
@@ -19,7 +20,7 @@ const Create = async (req, res) => {
 
     const newCompany = await new Company({
       shortName: req.body.result.ShortName,
-      registNumber: req.body.result.RegistNumber,
+      clientCode: req.body.result.ClientCode,
       username: req.user.username,
       formDataResultId: newForm._id,
     }).save();
@@ -44,6 +45,7 @@ const Create = async (req, res) => {
  */
 const Edit = async (req, res) => {
   try {
+
     //find person form and edit it
     await CompanyFormData.findOneAndUpdate(
       { _id: req.body.formDataResultId },
@@ -59,7 +61,7 @@ const Edit = async (req, res) => {
       { _id: req.body._id },
       {
         shortName: req.body.result.ShortName,
-        registNumber: req.body.result.RegistNumber.toString(),
+        clientCode: req.body.result.ClientCode.toString(),
       },
       (err, doc, res) => {
         if (err) {
@@ -91,7 +93,7 @@ const Search = async (req, res) => {
     let companies = await Company.find({
       $or: [
         { shortName: req.query.searchText },
-        { registNumber: req.query.searchText },
+        { clientCode: req.query.searchText },
       ],
     });
 
@@ -121,6 +123,7 @@ const FormDataById = async (req, res) => {
   });
 };
 
+
 const XLMS = async (req, res) => {
   let company = await Company.findOne({ _id: req.query.id });
 
@@ -128,21 +131,25 @@ const XLMS = async (req, res) => {
   let formdata = await CompanyFormData.findOne({
     _id: company.formDataResultId,
   });
-
+  
   //Sort of elemets by sort table
-  let arr = [];
-  Object.entries(formdata.result).forEach((item) => {
-    arr[order[item[0]].p] = item;
+  let arr = recursFormResult(formdata.result, order, []);
+  
+  let result = {};
+  arr.forEach((item) => {
+    Object.entries(item).forEach(([key, value]) => {
+      result[key] = value;
+    });
   });
-  arr = arr.filter((item) => item != null);
-  arr = Object.fromEntries(arr);
-
   let translate = await Helper.findOne({ name: "translate" });
   let xmls = new XLSXAnceta(translate.content);
   let buf = xmls.createFormBuf({
+    title: `Анкета юридичної особи ${
+      formdata.result["IsResident"] ? "Резидента" : "Не резидента"
+    }`,
     user: `${user.family} ${user.name} ${user.surname}`,
     createdAt: new Date(company.createdAt).toLocaleString(),
-    result: arr,
+    result,
   });
   return res.status(200).json({
     message: "Company get XLSX doc by id succcesed",

@@ -1,134 +1,139 @@
 {
   "DateOfFirstSigned": { "p": 1 },
   "DateOfFirstBissnesContact": { "p": 2 },
-  "IdentificationЕype": { "p": 3 },
-  "ServiceType": { "p": 4 },
-  "DateOfFreeze": { "p": 5 },
-  "DateOfUnfreeze": { "p": 6 },
-  "Name": { "p": 7 },
-  "Family": { "p": 8 },
-  "Surname": { "p": 9 },
-  "UNIR": { "p": 10 },
-  "INN": { "p": 11 },
-  "Birthday": { "p": 12 },
-  "PlaceOfBirth": { "p": 13 },
-  "IDDocument": { "p": 14 },
-  "IDSeries": { "p": 15 },
-  "IDNumber": { "p": 16 },
-  "IDGovAgency": { "p": 17 },
-  "IDDateRelise": { "p": 18 },
+  "DateOffContact": { "p": 3 },
+  "IdentificationDate": { "p": 4 },
+  "IdentificationType": { "p": 5 },
+  "ServiceType": { "p": 6 },
+  "DateOfFreeze": { "p": 7 },
+  "DateOfUnfreeze": { "p": 8 },
+  "Family": { "p": 9 },
+  "Name": { "p": 10 },
+  "Surname": { "p": 11 },
+  "UNIR": { "p": 12 },
+  "INN": { "p": 13 },
+  "Birthday": { "p": 14 },
+  "PlaceOfBirth": { "p": 15 },
+  "IDDocument": { "p": 16 },
+  "IDSeries": { "p": 17 },
+  "IDNumber": { "p": 18 },
+  "IDGovAgency": { "p": 19 },
+  "IDDateRelise": { "p": 20 },
   "Regist": {
-    "p": 19,
-    "c": [
-      { "Country": { "p": 1 } },
-      { "State": { "p": 2 } },
-      { "District": { "p": 3 } },
-      { "Adress": { "p": 4 } }
-    ]
+    "p": 21,
+    "c": {
+      "Country": { "p": 1 },
+      "State": { "p": 2 },
+      "District": { "p": 3 },
+      "Adress": { "p": 4 },
+      "IsEqualsToLive": { "d": true }
+    }
   },
   "Live": {
-    "p": 20,
-    "c": [
-      { "Country": { "p": 1 } },
-      { "State": { "p": 2 } },
-      { "District": { "p": 3 } },
-      { "Adress": { "p": 4 } }
-    ]
+    "p": 22,
+    "c": {
+      "Country": { "p": 1 },
+      "State": { "p": 2 },
+      "District": { "p": 3 },
+      "Adress": { "p": 4 }
+    }
   },
+  "Citizen": { "p": 23 },
+  "IsResident": { "p": 24 },
   "FOP": {
-    "p": 21,
-    "c": [
-      { "GovRegDoc": { "p": 1 } },
-      { "GovRegDocSerias": { "p": 2 } },
-      { "GovRegDocNumber": { "p": 3 } },
-      { "BusinessType": { "p": 4 } },
-      { "ProfessionType": { "p": 5 } },
-      { "GovRegDocDateRelise": { "p": 6 } },
-      { "RegistrationNumber": { "p": 7 } },
-      { "GovRegDocDepartment": { "p": 8 } }
-    ]
+    "p": 25,
+    "c": {
+      "GovRegDoc": { "p": 1 },
+      "GovRegDocSerias": { "p": 2 },
+      "GovRegDocNumber": { "p": 3 },
+      "BusinessType": { "p": 4 },
+      "ProfessionType": { "p": 5 },
+      "GovRegDocDateRelise": { "p": 6 },
+      "RegistrationNumber": { "p": 7 },
+      "GovRegDocDepartment": { "p": 8 }
+    }
   },
   "PEP": {
-    "p": 22,
-    "c": [
-      { "Type": { "p": 1 } },
-      { "Category": { "p": 2 } },
-      { "Name": { "p": 3 } },
-      { "Family": { "p": 4 } },
-      { "Surname": { "p": 5 } },
-      { "DateOfNown": { "p": 6 } },
-      { "DateOfBossAgree": { "p": 7 } },
-      { "DateOffContact": { "p": 8 } }
-    ]
+    "p": 26,
+    "c": {
+      "Type": { "p": 1 },
+      "Category": { "p": 2 },
+      "Name": { "p": 3 },
+      "Family": { "p": 4 },
+      "Surname": { "p": 5 },
+      "DateOfNown": { "p": 6 },
+      "DateOfBossAgree": { "p": 7 },
+      "DateOffContactWithPEP": { "p": 8 },
+      "IsSanction": { "p": 9 }
+    }
   },
-  "IsSanction": { "p": 23 },
-  "IsTerrorist": { "p": 24 },
+  "IsSanction": { "p": 27 },
+  "IsTerrorist": { "p": 28 },
   "Representative": {
-    "p": 25,
-    "c": [
-      { "Name": { "p": 1 } },
-      { "Family": { "p": 2 } },
-      { "Surname": { "p": 3 } },
-      { "UNIR": { "p": 4 } },
-      { "INN": { "p": 5 } },
-      { "Birthday": { "p": 6 } },
-
-      { "IDDocument": { "p": 7 } },
-      { "IDSeries": { "p": 8 } },
-      { "IDNumber": { "p": 9 } },
-      { "IDGovAgency": { "p": 10 } },
-      { "IDDateRelise": { "p": 11 } },
-      {
-        "Regist": {
-          "p": 12,
-          "c": [
-            { "Country": { "p": 1 } },
-            { "State": { "p": 2 } },
-            { "District": { "p": 3 } },
-            { "Adress": { "p": 4 } }
-          ]
+    "p": 29,
+    "c": {
+      "Family": { "p": 1 },
+      "Name": { "p": 2 },
+      "Surname": { "p": 3 },
+      "UNIR": { "p": 4 },
+      "INN": { "p": 5 },
+      "Birthday": { "p": 6 },
+      "IDDocument": { "p": 7 },
+      "IDSeries": { "p": 8 },
+      "IDNumber": { "p": 9 },
+      "IDGovAgency": { "p": 10 },
+      "IDDateRelise": { "p": 11 },
+      "Regist": {
+        "p": 12,
+        "c": {
+          "Country": { "p": 1 },
+          "State": { "p": 2 },
+          "District": { "p": 3 },
+          "Adress": { "p": 4 }
         }
       },
-      {
-        "Live": {
-          "p": 13,
-          "c": [
-            { "Country": { "p": 1 } },
-            { "State": { "p": 2 } },
-            { "District": { "p": 3 } },
-            { "Adress": { "p": 4 } }
-          ]
+      "Live": {
+        "p": 13,
+        "c": {
+          "Country": { "p": 1 },
+          "State": { "p": 2 },
+          "District": { "p": 3 },
+          "Adress": { "p": 4 }
         }
       },
-      { "Citizen": { "p": 14 } },
-      { "ConfirmAuthorityDocument": { "p": 15 } },
-      { "ConfirmAuthorityDocDate": { "p": 16 } },
-      { "ConfirmAuthorityDocNum": { "p": 17 } },
-      { "IsTerrorist": { "p": 18 } }
-    ]
+      "Citizen": { "p": 14 },
+      "ConfirmAuthorityDocument": { "p": 15 },
+      "ConfirmAuthorityDocDate": { "p": 16 },
+      "ConfirmAuthorityDocNum": { "p": 17 },
+      "IsTerrorist": { "p": 18 }
+    }
   },
-  "Citizen": { "p": 26 },
-  "AdressIsNotTrue": { "p": 27 },
-  "EmploymentType": { "p": 28 },
-  "Licenses": { "p": 29 },
+  "AdressIsNotTrue": { "p": 30 },
+  "EmploymentType": { "p": 31 },
+  "Licenses": { "p": 32 },
   "BankAccount": {
-    "p": 30,
-    "c": [
-      { "BankName": { "p": 1 } },
-      { "Code": { "p": 2 } },
-      { "AccountNumber": { "p": 3 } },
-      { "Country": { "p": 4 } }
-    ]
+    "p": 33,
+    "c": {
+      "BankName": { "p": 1 },
+      "BankCode": { "p": 2 },
+      "AccountCode": { "p": 3 }
+    }
   },
-  "EmployersNum": { "p": 31 },
-  "MounthIncome": { "p": 32 },
-  "Property": { "p": 33 },
-  "Telephone": { "p": 34 },
-  "Email": { "p": 35 },
-  "CheckList": { "p": 36 },
-  "AdditionalSteps": { "p": 37 },
-  "Operations": { "p": 38 },
-  "ClienReputations": { "p": 39 },
-  "ClienFinancialStand": { "p": 40 },
-  "ClienRisk": { "p": 41 }
+  "EmployersNum": { "p": 34 },
+  "MounthIncome": { "p": 35 },
+  "Property": { "p": 36 },
+  "Telephone": { "p": 37 },
+  "Email": { "p": 38 },
+  "CheckList": { "p": 39 },
+  "AdditionalSteps": { "p": 40 },
+  "Operations": { "p": 41 },
+  "ClienReputations": {
+    "p": 42,
+    "c": { "Reputation": { "p": 1 }, "CreateDate": { "p": 2 } }
+  },
+  "ClienFinancialStand": {
+    "p": 43,
+    "c": { "FinancialStand": { "p": 1 }, "CreateDate": { "p": 2 } }
+  },
+  "ClienRisk": { "p": 44 }
 }
