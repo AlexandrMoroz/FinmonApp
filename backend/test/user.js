@@ -10,7 +10,7 @@ let token = "";
 const user = {
   block: false,
   role: "admin",
-  name: "alexandr",
+  name: "alexandr2",
   family: "moroz1",
   surname: "sergeevich1",
   cashboxAdress:
