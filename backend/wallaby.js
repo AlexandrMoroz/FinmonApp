@@ -19,7 +19,7 @@ module.exports = function () {
     tests: ["test/*.js"],
     testFramework: "mocha",
     setup: function () {
-      global.expect = require("chai").expect;
+      global.should = require("chai").should;
     },
 
     env: {
