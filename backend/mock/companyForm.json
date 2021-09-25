@@ -2571,7 +2571,15 @@
                 "cancelButtonClass": "ml-1",
                 "type": "array"
               },
-              "fieldArray": { "type": "input" }
+              "fieldArray": [
+                {
+                  "type": "autocomplete",
+                  "templateOptions": {
+                    "required": true,
+                    "placeholder": "Вид господарської діяльності"
+                  }
+                }
+              ]
             },
             {
               "className": "col-6",

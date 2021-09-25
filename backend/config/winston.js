@@ -32,13 +32,12 @@ var logger = createLogger({
   exceptionHandlers: [
     new transports.File({
       level: "error",
-      filename: "./logs/info.log",
+      filename: "./logs/error.log",
       handleExceptions: true,
       timestamp: true,
       maxsize: 1000000,
     }),
     new transports.Console(options.console),
-  
   ],
   exitOnError: false, // do not exit on handled exceptions
 });
