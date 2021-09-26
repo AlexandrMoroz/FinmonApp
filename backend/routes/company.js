@@ -9,6 +9,7 @@ const {
   Edit,
   Search,
   XLMS,
+  FinRate
 } = require("../controller/companyController");
 
 router.post(
@@ -17,8 +18,8 @@ router.post(
   checkRole(["user", "admin"]),
   checkSchema(CompanyValidator.getCreateValidation()),
   validate,
-  async (req, res) => {
-    await Create(req, res);
+  async (req, res, next) => {
+    return await Create(req, res, next);
   }
 );
 
@@ -28,9 +29,8 @@ router.put(
   checkRole(["user", "admin"]),
   checkSchema(CompanyValidator.getEditValidation()),
   validate,
-  async (req, res) => {
-    //
-    await Edit(req, res);
+  async (req, res, next) => {
+    return await Edit(req, res, next);
   }
 );
 
@@ -43,9 +43,8 @@ router.get(
   checkRole(["user", "admin"]),
   checkSchema(CompanyValidator.getFormDataValidation()),
   validate,
-  async (req, res) => {
-    //
-    return FormDataById(req, res);
+  async (req, res, next) => {
+    return await FormDataById(req, res, next);
   }
 );
 /**
@@ -57,9 +56,8 @@ router.get(
   checkRole(["user", "admin"]),
   checkSchema(CompanyValidator.getSearchValidation()),
   validate,
-  async (req, res) => {
-    //
-    return Search(req, res);
+  async (req, res, next) => {
+    return await Search(req, res, next);
   }
 );
 
@@ -72,9 +70,19 @@ router.get(
   checkRole(["admin"]),
   checkSchema(CompanyValidator.getFileValidation()),
   validate,
-  async (req, res) => {
-    //
-    return XLMS(req, res);
+  async (req, res, next) => {
+    return await XLMS(req, res, next);
+  }
+);
+router.get(
+  "/finrate",
+  userAuth,
+  checkRole(["user", "admin"]),
+  checkSchema(CompanyValidator.getFinRateValidation()),
+  validate,
+  async (req, res, next) => {
+    
+    await FinRate(req, res, next);
   }
 );
 module.exports = router;

@@ -164,7 +164,7 @@ let test = () => {
             res.body.should.deep.equal({
               message: "helper get by name was complited",
               result: {
-                ...oldHelper,
+                ...oldHelper.content,
               },
               success: true,
             });

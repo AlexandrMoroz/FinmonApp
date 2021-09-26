@@ -2,11 +2,15 @@ const Person = require("../models/person");
 const PersonFormData = require("../models/personFormData");
 const User = require("../models/user");
 const XLSXAnceta = require("../utils/anceta");
-const {recursFormResult} = require("../utils/history");
+const { recursFormResult } = require("../utils/history");
 const Helper = require("../models/helper");
 let order = require("../mock/personOrder.json");
-
+const { INDIVIDUALS } =
+  require("../models/GroupOfQuestions/groupOfQuestions").Types;
+const UnionOfQuestionGroup = require("../models/GroupOfQuestions/unionOfQuestionGroup");
+const { logger } = require("express-winston");
 /**
+ *
  * @DESC person create 1. create form result. 2 create person documen with result id
  * req.body: {
  *  result: {} - form data model
@@ -29,14 +33,14 @@ const Create = async (req, res) => {
       formDataResultId: newPersonForm._id,
     }).save();
 
-    return res.status(201).json({
+    res.status(201).json({
       message: "Person was create",
       result: person,
       success: true,
     });
   } catch (err) {
     // Implement logger function (winston)
-    return res.status(500).json({
+    res.status(500).json({
       message: "Unable to create person.",
       success: false,
       error: err,
@@ -59,7 +63,7 @@ const Edit = async (req, res) => {
         __reason: `${req.body.user} updated`,
       }
     );
-     let newPerson = {
+    let newPerson = {
       name: req.body.result.Name,
       family: req.body.result.Family,
       surname: req.body.result.Surname ? req.body.result.Surname : "",
@@ -76,14 +80,14 @@ const Edit = async (req, res) => {
       }
     );
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "Person was edited",
       result: person,
       success: true,
     });
   } catch (err) {
     // Implement logger function (winston)
-    return res.status(500).json({
+    res.status(500).json({
       message: "Unable to edit person.",
       success: false,
       error: err,
@@ -105,14 +109,14 @@ const Search = async (req, res) => {
       ],
     });
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "Persons get all succcesed",
       result: persons,
       success: true,
     });
   } catch (err) {
     // Implement logger function (winston)
-    return res.status(500).json({
+    res.status(500).json({
       message: "Unable to search person.",
       success: false,
       error: err,
@@ -126,21 +130,20 @@ const FormDataById = async (req, res) => {
   try {
     let person = await PersonFormData.findOne({ _id: req.query.id });
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "Person get by id succcesed",
       result: person.result,
       success: true,
     });
   } catch (err) {
     // Implement logger function (winston)
-    return res.status(500).json({
+    res.status(500).json({
       message: "Unable to search person.",
       success: false,
       error: err,
     });
   }
 };
-
 
 /**
  * @DESC To get person from data.
@@ -179,7 +182,6 @@ const XLMS = async (req, res) => {
         result[key] = value;
       });
     });
-    //console.log(result);
     let translate = await Helper.findOne({ name: "translate" });
     let xmls = new XLSXAnceta(translate.content);
 
@@ -191,15 +193,14 @@ const XLMS = async (req, res) => {
       createdAt: new Date(person.createdAt).toLocaleString("en-GB"),
       result,
     });
-    return res.status(200).json({
+    res.status(200).json({
       message: "Person get XLSX doc by id succcesed",
       result: buf,
       success: true,
     });
   } catch (err) {
-    console.log(err);
     // Implement logger function (winston)
-    return res.status(500).json({
+    res.status(500).json({
       message: "Unable get file from person.",
       success: false,
       error: err,
@@ -207,10 +208,31 @@ const XLMS = async (req, res) => {
   }
 };
 
+const FinRate = async (req, res, next) => {
+  try {
+    let personData = await PersonFormData.findOne({ _id: req.query.id });
+    let union = new UnionOfQuestionGroup(personData, INDIVIDUALS);
+    let answers = await union.calcGroups();
+    res.status(200).json({
+      message: "Person get calculate person fin rating ",
+      result: answers,
+      success: true,
+    });
+  } catch (err) {
+    console.log(err);
+    // Implement logger function (winston)
+    res.status(500).json({
+      message: "Unable get calculate person fin rating.",
+      success: false,
+      error: err,
+    });
+  }
+};
 module.exports = {
   FormDataById,
   Create,
   Edit,
   Search,
   XLMS,
+  FinRate,
 };

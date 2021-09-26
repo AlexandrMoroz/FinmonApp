@@ -128,10 +128,7 @@ const PersonValidator = {
             if (!mongoose.Types.ObjectId.isValid(value))
               throw new Error("Помилковый тип _id");
             let flag = await Person.exists({ _id: value });
-            if (!flag)
-              throw new Error(
-                "Особу за _id не знайденно"
-              );
+            if (!flag) throw new Error("Особу за _id не знайденно");
             return true;
           },
         },
@@ -199,7 +196,6 @@ const PersonValidator = {
           },
         },
       },
-     
     };
   },
   getFormDataValidation: () => {
@@ -277,6 +273,37 @@ const PersonValidator = {
             let flag = await Person.exists({ _id: value });
             if (!flag) throw new Error("Невірний id");
             return true;
+          },
+        },
+      },
+    };
+  },
+  getFinRateValidation: () => {
+    return {
+      id: {
+        in: ["query"],
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле id порожне",
+          bail: true,
+        },
+        isString: {
+          errorMessage: "Поле id повинно бути строкою",
+          bail: true,
+        },
+        custom: {
+          options: async (value) => {
+            if (!mongoose.Types.ObjectId.isValid(value))
+              throw new Error("Невірний тип id");
+            let flag = await PersonFormData.exists({ _id: value });
+            if (!flag) throw new Error("Невірний id");
+            return true;
+          },
+        },
+        customSanitizer: {
+          options: (value) => {
+            return value.toString();
           },
         },
       },

@@ -14,9 +14,8 @@ router.post(
   checkRole(["admin"]),
   checkSchema(HelperValidator.getCreateValidation()),
   validate,
-  async (req, res) => {
-    //
-    await Create(req.body, res);
+  async (req, res, next) => {
+    return await Create(req.body, res, next);
   }
 );
 
@@ -26,9 +25,8 @@ router.get(
   checkRole(["user", "admin"]),
   checkSchema(HelperValidator.getByNameValidation()),
   validate,
-  async (req, res) => {
-    //
-    return GetByName(req.query, res);
+  async (req, res, next) => {
+    return await GetByName(req.query, res, next);
   }
 );
 

@@ -1,0 +1,150 @@
+{
+  "_id": "6138b3245b67031cecf2ece9" ,
+  "result": {
+    "IsResident": false,
+    "Ownership": {
+      "HasTrast": true,
+      "HasRatedСontrol": true,
+      "OwnershipStructureIsComplex": true
+    },
+    "MoutherCompany": {
+      "MoutherCompanyInfoForNonResident": {
+        "Director": { "IsResident": true },
+        "Country": "Пiвнiчна Корея",
+        "ActualLocation": { "Country": "Буркина-Фасо" }
+      },
+      "MoutherCompanyInfo": "LTD LIMITED"
+    },
+    "CheckList": {
+      "IsTerrorist": true,
+      "IsSanction": true,
+      "ClientProfessionIsDifferent": true,
+      "ClienProduceShares": true,
+      "HasInfoAboutEffectOnOwnerByRealOwners": true,
+      "HasQuestionFromPolice": true,
+      "HasQuestionFromTaxOffice": true,
+      "ClientHideFromCheck": true,
+      "HasInfoThatCompanyIsTaxFroudCompany": true,
+      "OwnerDontHavePlaneOfBuisness": true,
+      "HasInfoAboutRestrictionOwnerRights": true,
+      "CircleOfCommunicationDeefOfReality": true,
+      "AdressOfRegistHasMassiveRegistCompany": true,
+      "HasInfoThatCompanyRegistOnTheftDoc": true,
+      "RegistAdressInFlatWithAnotherCompany": true,
+      "HasInfoAboutFroudOwner": true,
+      "ClientDontHaveProductionCapacity": true,
+      "HasInfoAboutSendFroudInfoToGovFinDep": true,
+      "WorkersCountFalsy": true,
+      "CompanyPayByBarter": true,
+      "HasNegativeOperatingIncome": true,
+      "HasMassiveLongCredit": true,
+      "HasCreditThatGuarantedAnotherFinInstгuments": true,
+      "ClientIsNotProfitable": true
+    },
+    "DateOfFirstSigned": "2021-09-06",
+    "DateOfFirstBissnesContact": "2021-09-08",
+    "IdentificationDate": "2021-09-07",
+    "IdentificationType": "Особиста фізична присутність",
+    "ServiceType": ["Надання позик"],
+    "ShortName": "ТОВ \"ГЕРМЕС\"",
+    "FullName": "ТОВ \"ГЕРМЕС\"",
+    "OwnershipForm": "приватна",
+    "ClientCode": "12345678",
+    "DateOfRegistration": "2021-08-01",
+    "RegistPlace": { "Country": "Камбоджа", "AdressIsNotTrue": true },
+    "ActualLocation": { "Country": "Іран" },
+    "Director": [
+      {
+        "IsResident": true,
+        "Regist": { "Country": "Камбоджа" },
+        "Live": { "Country": "Ямайка" },
+        "IsSignificantParticipant": true,
+        "IsFinaleOwner": true,
+        "IsTerrorist": true,
+        "IsPEP": true,
+        "IsSanction": true,
+        "HasFactOfChangeDirectorIfPEP": true,
+        "IsVulnerablePeople": true,
+        "IsPoorOrHomless": true,
+        "IsTooYoungOrTooOld": true,
+        "IsImmigrant": true,
+        "Name": "Іванов",
+        "Family": "Іван",
+        "Surname": "Іванович",
+        "INN": "1234567891",
+        "Citizen": "Ямайка",
+        "ShareInCompany": "30",
+        "ConnectedPerson": [
+          { "NameOfCompany": "ТОВ \"ЮПІТЕР\"", "Position": "директор" },
+          { "NameOfCompany": "ТОВ \"ВЕНЕРА\"", "Position": "гол бухгалтер" },
+          { "NameOfCompany": "ТОВ \"МАРС\"", "Position": "директор" }
+        ],
+        "DirectorRepresentative": [
+          {
+            "IsResident": true,
+            "Regist": { "Country": "Пакистан" },
+            "Live": { "Country": "Фiлiппiни" },
+            "IsSignificantParticipant": true,
+            "IsFinaleOwner": true,
+            "IsTerrorist": true,
+            "IsPEP": true,
+            "IsSanction": true,
+            "HasFactOfChangeDirectorIfPEP": true,
+            "IsVulnerablePeople": true,
+            "IsPoorOrHomless": true,
+            "IsTooYoungOrTooOld": true,
+            "IsImmigrant": true,
+            "Name": "Гонец",
+            "Family": "Микола",
+            "Surname": "Азікович",
+            "Citizen": "Марокко"
+          }
+        ]
+      }
+    ],
+    "TypesOfBusiness": [
+      "юридичні послуги ",
+      "консалтингові послуги ",
+      "бухгалтерські послуги ",
+      "послуги з перестрахування",
+      "видобуток сирої нафти, природного газу та/або виробництво нафтопродуктів"
+    ],
+    "BankAccounts": [
+      {
+        "BankName": "УКРГАЗ",
+        "Code": "305112",
+        "AccountNumber": "135464651684653135432135431",
+        "Country": "Камбоджа"
+      }
+    ],
+    "MounthIncome": 0,
+    "ClearMounthIncome": 0,
+    "ProfitabilityOfSale": 0,
+    "Owner": [
+      {
+        "IsResident": true,
+        "Regist": { "Country": "Ботсвана" },
+        "Live": { "Country": "Барбадос" },
+        "IsTerrorist": true,
+        "IsPEP": true,
+        "IsSanction": true,
+        "HasFactOfChangeDirectorIfPEP": true,
+        "IsVulnerablePerson": true,
+        "Name": "Перший",
+        "Family": "Босс",
+        "Surname": "Боссович",
+        "Citizen": "Сiрiйська Арабська Республiка"
+      }
+    ],
+    "PointOfBusiness": "виробництво та торгівля матеріалами ядерних реакторів",
+    "Operations": [
+      { "Operation": "128", "CreateDate": "2021-09-08" },
+      { "Operation": "116", "CreateDate": "2021-09-08" },
+      { "Operation": "326", "CreateDate": "2021-09-08" }
+    ],
+    "ClientUseProduct": "велика частка готівкових операцій, що є невластивим для відповідного виду діяльності клієнт"
+  },
+  "createdAt": { "$date": "2021-09-08T12:57:08.739Z" },
+  "updatedAt": { "$date": "2021-09-10T12:48:50.078Z" },
+  "__v": 0
+}

@@ -7,12 +7,13 @@ const { serializeUser } = require("../utils/Auth");
 /**
  * @DESC To register the user (ADMIN, SUPER_ADMIN, USER)
  */
-const Create = async (body, res) => {
+const Create = async (body, res, next) => {
   try {
+ 
     // Get the hashed password
     //const password = await bcrypt.hash(body.password, 12);
     // create a new user
-    await new User({
+    let createdUser = await new User({
       block: false,
       name: body.name,
       family: body.family,
@@ -24,13 +25,14 @@ const Create = async (body, res) => {
       password: body.password,
     }).save();
 
-    return res.status(201).json({
+    res.status(201).json({
       message: "User was created",
+      result: serializeUser(createdUser),
       success: true,
     });
   } catch (err) {
     // Implement logger function (winston)
-    return res.status(500).json({
+    res.status(500).json({
       message: "Unable to create your account.",
       success: false,
       error: err,
@@ -41,27 +43,26 @@ const Create = async (body, res) => {
 /**
  * @DESC To edit the user
  */
-const Edit = async (body, res) => {
+const Edit = async (body, res, next) => {
   try {
-  
     // Find user and edit it
     let editedUser = await User.findOneAndUpdate(
       { _id: body.id },
       { ...body },
-      (err, doc, res) => {
+      (err, doc, res, next) => {
         if (err) {
           throw err;
         }
       }
     );
-    return res.status(200).json({
+    res.status(200).json({
       message: "User success edited",
-      user: serializeUser(editedUser),
+      result: serializeUser(editedUser),
       success: true,
     });
   } catch (err) {
     // Implement logger function (winston)
-    return res.status(500).json({
+    res.status(500).json({
       message: "Unable to edit your account.",
       success: false,
       error: err,
@@ -71,14 +72,14 @@ const Edit = async (body, res) => {
 /**
  * @DESC To get all users
  */
-const All = async (res) => {
+const All = async (res, next) => {
   let tempUsers = await User.find();
   tempUsers = tempUsers.map((item) => {
     return serializeUser(item);
   });
-  return res.status(200).json({
+  res.status(200).json({
     message: "User get all was succces",
-    users: tempUsers,
+    result: tempUsers,
     success: true,
   });
 };
@@ -86,7 +87,7 @@ const All = async (res) => {
 /**
  * @DESC To Login the user (ADMIN, SUPER_ADMIN, USER)
  */
-const Login = async (body, res) => {
+const Login = async (body, res, next) => {
   try {
     let { username } = body;
 
@@ -112,13 +113,13 @@ const Login = async (body, res) => {
       token: `Bearer ${token}`,
       expiresIn: 28800,
     };
-    return res.status(200).json({
+    res.status(200).json({
       message: "You are now logged in.",
       ...result,
       success: true,
     });
   } catch (err) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Unable login.",
       success: false,
       error: err,

@@ -1,0 +1,65 @@
+{
+  "_id": { "$oid": "613885245b67031cecf2ecd8" },
+  "result": {
+    "IsResident": true,
+    "CheckList": {
+      "HasQuestionFromPolice": false,
+      "HasQuestionFromFinmon": false,
+      "HasBadReputation": false,
+      "ClientProfessionIsDifferent": true,
+      "ClientHideFromCheck": true,
+      "HasNotIncome": true,
+      "HasNegativeOperatingIncome": true,
+      "HasCreditThatGuarantedAnotherFinInstгuments": true,
+      "ClientUseFiduciaryService": true,
+      "IsSanction": true,
+      "IsTerrorist": true,
+      "ClientVIPService": "Плановий або фактичний річний оборот фінансових операцій перевищує 10 мільйонів гривень",
+      "ClientUseProduct": "проведення фінансових операцій на незвично великі суми (або загальний оборот), що є невластивим для відомої установі діяльності клієнт"
+    },
+    "DateOfFirstSigned": "2021-09-06",
+    "DateOfFirstBissnesContact": "2021-09-08",
+    "DateOffContact": "",
+    "IdentificationDate": "2021-09-07",
+    "IdentificationType": "Особиста фізична присутність",
+    "ServiceType": ["Надання позик"],
+    "Family": "Іванов",
+    "Name": "Василь",
+    "Surname": "Алібабаєвич",
+    "INN": "1234567891",
+    "Birthday": "1990-01-01",
+    "PlaceOfBirth": "Київ",
+    "IDDocument": "паспорт громадянина України",
+    "IDSeries": "КА",
+    "IDNumber": "123456",
+    "IDGovAgency": "Київський РВ УМВС України в м.Києві",
+    "IDDateRelise": "2010-01-01",
+    "UNIR": "9999999999999999",
+    "Citizen": "Ямайка",
+    "Regist": { "Country": "Беліз", "IsEqualsToLive": true },
+    "Live": { "Country": "Беліз", "IsEqualsToLive": true },
+    "FOP": {
+      "GovRegDoc": "виписка",
+      "GovRegDocSerias": "АА",
+      "GovRegDocNumber": "555555",
+      "TypesOfBusiness": [
+        "юридичні послуги",
+        "консалтингові послуги",
+        "бухгалтерські послуги",
+        "азартні ігри, лотереї",
+        "виробництво та/або торгівля фармацевтичними продуктами або наркотичними речовинами (прекурсорами)"
+      ],
+      "GovRegDocDateRelise": "2021-08-01",
+      "ClientAge": "7 дней 1 месяцев "
+    },
+    "EmploymentType": ["власник бізнеса"],
+    "Operations": [
+      { "Operation": "128", "CreateDate": "2021-09-08" },
+      { "Operation": "116", "CreateDate": "2021-09-08" },
+      { "Operation": "326", "CreateDate": "2021-09-08" }
+    ]
+  },
+  "createdAt": { "$date": "2021-09-08T09:40:52.196Z" },
+  "updatedAt": { "$date": "2021-09-08T12:55:53.595Z" },
+  "__v": 0
+}

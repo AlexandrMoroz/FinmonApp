@@ -28,15 +28,18 @@ let test = () => {
   describe("test user api", () => {
     describe("user/create ", () => {
       before(async () => {
-        await User.deleteMany({});
-        let password = await bcrypt.hash(user.password, 12);
-        newuser = await new User({ ...user, password }).save();
-        let res = await chai.request(server).post("/api/user/login").send({
-          username: user.username,
-          password: user.password,
-        });
-
-        token = res.body.token;
+        try {
+          await User.deleteMany({});
+          let password = await bcrypt.hash(user.password, 12);
+          newuser = await new User({ ...user, password }).save();
+          let res = await chai.request(server).post("/api/user/login").send({
+            username: user.username,
+            password: user.password,
+          });
+          token = res.body.token;
+        } catch (err) {
+          console.log(err);
+        }
       });
       it("it create new user", (done) => {
         const CreateUser = {
@@ -48,7 +51,7 @@ let test = () => {
           cashboxAdress:
             "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
           email: "vadim@gmail.com",
-          username: "vadim1",
+          username: "vadim",
           password: "123qwe123qwe",
         };
         chai
@@ -57,9 +60,20 @@ let test = () => {
           .set("Authorization", token)
           .send(CreateUser)
           .end((err, res) => {
-            res.body.should.deep.equal({
+            res.body.should.excluding(["result"]).deep.equal({
               message: "User was created",
               success: true,
+            });
+            res.body.result.should.excluding(["id", "password"]).deep.equal({
+              block: false,
+              role: "user",
+              name: "vadim",
+              family: "tkalenko",
+              surname: "anatolievich",
+              cashboxAdress:
+                "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
+              email: "vadim@gmail.com",
+              username: "vadim",
             });
             res.should.have.status(201);
             done();
@@ -75,7 +89,7 @@ let test = () => {
           cashboxAdress:
             "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
           email: "vadim@gmail.com",
-          username: "vadim1",
+          username: "vadim",
           password: "123qwe123qwe",
         };
         chai
@@ -98,7 +112,7 @@ let test = () => {
           cashboxAdress:
             "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
           email: "vadim@gmail.com",
-          username1: "vadim1", //err
+          username1: "vadim", //err
           password: "123qwe123qwe",
         };
         chai
@@ -133,7 +147,7 @@ let test = () => {
           cashboxAdress:
             "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
           email: "vadim@gmail.com",
-          username: "vadim1", //err
+          username: "vadim", //err
           password: "123qwe123qwe",
         };
         chai
@@ -149,7 +163,7 @@ let test = () => {
               success: false,
               error: [
                 {
-                  value: "vadim1",
+                  value: "vadim",
                   msg: "Логин уже используется",
                   param: "username",
                   location: "body",
@@ -167,7 +181,6 @@ let test = () => {
           .set("Authorization", token)
           .send(CreateUser)
           .end((err, res) => {
- 
             res.should.have.status(400);
             res.body.should.have.property("message").eql("Validation error");
             res.body.should.have.property("validation").eql(false);
@@ -204,19 +217,29 @@ let test = () => {
     });
 
     describe("user/edit", () => {
-      beforeEach(async () => {
-        await User.deleteMany({});
-        let password = await bcrypt.hash(user.password, 12);
-        newuser = await new User({ ...user, password }).save();
-        let res = await chai.request(server).post("/api/user/login").send({
-          username: user.username,
-          password: user.password,
-        });
-        token = res.body.token;
+      let newEditUser;
+      before(async () => {
+        let res = await chai
+          .request(server)
+          .post("/api/user/create")
+          .set("Authorization", token)
+          .send({
+            block: false,
+            role: "admin",
+            name: "vadim23",
+            family: "tkalenko23",
+            surname: "anatolievich23",
+            cashboxAdress:
+              "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
+            email: "vadim@gmail.com",
+            username: "vadim23",
+            password: "123qwe123qwe",
+          });
+        newEditUser = res.body.result;
       });
       it("it edit user", (done) => {
         const EditUser = {
-          id: newuser._id.toString(),
+          id: newEditUser.id.toString(),
           block: false,
           role: "admin",
           name: "vadim2",
@@ -228,7 +251,6 @@ let test = () => {
           username: "vadim1",
           password: "123qwe123qwe",
         };
-
         chai
           .request(server)
           .put("/api/user/edit")
@@ -237,7 +259,7 @@ let test = () => {
           .end((err, res) => {
             res.body.should.deep.equal({
               message: "User success edited",
-              user: {
+              result: {
                 id: EditUser.id,
                 block: EditUser.block,
                 role: EditUser.role,
@@ -256,7 +278,7 @@ let test = () => {
       });
       it("it edit user with non password property", (done) => {
         const EditUser = {
-          id: newuser._id.toString(),
+          id: newEditUser.id.toString(),
           block: false,
           role: "admin",
           name: "vadim2",
@@ -265,7 +287,7 @@ let test = () => {
           cashboxAdress:
             "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
           email: "vadim3@gmail.com",
-          username: "vadim",
+          username: "vadim1",
         };
 
         chai
@@ -276,17 +298,16 @@ let test = () => {
           .end((err, res) => {
             res.body.should.deep.equal({
               message: "User success edited",
-              user: {
-                id: newuser._id.toString(),
-                block: false,
-                username: "vadim",
-                role: "admin",
-                email: "vadim3@gmail.com",
-                name: "vadim2",
-                family: "tkalenko2",
-                surname: "anatolievich3",
-                cashboxAdress:
-                  "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
+              result: {
+                id: EditUser.id,
+                block: EditUser.block,
+                role: EditUser.role,
+                name: EditUser.name,
+                family: EditUser.family,
+                surname: EditUser.surname,
+                cashboxAdress: EditUser.cashboxAdress,
+                email: EditUser.email,
+                username: EditUser.username,
               },
               success: true,
             });
@@ -296,7 +317,7 @@ let test = () => {
       });
       it("it negative test edit user with empty username", (done) => {
         const EditUser = {
-          id: newuser._id.toString(),
+          id: newEditUser.id.toString(),
           block: false,
           role: "admin",
           name: "vadim2",
@@ -308,7 +329,6 @@ let test = () => {
           username: "",
           password: "123qwe123qwe",
         };
-
         chai
           .request(server)
           .put("/api/user/edit")
@@ -334,7 +354,7 @@ let test = () => {
       });
       it("it negative test edit user with non username property", (done) => {
         const EditUser = {
-          id: newuser._id.toString(),
+          id: newEditUser.id.toString(),
           block: false,
           role: "admin",
           name: "vadim2",
@@ -353,20 +373,25 @@ let test = () => {
           .set("Authorization", token)
           .send(EditUser)
           .end((err, res) => {
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  msg: "Поле логин не найденно",
-                  param: "username",
-                  location: "body",
-                },
-              ],
-            });
-            res.should.have.status(400);
-            done();
+            try {
+              res.body.should.deep.equal({
+                message: "Validation error",
+                validation: false,
+                success: false,
+                error: [
+                  {
+                    msg: "Поле логин не найденно",
+                    param: "username",
+                    location: "body",
+                  },
+                ],
+              });
+              res.should.have.status(400);
+              done();
+            } catch (err) {
+              console.log(err);
+              done();
+            }
           });
       });
     });

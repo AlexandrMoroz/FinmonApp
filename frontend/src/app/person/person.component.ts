@@ -104,7 +104,6 @@ export class PersonComponent implements OnInit {
               let state = this.options.formState[field.key.toString()];
               this.options.formState[field.key.toString()] =
                 state == null ? false : true;
-              console.log(this.options.formState);
               if (this.options.formState[field.key.toString()]) {
                 this.options.formState[field.key.toString()] = false;
                 delete this.model[item.key][field.key.toString()];
@@ -114,8 +113,19 @@ export class PersonComponent implements OnInit {
           }
         });
       }
+      if (item?.key === 'CheckClientByQuestion') {
+        item?.fieldGroup[1].templateOptions.onClick = () => {
+          let answers = this.dataService.getRate(
+            this.SelectedItem.formDataResultId
+          );
+          this.model['CheckClientByQuestion']['QuestionDescription'] =
+            JSON.stringify(answers);
+        };
+      }
     });
   }
+
+  private GetRate() {}
   private CopyRegistAdressToLiveAdress(field: FormlyFieldConfig, event?: any) {
     if (event.target.checked) {
       this.model = { ...this.model, Live: this.model['Regist'] };

@@ -41,6 +41,7 @@ import {
   NbIconModule,
   NbInputModule,
   NbSpinnerModule,
+  NbAutocompleteModule
 } from '@nebular/theme';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
@@ -49,6 +50,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component';
 import { TabsType } from './tabstype/tabs.component';
+import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 
 
 
@@ -68,6 +70,7 @@ import { TabsType } from './tabstype/tabs.component';
     RepeatComponent,
     RepeatOneRowComponent,
     TabsType,
+    AutocompleteComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,6 +93,7 @@ import { TabsType } from './tabstype/tabs.component';
     NbInputModule,
     NbSpinnerModule,
     NbTabsetModule,
+    NbAutocompleteModule,
     FormlyModule.forRoot({
       types: [
         {
@@ -101,6 +105,9 @@ import { TabsType } from './tabstype/tabs.component';
         },{
           name:'tabs',
           component:TabsType,
+        },{
+          name:'autocomplete',
+          component:AutocompleteComponent,
         }
       ],
     }),

@@ -34,7 +34,6 @@ let init = async (oldResult, editResult, url) => {
       .set("Authorization", token)
       .send(oldResult)
   ).body.result;
-
   editResult = {
     ...editResult,
     formDataResultId: newResult.formDataResultId.toString(),
@@ -77,6 +76,7 @@ let test = () => {
             Family: "Moroz",
             Surname: "Sergeevich",
             INN: "2312234312",
+            IsResident:false,
           },
         };
         let editResult = {
@@ -86,6 +86,7 @@ let test = () => {
             Surname: "Sergeevich2",
             DateOfFirstSigned: "12.12.2021",
             INN: "2312234312",
+            IsResident:false,
           },
         };
         newPerson = await init(oldPerson, editResult, "person");
@@ -214,6 +215,7 @@ let test = () => {
             Family: "Moroz",
             Surname: "Sergeevich",
             INN: "2312234312",
+            IsResident:false,
           },
         };
         let editResult = {
@@ -223,6 +225,7 @@ let test = () => {
             Surname: "Sergeevich2",
             DateOfFirstSigned: "12.12.2021",
             INN: "2312234312",
+            IsResident:false,
           },
         };
         newPerson = await init(oldPerson, editResult, "person");
@@ -397,15 +400,17 @@ let test = () => {
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
-            RegistNumber: "12321141",
+            ClientCode: "12321141",
+            IsResident:false,
           },
         };
         editResult = {
           result: {
             ShortName: "ТОВ ФИНОД2",
-            RegistNumber: "12321141",
+            ClientCode: "12321141",
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
+            IsResident:false,
           },
         };
         newCompany = await init(oldCompany, editResult, "company");
@@ -521,15 +526,17 @@ let test = () => {
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
-            RegistNumber: "12321141",
+            ClientCode: "12321141",
+            IsResident:false,
           },
         };
         editResult = {
           result: {
             ShortName: "ТОВ ФИНОД2",
-            RegistNumber: "12321141",
+            ClientCode: "12321141",
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
+            IsResident:false,
           },
         };
         newCompany = await init(oldCompany, editResult, "company");

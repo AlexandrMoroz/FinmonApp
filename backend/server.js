@@ -4,18 +4,11 @@ const passport = require("passport");
 const { connect } = require("mongoose");
 var winston = require("./config/winston");
 var morgan = require("morgan");
-let initServer = (config) => {
+let initServer = async (config) => {
+  console.log("init serv config");
   // Initialize the application
   const app = exp();
 
-  function isEmpty(obj) {
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        return false;
-      }
-    }
-    return JSON.stringify(obj) === JSON.stringify({});
-  }
   // Middlewares
   app.use(cors());
   app.use(exp.json());
@@ -26,7 +19,7 @@ let initServer = (config) => {
   app.use((req, res, next) => {
     winston.info(
       `REQUEST: ${req.method}; url:${req.url} - ${
-        !isEmpty(req.body)
+        req.method == "POST"
           ? JSON.stringify(req.body)
           : JSON.stringify(req.query)
       }`
@@ -46,9 +39,21 @@ let initServer = (config) => {
     throw new Error(reason);
   });
 
-  // process.on('uncaughtException', function(err) {
-  //   console.log('Caught exception: ' + err);
-  // });
+  process.on("uncaughtException", function (err) {
+    console.log("Caught exception: " + err);
+  });
+
+  app.use((err, req, res, next) => {
+    console.log(err);
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get("env") === "development" ? err : {};
+    // add this line to include winston logging
+    // render the error page
+    res.status(err.status || 500);
+    res.render("error");
+    next();
+  });
   const server = async () => {
     // Connection With DB
     await connect(config.DB, {
@@ -56,29 +61,16 @@ let initServer = (config) => {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });
-
-    // console.log({
-    //   message: `Successfully connected with the Database \n${config.DB}`,
-    //   badge: true,
-    // });
-    app.use((err, req, res, next) => {
-      console.log(err);
-      // set locals, only providing error in development
-      res.locals.message = err.message;
-      res.locals.error = req.app.get("env") === "development" ? err : {};
-      // add this line to include winston logging
-
-      // render the error page
-      res.status(err.status || 500);
-      res.render("error");
-      next();
+    console.log({
+      message: `Successfully connected with the Database \n${config.DB}`,
+      badge: true,
     });
     // Start Listenting for the server on PORT
-    return app.listen(config.PORT, "0.0.0.0", () => {
+    app.listen(config.PORT, "localhost", () => {
       console.log(`Server started on PORT ${config.PORT}`);
     });
   };
-  server();
+  return await server();
 };
 
 module.exports = initServer;

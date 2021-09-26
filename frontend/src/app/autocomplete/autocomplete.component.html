@@ -1,0 +1,21 @@
+<input
+  #autoInput
+  nbInput
+  [type]="type"
+  (input)="onChange()"
+  placeholder="Enter value"
+  [nbAutocomplete]="auto"
+  [formControl]="formControl"
+  [formlyAttributes]="field"
+  [fullWidth]="true"
+  class="{{ to.inputClassName }}"
+/>
+<nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
+  <nb-option
+    *ngFor="let option of filteredinputOptions$ | async"
+    [value]="option"
+    class="{{ to.inputClassName }}"
+  >
+    {{ option }}
+  </nb-option>
+</nb-autocomplete>

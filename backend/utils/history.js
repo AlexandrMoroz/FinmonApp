@@ -78,9 +78,6 @@ const recursFormResult = (res, order, arr) => {
         arr[order[key].p] = {
           [key]: recursFormResult(value, order[key].c, []),
         };
-        if (key == "Regist") {
-          console.log(order);
-        }
       } else if (order[key] && !order[key].d) {
         arr[order[key].p] = { [key]: value };
       }

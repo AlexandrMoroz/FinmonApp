@@ -3,33 +3,31 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CompanyService {
   constructor(private http: HttpClient) {}
 
   edit(companyModel: any) {
-    
     return this.http.put(`${environment.apiUrl}company/edit`, companyModel);
   }
 
   create(companyModel: any) {
-    
-    return this.http.post(
-      `${environment.apiUrl}company/create`,
-      companyModel
-    );
+    return this.http.post(`${environment.apiUrl}company/create`, companyModel);
   }
 
-  getFormData(id) {
-    
+  getFormData(id:string) {
     return this.http.get(`${environment.apiUrl}company/form-data`, {
       params: new HttpParams().set('id', id),
     });
   }
-  getFile(id) {
-    
+  getFile(id:string) {
     return this.http.get(`${environment.apiUrl}company/file`, {
+      params: new HttpParams().set('id', id),
+    });
+  }
+  getRate(id: string) {
+    return this.http.get(`${environment.apiUrl}person/finrate`, {
       params: new HttpParams().set('id', id),
     });
   }

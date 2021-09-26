@@ -30,7 +30,7 @@ const GetByName = async (query, res) => {
     let helper = await Helper.findOne({ name: query.name });
     return res.status(200).json({
       message: "helper get by name was complited",
-      result: { name: helper.name, content: helper.content },
+      result: helper.content,
       success: true,
     });
   } catch (err) {

@@ -76,7 +76,7 @@ export class UsersComponent implements OnInit {
   ) {
     this.isLoading = true;
     this.service.getAll().subscribe((data: any) => {
-      this.users = data.users as UserModel[];
+      this.users = data.result as UserModel[];
       this.source.load(this.users);
       this.isLoading = false;
     });

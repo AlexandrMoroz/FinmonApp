@@ -17,9 +17,9 @@ router.get(
   checkRole(["admin"]),
   checkSchema(HistoryValidator.getHistoryValidation(PersonFormDataCollection)),
   validate,
-  async (req, res) => {
+  async (req, res, next) => {
     
-    return PersonHistoryGetById(req.query, res);
+    return PersonHistoryGetById(req.query, res, next);
   }
 );
 
@@ -29,9 +29,9 @@ router.get(
   checkRole(["admin"]),
   checkSchema(HistoryValidator.getHistoryValidation(PersonFormDataCollection)),
   validate,
-  async (req, res) => {
+  async (req, res, next) => {
     
-    return PersonXMLSHistoryGetById(req.query, res);
+    return PersonXMLSHistoryGetById(req.query, res, next);
   }
 );
 
@@ -41,9 +41,9 @@ router.get(
   checkRole(["admin"]),
   checkSchema(HistoryValidator.getHistoryValidation(CompanyFormDataCollection)),
   validate,
-  async (req, res) => {
+  async (req, res, next) => {
     
-    return CompanyHistoryGetById(req.query, res);
+    return CompanyHistoryGetById(req.query, res, next);
   }
 );
 router.get(
@@ -52,9 +52,9 @@ router.get(
   checkRole(["admin"]),
   checkSchema(HistoryValidator.getHistoryValidation(CompanyFormDataCollection)),
   validate,
-  async (req, res) => {
+  async (req, res, next) => {
     
-    return CompanyXMLSHistoryGetById(req.query, res);
+    return CompanyXMLSHistoryGetById(req.query, res, next);
   }
 );
 

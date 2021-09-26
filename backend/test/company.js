@@ -54,7 +54,8 @@ let test = () => {
         const company = {
           result: {
             ShortName: "ТОВ ФИНОД",
-            RegistNumber: "12321141",
+            ClientCode: "12321141",
+            IsResident: false,
           },
         };
         chai
@@ -63,6 +64,8 @@ let test = () => {
           .set("Authorization", token)
           .send(company)
           .end((err, res) => {
+            
+            
             res.should.have.status(201);
             done();
           });
@@ -71,7 +74,8 @@ let test = () => {
         const company = {
           result: {
             ShortName: "ТОВ ФИНОД",
-            RegistNumber: "1231141",
+            ClientCode: "1231141",
+            IsResident: false,
           },
         };
         chai
@@ -88,7 +92,8 @@ let test = () => {
         const company = {
           result: {
             ShortName1: "ТОВ ФИНОД",
-            RegistNumber: "1231141",
+            ClientCode: "1231141",
+            IsResident: false,
           },
         };
         chai
@@ -131,7 +136,8 @@ let test = () => {
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
-            RegistNumber: "12341141",
+            ClientCode: "12341141",
+            IsResident: false,
           },
         };
         newCompanyFormData = await new CompanyFormData({
@@ -139,7 +145,7 @@ let test = () => {
         }).save();
         newCompany = await new Company({
           shortName: oldCompany.result.ShortName,
-          registNumber: oldCompany.result.RegistNumber,
+          clientCode: oldCompany.result.ClientCode,
           username: user.username,
           formDataResultId: newCompanyFormData._id,
         }).save();
@@ -149,9 +155,10 @@ let test = () => {
         let editCompany = {
           result: {
             ShortName: "ТОВ ФИНОД2",
-            RegistNumber: "12341141",
+            ClientCode: "12341141",
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
+            IsResident: false,
           },
           formDataResultId: newCompanyFormData._id,
           _id: newCompany._id,
@@ -169,7 +176,7 @@ let test = () => {
               .deep.equal({
                 _id: newCompany._id.toString(),
                 shortName: editCompany.result.ShortName,
-                registNumber: editCompany.result.RegistNumber,
+                clientCode: editCompany.result.ClientCode,
                 username: user.username,
                 formDataResultId: newCompanyFormData._id.toString(),
               });
@@ -184,9 +191,10 @@ let test = () => {
         let editCompany = {
           result: {
             ShortName: "ТОВ ФИНОД2",
-            RegistNumber: "12341141",
+            ClientCode: "12341141",
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
+            IsResident: false,
           },
           formDataResultId: newCompanyFormData._id,
           _id: newCompany._id,
@@ -218,9 +226,10 @@ let test = () => {
         let editCompany = {
           result: {
             ShortName2: "ТОВ ФИНОД2", //err
-            RegistNumber: "12341141",
+            ClientCode: "12341141",
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
+            IsResident: false,
           },
           formDataResultId: newCompanyFormData._id,
           _id: newCompany._id,
@@ -240,7 +249,7 @@ let test = () => {
               success: false,
               error: [
                 {
-                  msg: "Поле (Скорочене наименування) пустое",
+                  msg: "Поле (Скорочене наименування) порожне",
                   param: "result.ShortName",
                   location: "body",
                 },
@@ -253,9 +262,10 @@ let test = () => {
         let editCompany = {
           result: {
             ShortName: 12312, //err
-            RegistNumber: "12341141",
+            ClientCode: "12341141",
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
+            IsResident: false,
           },
           formDataResultId: newCompanyFormData._id,
           _id: newCompany._id,
@@ -276,7 +286,7 @@ let test = () => {
               error: [
                 {
                   value: 12312,
-                  msg: "Поле (Скорочене наименування) должнол быть строкой",
+                  msg: "Поле (Скорочене наименування) повинно бути строкою",
                   param: "result.ShortName",
                   location: "body",
                 },
@@ -298,7 +308,8 @@ let test = () => {
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
-            RegistNumber: "12341141",
+            ClientCode: "12341141",
+            IsResident: false,
           },
         };
         newCompanyFormData = await new CompanyFormData({
@@ -306,7 +317,7 @@ let test = () => {
         }).save();
         newCompany = await new Company({
           shortName: oldCompany.result.ShortName,
-          registNumber: oldCompany.result.RegistNumber,
+          clientCode: oldCompany.result.ClientCode,
           username: user.username,
           formDataResultId: newCompanyFormData._id,
         }).save();
@@ -328,7 +339,7 @@ let test = () => {
                 {
                   _id: newCompany._id.toString(),
                   shortName: oldCompany.result.ShortName,
-                  registNumber: oldCompany.result.RegistNumber,
+                  clientCode: oldCompany.result.ClientCode,
                   username: user.username,
                   formDataResultId: newCompanyFormData._id.toString(),
                 },
@@ -359,7 +370,7 @@ let test = () => {
               error: [
                 {
                   value: "",
-                  msg: "Поле Поиска должно содержать больше 2 символа",
+                  msg: "Поле Пошуку повинно містити більше 2 символів",
                   param: "searchText",
                   location: "query",
                 },
@@ -373,7 +384,7 @@ let test = () => {
       });
       it("it negative test search company with wrong searchtext name ", (done) => {
         let searchCompany = {
-          searchText1: "1234567",
+          searchText1: "1234567",//err
         };
         chai
           .request(server)
@@ -390,7 +401,7 @@ let test = () => {
               success: false,
               error: [
                 {
-                  msg: "Поле Поиска пустое",
+                  msg: "Поле Пошуку порожне",
                   param: "searchText",
                   location: "query",
                 },
@@ -422,7 +433,7 @@ let test = () => {
               error: [
                 {
                   value: "1",
-                  msg: "Поле Поиска должно содержать больше 2 символа",
+                  msg: "Поле Пошуку повинно містити більше 2 символів",
                   param: "searchText",
                   location: "query",
                 },
@@ -447,7 +458,8 @@ let test = () => {
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
-            RegistNumber: "12341141",
+            ClientCode: "12341141",
+            IsResident: false,
           },
         };
         newCompanyFormData = await new CompanyFormData({
@@ -455,7 +467,7 @@ let test = () => {
         }).save();
         newCompany = await new Company({
           shortName: oldCompany.result.ShortName,
-          registNumber: oldCompany.result.RegistNumber,
+          clientCode: oldCompany.result.ClientCode,
           username: user.username,
           formDataResultId: newCompanyFormData._id.toString(),
         }).save();
@@ -467,10 +479,10 @@ let test = () => {
           .set("Authorization", token)
           .query({ id: newCompany.formDataResultId.toString() })
           .end(async (err, res) => {
-            res.should.have.status(200);
             res.body.result.should.deep.equal({
               ShortName: oldCompany.result.ShortName,
-              RegistNumber: oldCompany.result.RegistNumber,
+              ClientCode: oldCompany.result.ClientCode,
+              IsResident: false 
             });
             if (err) {
               done(err);
@@ -490,13 +502,12 @@ let test = () => {
             res.body.should.have.property("validation").eql(false);
             res.body.should.have.property("error").deep.equal([
               {
-                value: "60a6240e9874e015b03b25f2",
-                msg: "Неверный id",
-                param: "id",
-                location: "query",
-              },
+                value: '60a6240e9874e015b03b25f2',
+                msg: 'Дані компанії за _id не знайденно ',
+                param: 'id',
+                location: 'query'
+              }
             ]);
-            //res.body.
             if (err) {
               done(err);
             }
@@ -516,7 +527,7 @@ let test = () => {
             res.body.should.have.property("error").deep.equal([
               {
                 value: "",
-                msg: "Неверный тип id",
+                msg: "Невірний тип id",
                 param: "id",
                 location: "query",
               },
@@ -546,7 +557,8 @@ let test = () => {
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
-            RegistNumber: "12341141",
+            ClientCode: "12341141",
+            IsResident: false,
           },
         };
         newCompanyFormData = await new CompanyFormData({
@@ -554,7 +566,7 @@ let test = () => {
         }).save();
         newCompany = await new Company({
           shortName: oldCompany.result.ShortName,
-          registNumber: oldCompany.result.RegistNumber,
+          clientCode: oldCompany.result.ClientCode,
           username: user.username,
           formDataResultId: newCompanyFormData._id,
         }).save();
@@ -569,43 +581,49 @@ let test = () => {
             const wb = XLSX.read(res.body.result, { type: "base64" });
             let obj = {
               Анкета: {
-                "!ref": "A1:D3",
+                '!ref': 'A1:D4',
                 A1: {
-                  t: "s",
-                  v: "Створенно користувачем",
-                  h: "Створенно користувачем",
-                  w: "Створенно користувачем",
-                },
-                B1: {
-                  t: "s",
-                  v: "moroz1 alexandr1 sergeevich1",
-                  h: "moroz1 alexandr1 sergeevich1",
-                  w: "moroz1 alexandr1 sergeevich1",
-                },
-                C1: {
-                  t: "s",
-                  v: "Дата створення:",
-                  h: "Дата створення:",
-                  w: "Дата створення:",
+                  t: 's',
+                  v: 'Анкета юридичної особи Не резидента',
+                  h: 'Анкета юридичної особи Не резидента',
+                  w: 'Анкета юридичної особи Не резидента'
                 },
                 A2: {
-                  t: "s",
-                  v: "Скорочене найменування (за наявності)",
-                  h: "Скорочене найменування (за наявності)",
-                  w: "Скорочене найменування (за наявності)",
+                  t: 's',
+                  v: 'Створенно користувачем',
+                  h: 'Створенно користувачем',
+                  w: 'Створенно користувачем'
                 },
-                B2: { t: "s", v: "ТОВ ФИНОД", h: "ТОВ ФИНОД", w: "ТОВ ФИНОД" },
+                B2: {
+                  t: 's',
+                  v: 'moroz1 alexandr1 sergeevich1',
+                  h: 'moroz1 alexandr1 sergeevich1',
+                  w: 'moroz1 alexandr1 sergeevich1'
+                },
+                C2: {
+                  t: 's',
+                  v: 'Дата створення:',
+                  h: 'Дата створення:',
+                  w: 'Дата створення:'
+                },
                 A3: {
-                  t: "s",
-                  v: "Реєстраційний (обліковий) номер",
-                  h: "Реєстраційний (обліковий) номер",
-                  w: "Реєстраційний (обліковий) номер",
+                  t: 's',
+                  v: 'Скорочене найменування (за наявності)',
+                  h: 'Скорочене найменування (за наявності)',
+                  w: 'Скорочене найменування (за наявності)'
                 },
-                B3: { t: "s", v: "12341141", h: "12341141", w: "12341141" },
-              },
+                B3: { t: 's', v: 'ТОВ ФИНОД', h: 'ТОВ ФИНОД', w: 'ТОВ ФИНОД' },
+                A4: {
+                  t: 's',
+                  v: 'Код (за наявності) клієнта',
+                  h: 'Код (за наявності) клієнта',
+                  w: 'Код (за наявності) клієнта'
+                },
+                B4: { t: 's', v: '12341141', h: '12341141', w: '12341141' }
+              }
             };
             wb.Sheets["Анкета"].should
-              .excluding(["D1"])
+              .excluding(["D2"])
               .deep.equal(obj["Анкета"]);
             res.should.have.status(200);
             done();
@@ -625,7 +643,7 @@ let test = () => {
               error: [
                 {
                   value: "60a6240e9874e015b03b25f2",
-                  msg: "Неверный id",
+                  msg: "Невірний id",
                   param: "id",
                   location: "query",
                 },
@@ -649,7 +667,7 @@ let test = () => {
               error: [
                 {
                   value: "",
-                  msg: "Неверный тип id",
+                  msg: "Невірний тип id",
                   param: "id",
                   location: "query",
                 },

@@ -11,14 +11,11 @@ import { HelperService } from './helpers.service';
   providedIn: 'root',
 })
 export class FormService {
-
   constructor(
     private http: HttpClient,
     private flashMessagesService: FlashMessagesService,
     private helperService: HelperService
-  ) {
-  
-  }
+  ) {}
 
   getFormByName(name) {
     // if (!localStorage.getItem(name)) {
@@ -38,6 +35,7 @@ export class FormService {
     // }
   }
   mapFormFields(fields, name) {
+    fields = cloneDeepWith(fields, this.fieldsMap);
     if (name == 'personForm') {
       return cloneDeepWith(fields, this.personFieldsMap);
     }
@@ -45,7 +43,7 @@ export class FormService {
       return cloneDeepWith(fields, this.companyFieldsMap);
     }
   }
-  private personFieldsMap = (item) => {
+  private fieldsMap = (item) => {
     if (item !== undefined) {
       if (item.key === 'Country') {
         item.templateOptions.options = this.helperService.getCountries();
@@ -71,18 +69,14 @@ export class FormService {
     }
   };
 
+  private personFieldsMap = (item) => {
+    if (item !== undefined) {
+      
+    }
+  };
+
   private companyFieldsMap = (item) => {
     if (item !== undefined) {
-      if (item.key === 'Country') {
-        let cout = this.helperService.getCountries();
-        item.templateOptions.options = cout;
-      }
-      if (item.key === 'Citizen') {
-        item.templateOptions.options = this.helperService.getCountries();
-      }
-      if (item.key === 'Telephone') {
-        item.templateOptions.keypress = this.onTelInputPress;
-      }
       if (item.key === 'BankAccounts') {
         item.validators = {
           arrcount: {
@@ -116,20 +110,9 @@ export class FormService {
           },
         };
       }
-      if (item.key === 'Birthday') {
-        item.templateOptions.change = this.cheakBirthDay;
-      }
-      if (item.type === 'select') {
-        item.templateOptions.valueProp = (o) => o.label;
-      }
-      if (item.type === 'multicheckbox') {
-        item.templateOptions.valueProp = (o) => o.label;
-      }
-      if (item.type === 'radio') {
-        item.templateOptions.valueProp = (o) => o.label;
-      }
     }
   };
+
   private cheakBirthDay(field: FormlyFieldConfig, event?: any) {
     let val = event.target.value;
     if (!val) {
@@ -156,7 +139,7 @@ export class FormService {
       );
     }
   }
- 
+
   private onTelInputPress(field: FormlyFieldConfig, event?: any) {
     let newVal = event.target.value.replace(/\D/g, '');
     if (newVal.length === 0) {

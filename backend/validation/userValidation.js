@@ -208,8 +208,7 @@ const UserValidation = {
                 throw new Error("Логин уже используется");
               }
             }
-
-            return true;
+           return true;
           },
         },
       },

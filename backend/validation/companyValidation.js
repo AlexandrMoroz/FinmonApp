@@ -49,7 +49,6 @@ const CompanyValidator = {
                 throw new Error(
                   "Поле Поле Реєстраційний (обліковий) номер порожне"
                 );
-              console.log(value.length);
               if (value.length != 17)
                 throw new Error(
                   "Поле Реєстраційний (обліковий) номер повинно бути з 17 цифр"
@@ -270,15 +269,15 @@ const CompanyValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле Поиска порожне",
+          errorMessage: "Поле Пошуку порожне",
           bail: true,
         },
         isString: {
-          errorMessage: "Поле Поиска повинно бути строкою",
+          errorMessage: "Поле Пошуку повинно бути строкою",
           bail: true,
         },
         isLength: {
-          errorMessage: "Поле Поиска должно содержать больше 2 символа",
+          errorMessage: "Поле Пошуку повинно містити більше 2 символів",
           options: { min: 2, max: 30 },
           bail: true,
         },
@@ -303,10 +302,41 @@ const CompanyValidator = {
         custom: {
           options: async (value) => {
             if (!mongoose.Types.ObjectId.isValid(value))
-              throw new Error("Неверный тип id");
+              throw new Error("Невірний тип id");
             let flag = await Company.exists({ _id: value });
-            if (!flag) throw new Error("Неверный id");
+            if (!flag) throw new Error("Невірний id");
             return true;
+          },
+        },
+      },
+    };
+  },
+  getFinRateValidation: () => {
+    return {
+      id: {
+        in: ["query"],
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле id порожне",
+          bail: true,
+        },
+        isString: {
+          errorMessage: "Поле id повинно бути строкою",
+          bail: true,
+        },
+        custom: {
+          options: async (value) => {
+           if (!mongoose.Types.ObjectId.isValid(value))
+              throw new Error("Невірний тип id");
+            let flag = await CompanyFormData.exists({ _id: value });
+            if (!flag) throw new Error("Невірний id");
+            return true;
+          },
+        },
+        customSanitizer: {
+          options: (value) => {
+            return value.toString();
           },
         },
       },
