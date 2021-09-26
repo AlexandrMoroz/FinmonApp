@@ -1,7 +1,7 @@
 const server = require("../server");
 const { testConfig } = require("../config/index");
 
-   server(testConfig);
+server(testConfig);
 
 //  require("./user")();
 //   require("./company")();
@@ -9,4 +9,5 @@ const { testConfig } = require("../config/index");
 //   require("./form")();
 //   require("./helper")();
 //   require("./history")();
-   require("./questions")();
+
+//require("./questions");

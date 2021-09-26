@@ -1,30 +1,41 @@
 module.exports = function () {
-   process.env.APP_DB,
-   process.env.APP_PORT,
-   process.env.APP_SECRET
+  process.env.TEST_APP_DB = "mongodb://localhost:27017/node-test";
+  process.env.TEST_APP_PORT = 4000;
+  process.env.APP_SECRET = "123qwe123";
   return {
+    debug: true,
     files: [
-      "config/index.js",
+      "config/*.js",
       "controller/*.js",
+      "models/*/*.js",
       "models/*.js",
       "middlewares/*.js",
       "routes/*.js",
       "utils/*.js",
       "mock/*.json",
       "validation/*.js",
-         //'index.js',
+      "index.js",
+      "test/test.js",
       "server.js",
     ],
 
-    tests: ["test/*.js"],
+    tests: ["test/questions.js"],
     testFramework: "mocha",
     setup: function () {
       global.should = require("chai").should;
+      var mocha = wallaby.testFramework;
+      mocha.suite.beforeAll(() =>
+        require(wallaby.projectCacheDir + "/test/test.js")
+      );
     },
-
     env: {
       type: "node",
       runner: "node",
     },
+    workers: {
+      initial: 4,
+      regular: 4,
+      recycle: true
+    }
   };
 };

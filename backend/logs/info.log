@@ -3727,3 +3727,106 @@ SyntaxError: C:\Users\Owner\Desktop\finodApp\App\backend\mock\companyOrder.json:
 2021-08-05T12:36:05.185Z info: REQUEST: GET; url:/api/form/?name=personForm - {"name":"personForm"}
 2021-08-05T12:36:05.187Z info: RESPONSE: GET;  url:/api/form/?name=personForm => 401 
 
+2021-09-26T16:21:05.313Z info: REQUEST: POST; url:/api/user/login - {"username":"alexandrMorozzz12","password":"123qwe123qwe"}
+2021-09-26T16:21:05.604Z info: RESPONSE: POST;  url:/api/user/login => 200 
+
+2021-09-26T16:21:05.681Z info: REQUEST: GET; url:/api/person/finrate?id=61509df1f99dee2168aa82a5 - {"id":"61509df1f99dee2168aa82a5"}
+2021-09-26T16:21:05.695Z info: RESPONSE: GET;  url:/api/person/finrate?id=61509df1f99dee2168aa82a5 => 200 
+
+2021-09-26T16:21:05.699Z info: REQUEST: GET; url:/api/company/finrate?id=61509df1f99dee2168aa82ab - {"id":"61509df1f99dee2168aa82ab"}
+2021-09-26T16:21:05.709Z info: RESPONSE: GET;  url:/api/company/finrate?id=61509df1f99dee2168aa82ab => 200 
+
+2021-09-26T16:21:05.713Z info: REQUEST: GET; url:/api/company/finrate?id=123123124124123 - {"id":"123123124124123"}
+2021-09-26T16:21:05.715Z info: RESPONSE: GET;  url:/api/company/finrate?id=123123124124123 => 400 
+
+2021-09-26T16:21:05.719Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
+2021-09-26T16:21:05.721Z info: RESPONSE: GET;  url:/api/company/finrate?id= => 400 
+
+2021-09-26T16:22:13.006Z info: REQUEST: POST; url:/api/user/login - {"username":"alexandrMorozzz12","password":"123qwe123qwe"}
+2021-09-26T16:22:13.294Z info: RESPONSE: POST;  url:/api/user/login => 200 
+
+2021-09-26T16:22:13.315Z info: REQUEST: GET; url:/api/person/finrate?id=61509e3580df09212cfe306e - {"id":"61509e3580df09212cfe306e"}
+2021-09-26T16:22:13.323Z info: RESPONSE: GET;  url:/api/person/finrate?id=61509e3580df09212cfe306e => 200 
+
+2021-09-26T16:22:13.327Z info: REQUEST: GET; url:/api/company/finrate?id=61509e3580df09212cfe3074 - {"id":"61509e3580df09212cfe3074"}
+2021-09-26T16:22:13.337Z info: RESPONSE: GET;  url:/api/company/finrate?id=61509e3580df09212cfe3074 => 200 
+
+2021-09-26T16:22:13.341Z info: REQUEST: GET; url:/api/company/finrate?id=123123124124123 - {"id":"123123124124123"}
+2021-09-26T16:22:13.344Z info: RESPONSE: GET;  url:/api/company/finrate?id=123123124124123 => 400 
+
+2021-09-26T16:22:13.348Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
+2021-09-26T16:22:13.350Z info: RESPONSE: GET;  url:/api/company/finrate?id= => 400 
+
+2021-09-26T16:24:06.896Z info: REQUEST: POST; url:/api/user/login - {"username":"alexandrMorozzz12","password":"123qwe123qwe"}
+2021-09-26T16:24:07.184Z info: RESPONSE: POST;  url:/api/user/login => 200 
+
+2021-09-26T16:24:07.206Z info: REQUEST: GET; url:/api/person/finrate?id=61509ea7b3294c04dcc4979b - {"id":"61509ea7b3294c04dcc4979b"}
+2021-09-26T16:24:07.215Z info: RESPONSE: GET;  url:/api/person/finrate?id=61509ea7b3294c04dcc4979b => 200 
+
+2021-09-26T16:24:07.219Z info: REQUEST: GET; url:/api/company/finrate?id=61509ea7b3294c04dcc497a1 - {"id":"61509ea7b3294c04dcc497a1"}
+2021-09-26T16:24:07.229Z info: RESPONSE: GET;  url:/api/company/finrate?id=61509ea7b3294c04dcc497a1 => 200 
+
+2021-09-26T16:24:07.232Z info: REQUEST: GET; url:/api/company/finrate?id=123123124124123 - {"id":"123123124124123"}
+2021-09-26T16:24:07.236Z info: RESPONSE: GET;  url:/api/company/finrate?id=123123124124123 => 400 
+
+2021-09-26T16:24:07.241Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
+2021-09-26T16:24:07.244Z info: RESPONSE: GET;  url:/api/company/finrate?id= => 400 
+
+2021-09-26T16:35:48.577Z info: REQUEST: POST; url:/api/user/login - {"username":"alexandrMorozzz12","password":"123qwe123qwe"}
+2021-09-26T16:35:48.865Z info: RESPONSE: POST;  url:/api/user/login => 200 
+
+2021-09-26T16:35:48.890Z info: REQUEST: GET; url:/api/person/finrate?id=6150a16433a9292e7c32e6c4 - {"id":"6150a16433a9292e7c32e6c4"}
+2021-09-26T16:35:48.898Z info: RESPONSE: GET;  url:/api/person/finrate?id=6150a16433a9292e7c32e6c4 => 200 
+
+2021-09-26T16:35:48.902Z info: REQUEST: GET; url:/api/company/finrate?id=6150a16433a9292e7c32e6ca - {"id":"6150a16433a9292e7c32e6ca"}
+2021-09-26T16:35:48.911Z info: RESPONSE: GET;  url:/api/company/finrate?id=6150a16433a9292e7c32e6ca => 200 
+
+2021-09-26T16:35:48.914Z info: REQUEST: GET; url:/api/company/finrate?id=123123124124123 - {"id":"123123124124123"}
+2021-09-26T16:35:48.917Z info: RESPONSE: GET;  url:/api/company/finrate?id=123123124124123 => 400 
+
+2021-09-26T16:35:48.920Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
+2021-09-26T16:46:24.350Z info: REQUEST: POST; url:/api/user/login - {"username":"alexandrMorozzz12","password":"123qwe123qwe"}
+2021-09-26T16:46:24.631Z info: RESPONSE: POST;  url:/api/user/login => 200 
+
+2021-09-26T16:46:24.651Z info: REQUEST: GET; url:/api/person/finrate?id=6150a3e014cb1a35b074f5d6 - {"id":"6150a3e014cb1a35b074f5d6"}
+2021-09-26T16:46:24.660Z info: RESPONSE: GET;  url:/api/person/finrate?id=6150a3e014cb1a35b074f5d6 => 200 
+
+2021-09-26T16:46:24.664Z info: REQUEST: GET; url:/api/company/finrate?id=6150a3e014cb1a35b074f5dc - {"id":"6150a3e014cb1a35b074f5dc"}
+2021-09-26T16:46:24.673Z info: RESPONSE: GET;  url:/api/company/finrate?id=6150a3e014cb1a35b074f5dc => 200 
+
+2021-09-26T16:46:24.678Z info: REQUEST: GET; url:/api/company/finrate?id=123123124124123 - {"id":"123123124124123"}
+2021-09-26T16:46:24.680Z info: RESPONSE: GET;  url:/api/company/finrate?id=123123124124123 => 400 
+
+2021-09-26T16:46:24.684Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
+2021-09-26T16:46:24.687Z info: RESPONSE: GET;  url:/api/company/finrate?id= => 400 
+
+2021-09-26T16:55:10.149Z info: REQUEST: POST; url:/api/user/login - {"username":"alexandrMorozzz12","password":"123qwe123qwe"}
+2021-09-26T16:55:10.470Z info: RESPONSE: POST;  url:/api/user/login => 200 
+
+2021-09-26T16:55:10.493Z info: REQUEST: GET; url:/api/person/finrate?id=6150a5eec4a7120b90aa78eb - {"id":"6150a5eec4a7120b90aa78eb"}
+2021-09-26T16:55:10.503Z info: RESPONSE: GET;  url:/api/person/finrate?id=6150a5eec4a7120b90aa78eb => 200 
+
+2021-09-26T16:55:10.507Z info: REQUEST: GET; url:/api/company/finrate?id=6150a5eec4a7120b90aa78f1 - {"id":"6150a5eec4a7120b90aa78f1"}
+2021-09-26T16:55:10.520Z info: RESPONSE: GET;  url:/api/company/finrate?id=6150a5eec4a7120b90aa78f1 => 200 
+
+2021-09-26T16:55:10.524Z info: REQUEST: GET; url:/api/company/finrate?id=123123124124123 - {"id":"123123124124123"}
+2021-09-26T16:55:10.527Z info: RESPONSE: GET;  url:/api/company/finrate?id=123123124124123 => 400 
+
+2021-09-26T16:55:10.530Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
+2021-09-26T16:55:10.532Z info: RESPONSE: GET;  url:/api/company/finrate?id= => 400 
+
+2021-09-26T17:04:50.285Z info: REQUEST: POST; url:/api/user/login - {"username":"alexandrMorozzz12","password":"123qwe123qwe"}
+2021-09-26T17:04:50.575Z info: RESPONSE: POST;  url:/api/user/login => 200 
+
+2021-09-26T17:04:50.596Z info: REQUEST: GET; url:/api/person/finrate?id=6150a832d86d210c242f3b24 - {"id":"6150a832d86d210c242f3b24"}
+2021-09-26T17:04:50.604Z info: RESPONSE: GET;  url:/api/person/finrate?id=6150a832d86d210c242f3b24 => 200 
+
+2021-09-26T17:04:50.608Z info: REQUEST: GET; url:/api/company/finrate?id=6150a832d86d210c242f3b2a - {"id":"6150a832d86d210c242f3b2a"}
+2021-09-26T17:04:50.619Z info: RESPONSE: GET;  url:/api/company/finrate?id=6150a832d86d210c242f3b2a => 200 
+
+2021-09-26T17:04:50.622Z info: REQUEST: GET; url:/api/company/finrate?id=123123124124123 - {"id":"123123124124123"}
+2021-09-26T17:04:50.625Z info: RESPONSE: GET;  url:/api/company/finrate?id=123123124124123 => 400 
+
+2021-09-26T17:04:50.629Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
+2021-09-26T17:04:50.631Z info: RESPONSE: GET;  url:/api/company/finrate?id= => 400 
+
