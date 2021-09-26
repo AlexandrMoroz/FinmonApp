@@ -32,10 +32,11 @@ module.exports = function () {
       type: "node",
       runner: "node",
     },
+    runMode:'onsave', 
     workers: {
       initial: 4,
       regular: 4,
-      recycle: true
+      //recycle: true
     }
   };
 };

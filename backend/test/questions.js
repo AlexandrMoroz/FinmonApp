@@ -13,7 +13,9 @@ const CompanyFormData = require("../models/companyFormData");
 const Company = require("../models/company");
 const { INDIVIDUALS, LEGALENTITES } =
   require("../models/GroupOfQuestions/groupOfQuestions").Types;
-const server = "http://localhost:4000";
+//const server = "http://localhost:4000";
+const { testConfig } = require("../config/index");
+let server = require("../server")(testConfig);
 
 let token = "";
 const user = {
@@ -67,7 +69,7 @@ describe("test fin rate question classes", () => {
       true,
     ];
     answers.forEach((item, i, arr) => {
-      item.should.equals(expect[i]); 
+      item.should.equals(expect[i]);
     });
     return true;
   });
@@ -111,11 +113,11 @@ describe("test fin rate api", () => {
     console.log(await User.deleteMany({}));
     let password = await bcrypt.hash(user.password, 12);
     newuser = await new User({ ...user, password }).save();
-   let res = await chai.request(server).post("/api/user/login").send({
+    let res = await chai.request(server).post("/api/user/login").send({
       username: user.username,
       password: user.password,
     });
-    res.status//?
+    res.status; //?
     token = res.body.token;
 
     await PersonFormData.deleteMany({});
@@ -162,28 +164,27 @@ describe("test fin rate api", () => {
       .query({ id: newPerson.formDataResultId.toString() })
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.result.should.equal(true)
-        // const expect = [
-        //   true,
-        //   true,
-        //   true,
-        //   true,
-        //   true,
-        //   true,
-        //   true,
-        //   false,
-        //   true,
-        //   false,
-        //   true,
-        //   false,
-        //   true,
-        //   true,
-        //   true,
-        //   true,
-        // ];
-        // res.body.result.forEach((item, i, arr) => {
-        //   item.should.equals(expect[i]);
-        // });
+        const expect = [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false,
+          true,
+          false,
+          true,
+          false,
+          true,
+          true,
+          true,
+          true,
+        ];
+        res.body.result.forEach((item, i, arr) => {
+          item.should.equals(expect[i]);
+        });
         done();
       });
   });

@@ -3830,3 +3830,33 @@ SyntaxError: C:\Users\Owner\Desktop\finodApp\App\backend\mock\companyOrder.json:
 2021-09-26T17:04:50.629Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
 2021-09-26T17:04:50.631Z info: RESPONSE: GET;  url:/api/company/finrate?id= => 400 
 
+2021-09-26T19:54:10.561Z info: REQUEST: POST; url:/api/user/login - {"username":"alexandrMorozzz12","password":"123qwe123qwe"}
+2021-09-26T19:54:10.845Z info: RESPONSE: POST;  url:/api/user/login => 200 
+
+2021-09-26T19:54:10.866Z info: REQUEST: GET; url:/api/person/finrate?id=6150cfe25c588432580e88c9 - {"id":"6150cfe25c588432580e88c9"}
+2021-09-26T19:54:10.875Z info: RESPONSE: GET;  url:/api/person/finrate?id=6150cfe25c588432580e88c9 => 200 
+
+2021-09-26T19:54:10.912Z info: REQUEST: GET; url:/api/company/finrate?id=6150cfe25c588432580e88cf - {"id":"6150cfe25c588432580e88cf"}
+2021-09-26T19:54:10.923Z info: RESPONSE: GET;  url:/api/company/finrate?id=6150cfe25c588432580e88cf => 200 
+
+2021-09-26T19:54:10.927Z info: REQUEST: GET; url:/api/company/finrate?id=123123124124123 - {"id":"123123124124123"}
+2021-09-26T19:54:10.930Z info: RESPONSE: GET;  url:/api/company/finrate?id=123123124124123 => 400 
+
+2021-09-26T19:54:10.935Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
+2021-09-26T19:54:10.938Z info: RESPONSE: GET;  url:/api/company/finrate?id= => 400 
+
+2021-09-26T19:55:42.640Z info: REQUEST: POST; url:/api/user/login - {"username":"alexandrMorozzz12","password":"123qwe123qwe"}
+2021-09-26T19:55:42.944Z info: RESPONSE: POST;  url:/api/user/login => 200 
+
+2021-09-26T19:55:42.967Z info: REQUEST: GET; url:/api/person/finrate?id=6150d03ea94e6a0798e9f427 - {"id":"6150d03ea94e6a0798e9f427"}
+2021-09-26T19:55:42.976Z info: RESPONSE: GET;  url:/api/person/finrate?id=6150d03ea94e6a0798e9f427 => 200 
+
+2021-09-26T19:55:42.981Z info: REQUEST: GET; url:/api/company/finrate?id=6150d03ea94e6a0798e9f42d - {"id":"6150d03ea94e6a0798e9f42d"}
+2021-09-26T19:55:42.991Z info: RESPONSE: GET;  url:/api/company/finrate?id=6150d03ea94e6a0798e9f42d => 200 
+
+2021-09-26T19:55:42.995Z info: REQUEST: GET; url:/api/company/finrate?id=123123124124123 - {"id":"123123124124123"}
+2021-09-26T19:55:42.998Z info: RESPONSE: GET;  url:/api/company/finrate?id=123123124124123 => 400 
+
+2021-09-26T19:55:43.002Z info: REQUEST: GET; url:/api/company/finrate?id= - {"id":""}
+2021-09-26T19:55:43.005Z info: RESPONSE: GET;  url:/api/company/finrate?id= => 400 
+

@@ -4,7 +4,7 @@ const passport = require("passport");
 const { connect } = require("mongoose");
 var winston = require("./config/winston");
 var morgan = require("morgan");
-let initServer = async (config) => {
+let initServer = (config) => {
   console.log("init serv config");
   // Initialize the application
   const app = exp();
@@ -24,7 +24,6 @@ let initServer = async (config) => {
           : JSON.stringify(req.query)
       }`
     );
-
     next();
   });
 
@@ -35,6 +34,16 @@ let initServer = async (config) => {
   app.use("/api/helper", require("./routes/helper"));
   app.use("/api/history", require("./routes/history"));
   app.use("/api/person", require("./routes/person"));
+  // app.use((req, res, next) => {
+  //   winston.info(
+  //     `RESPONSE22: ${res.method}; url:${req.url} - ${
+  //       req.method == "POST"
+  //         ? JSON.stringify(req.body)
+  //         : JSON.stringify(req.query)
+  //     }`
+  //   );
+  //   next();
+  // });
   process.on("unhandledRejection", function (reason, p) {
     throw new Error(reason);
   });
@@ -54,23 +63,20 @@ let initServer = async (config) => {
     res.render("error");
     next();
   });
-  const server = async () => {
-    // Connection With DB
-    await connect(config.DB, {
-      useFindAndModify: false,
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-    });
-    console.log({
-      message: `Successfully connected with the Database \n${config.DB}`,
-      badge: true,
-    });
-    // Start Listenting for the server on PORT
-    app.listen(config.PORT, "localhost", () => {
-      console.log(`Server started on PORT ${config.PORT}`);
-    });
-  };
-  return await server();
+
+  connect(config.DB, {
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  });
+  console.log({
+    message: `Successfully connected with the Database \n${config.DB}`,
+    badge: true,
+  });
+
+  return app.listen(0, "localhost", () => {
+    console.log(`Server started on PORT ${config.PORT}`);
+  });
 };
 
 module.exports = initServer;
