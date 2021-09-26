@@ -2571,14 +2571,12 @@
                 "cancelButtonClass": "ml-1",
                 "type": "array"
               },
-<<<<<<< HEAD
               "fieldArray": {
                 "type": "autocomplete",
                 "templateOptions": {
                   "inputClassName": "col mb-3 autocomplete"
                 }
-              }
-=======
+              },
               "fieldArray": [
                 {
                   "type": "autocomplete",
@@ -2588,7 +2586,6 @@
                   }
                 }
               ]
->>>>>>> 1d77058ca3b0e4d358f1f894139136a63051e583
             },
             {
               "className": "col-6",
