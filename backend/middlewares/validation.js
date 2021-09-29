@@ -5,7 +5,6 @@ const validate = async (req, res, next) => {
   if (errors.isEmpty()) {
     return next();
   }
-
   res.status(400).json({
     message: "Validation error",
     validation: false,

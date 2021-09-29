@@ -17,7 +17,7 @@ const { logger } = require("express-winston");
  *  user: ""
  * }
  */
-const Create = async (req, res) => {
+const Create = async (req, res, next) => {
   try {
     // create a new user
     const newPersonForm = await new PersonFormData({
@@ -40,18 +40,14 @@ const Create = async (req, res) => {
     });
   } catch (err) {
     // Implement logger function (winston)
-    res.status(500).json({
-      message: "Unable to create person.",
-      success: false,
-      error: err,
-    });
+    next({ message: "Unable to create person.", error: err });
   }
 };
 
 /**
  * @DESC To edit the person
  */
-const Edit = async (req, res) => {
+const Edit = async (req, res, next) => {
   try {
     //find person form and edit it
     await PersonFormData.findOneAndUpdate(
@@ -73,7 +69,7 @@ const Edit = async (req, res) => {
     let person = await Person.findOneAndUpdate(
       { _id: req.body._id },
       { ...newPerson },
-      (err, doc, res) => {
+      (err, doc, res, next) => {
         if (err) {
           throw err;
         }
@@ -87,18 +83,14 @@ const Edit = async (req, res) => {
     });
   } catch (err) {
     // Implement logger function (winston)
-    res.status(500).json({
-      message: "Unable to edit person.",
-      success: false,
-      error: err,
-    });
+    next({ message: "Unable to edit person.", error: err });
   }
 };
 
 /**
  * @DESC
  */
-const Search = async (req, res) => {
+const Search = async (req, res, next) => {
   try {
     let persons = await Person.find({
       $or: [
@@ -116,17 +108,13 @@ const Search = async (req, res) => {
     });
   } catch (err) {
     // Implement logger function (winston)
-    res.status(500).json({
-      message: "Unable to search person.",
-      success: false,
-      error: err,
-    });
+    next({ message: "Unable to search person.", error: err });
   }
 };
 /**
  * @DESC To get person from data by personFromData id
  */
-const FormDataById = async (req, res) => {
+const FormDataById = async (req, res, next) => {
   try {
     let person = await PersonFormData.findOne({ _id: req.query.id });
 
@@ -137,11 +125,7 @@ const FormDataById = async (req, res) => {
     });
   } catch (err) {
     // Implement logger function (winston)
-    res.status(500).json({
-      message: "Unable to search person.",
-      success: false,
-      error: err,
-    });
+    next({ message: "Unable to get person by id.", error: err });
   }
 };
 
@@ -152,7 +136,7 @@ const FormDataById = async (req, res) => {
  * }
  * id of person collection
  */
-const XLMS = async (req, res) => {
+const XLMS = async (req, res, next) => {
   try {
     let person = await Person.findOne({ _id: req.query.id });
     let user = await User.findOne({ username: person.username });
@@ -200,16 +184,13 @@ const XLMS = async (req, res) => {
     });
   } catch (err) {
     // Implement logger function (winston)
-    res.status(500).json({
-      message: "Unable get file from person.",
-      success: false,
-      error: err,
-    });
+    next({ message: "Unable get file from person.", error: err });
   }
 };
 
 const FinRate = async (req, res, next) => {
   try {
+    throw new Error("qweqweqwe");
     let personData = await PersonFormData.findOne({ _id: req.query.id });
     let union = new UnionOfQuestionGroup(personData, INDIVIDUALS);
     let answers = await union.calcGroups();
@@ -219,13 +200,8 @@ const FinRate = async (req, res, next) => {
       success: true,
     });
   } catch (err) {
-    console.log(err);
     // Implement logger function (winston)
-    res.status(500).json({
-      message: "Unable get calculate person fin rating.",
-      success: false,
-      error: err,
-    });
+    next({ message: "Unable get calculate person fin rating.", error: err });
   }
 };
 module.exports = {

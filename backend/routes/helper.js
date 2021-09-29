@@ -15,7 +15,7 @@ router.post(
   checkSchema(HelperValidator.getCreateValidation()),
   validate,
   async (req, res, next) => {
-    return await Create(req.body, res, next);
+    await Create(req.body, res, next);
   }
 );
 
@@ -26,7 +26,7 @@ router.get(
   checkSchema(HelperValidator.getByNameValidation()),
   validate,
   async (req, res, next) => {
-    return await GetByName(req.query, res, next);
+    await GetByName(req.query, res, next);
   }
 );
 

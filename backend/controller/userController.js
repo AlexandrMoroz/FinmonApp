@@ -9,7 +9,6 @@ const { serializeUser } = require("../utils/Auth");
  */
 const Create = async (body, res, next) => {
   try {
- 
     // Get the hashed password
     //const password = await bcrypt.hash(body.password, 12);
     // create a new user
@@ -32,11 +31,7 @@ const Create = async (body, res, next) => {
     });
   } catch (err) {
     // Implement logger function (winston)
-    res.status(500).json({
-      message: "Unable to create your account.",
-      success: false,
-      error: err,
-    });
+    next({ message: "Unable to create account.", error: err });
   }
 };
 
@@ -62,26 +57,26 @@ const Edit = async (body, res, next) => {
     });
   } catch (err) {
     // Implement logger function (winston)
-    res.status(500).json({
-      message: "Unable to edit your account.",
-      success: false,
-      error: err,
-    });
+    next({ message: "Unable to edit account.", error: err });
   }
 };
 /**
  * @DESC To get all users
  */
 const All = async (res, next) => {
-  let tempUsers = await User.find();
-  tempUsers = tempUsers.map((item) => {
-    return serializeUser(item);
-  });
-  res.status(200).json({
-    message: "User get all was succces",
-    result: tempUsers,
-    success: true,
-  });
+  try {
+    let tempUsers = await User.find();
+    tempUsers = tempUsers.map((item) => {
+      return serializeUser(item);
+    });
+    res.status(200).json({
+      message: "User get all was succces",
+      result: tempUsers,
+      success: true,
+    });
+  } catch (error) {
+    next({ message: "Unable get accounts.", error: err });
+  }
 };
 
 /**
@@ -90,10 +85,8 @@ const All = async (res, next) => {
 const Login = async (body, res, next) => {
   try {
     let { username } = body;
-
     let user = await User.findOne({ username });
     // First Check if the username is in the database
-
     // Sign in the token and issue it to the user
     let token = jwt.sign(
       {
@@ -118,12 +111,8 @@ const Login = async (body, res, next) => {
       ...result,
       success: true,
     });
-  } catch (err) {//?
-    res.status(500).json({
-      message: "Unable login.",
-      success: false,
-      error: err,
-    });
+  } catch (err) {
+    next({ message: "Unable login.", error: err });
   }
 };
 

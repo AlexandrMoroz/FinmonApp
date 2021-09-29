@@ -82,7 +82,6 @@ router.get(
   validate,
   async (req, res, next) => {
     await FinRate(req, res, next);
-    next()
   }
 );
 module.exports = router;

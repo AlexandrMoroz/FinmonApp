@@ -26,7 +26,7 @@ router.put(
   checkSchema(UserValidator.getEditValidation()),
   validate,
   async (req, res, next) => {
-    return await Edit(req.body, res, next);
+    await Edit(req.body, res, next);
   }
 );
 
@@ -36,13 +36,13 @@ router.post(
   checkSchema(UserValidator.getLoginValidation()),
   validate,
   async (req, res, next) => {
-    return await Login(req.body, res, next);
+    await Login(req.body, res, next);
   }
 );
 
 // Get all users
 router.get("/all", userAuth, checkRole(["admin"]), async (req, res, next) => {
-  return await All(res, next);
+  await All(res, next);
 });
 
 module.exports = router;

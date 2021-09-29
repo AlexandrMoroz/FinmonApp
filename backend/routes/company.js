@@ -9,7 +9,7 @@ const {
   Edit,
   Search,
   XLMS,
-  FinRate
+  FinRate,
 } = require("../controller/companyController");
 
 router.post(
@@ -19,7 +19,7 @@ router.post(
   checkSchema(CompanyValidator.getCreateValidation()),
   validate,
   async (req, res, next) => {
-    return await Create(req, res, next);
+    await Create(req, res, next);
   }
 );
 
@@ -30,7 +30,7 @@ router.put(
   checkSchema(CompanyValidator.getEditValidation()),
   validate,
   async (req, res, next) => {
-    return await Edit(req, res, next);
+    await Edit(req, res, next);
   }
 );
 
@@ -44,7 +44,7 @@ router.get(
   checkSchema(CompanyValidator.getFormDataValidation()),
   validate,
   async (req, res, next) => {
-    return await FormDataById(req, res, next);
+    await FormDataById(req, res, next);
   }
 );
 /**
@@ -57,7 +57,7 @@ router.get(
   checkSchema(CompanyValidator.getSearchValidation()),
   validate,
   async (req, res, next) => {
-    return await Search(req, res, next);
+    await Search(req, res, next);
   }
 );
 
@@ -71,7 +71,7 @@ router.get(
   checkSchema(CompanyValidator.getFileValidation()),
   validate,
   async (req, res, next) => {
-    return await XLMS(req, res, next);
+    await XLMS(req, res, next);
   }
 );
 router.get(
@@ -81,7 +81,6 @@ router.get(
   checkSchema(CompanyValidator.getFinRateValidation()),
   validate,
   async (req, res, next) => {
-    
     await FinRate(req, res, next);
   }
 );

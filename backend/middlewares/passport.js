@@ -16,7 +16,7 @@ module.exports = (passport, SECRET) => {
           return done(null, false);
         })
         .catch((err) => {
-          console(err);
+          console.log(err);
           return done(null, false);
         });
     })

@@ -18,8 +18,7 @@ router.get(
   checkSchema(HistoryValidator.getHistoryValidation(PersonFormDataCollection)),
   validate,
   async (req, res, next) => {
-    
-    return PersonHistoryGetById(req.query, res, next);
+    await PersonHistoryGetById(req.query, res, next);
   }
 );
 
@@ -30,8 +29,7 @@ router.get(
   checkSchema(HistoryValidator.getHistoryValidation(PersonFormDataCollection)),
   validate,
   async (req, res, next) => {
-    
-    return PersonXMLSHistoryGetById(req.query, res, next);
+    await PersonXMLSHistoryGetById(req.query, res, next);
   }
 );
 
@@ -42,8 +40,7 @@ router.get(
   checkSchema(HistoryValidator.getHistoryValidation(CompanyFormDataCollection)),
   validate,
   async (req, res, next) => {
-    
-    return CompanyHistoryGetById(req.query, res, next);
+    await CompanyHistoryGetById(req.query, res, next);
   }
 );
 router.get(
@@ -53,8 +50,7 @@ router.get(
   checkSchema(HistoryValidator.getHistoryValidation(CompanyFormDataCollection)),
   validate,
   async (req, res, next) => {
-    
-    return CompanyXMLSHistoryGetById(req.query, res, next);
+    await CompanyXMLSHistoryGetById(req.query, res, next);
   }
 );
 

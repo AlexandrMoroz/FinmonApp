@@ -218,7 +218,6 @@ async function Question17() {
             item.path.split("/").some((item) => item == position) &&
             (item.op == OPERATIONS.add || item.op == OPERATIONS.remove)
           ) {
-            console.log(item.path);
             return true;
           }
           return false;

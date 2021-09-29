@@ -13,7 +13,7 @@ router.post(
   checkSchema(FormValidation.getCreateValidation()),
   validate,
   async (req, res, next) => {
-    return await Create(req.body, res, next);
+    await Create(req.body, res, next);
   }
 );
 
@@ -24,7 +24,7 @@ router.put(
   checkSchema(FormValidation.getEditValidation()),
   validate,
   async (req, res, next) => {
-    return await Edit(req.body, res, next);
+    await Edit(req.body, res, next);
   }
 );
 
@@ -35,7 +35,7 @@ router.get(
   checkSchema(FormValidation.getFormByIdValidation()),
   validate,
   async (req, res, next) => {
-    return await GetByName(req.query, res, next);
+    await GetByName(req.query, res, next);
   }
 );
 

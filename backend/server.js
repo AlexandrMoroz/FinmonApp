@@ -14,8 +14,8 @@ let initServer = (config) => {
   app.use(exp.json());
   app.use(passport.initialize());
   require("./middlewares/passport")(passport, config.SECRET);
-  morgan.token("custom", "RESPONSE: :method;  url::url => :status ");
-  app.use(morgan("custom", { stream: winston.stream }));
+  //morgan.token("custom", "RESPONSE: :method;  url::url => :status ");
+  //app.use(morgan("custom", { stream: winston.stream }));
   app.use((req, res, next) => {
     winston.info(
       `REQUEST: ${req.method}; url:${req.url} - ${
@@ -34,36 +34,30 @@ let initServer = (config) => {
   app.use("/api/helper", require("./routes/helper"));
   app.use("/api/history", require("./routes/history"));
   app.use("/api/person", require("./routes/person"));
-  // app.use((req, res, next) => {
-  //   winston.info(
-  //     `RESPONSE22: ${res.method}; url:${req.url} - ${
-  //       req.method == "POST"
-  //         ? JSON.stringify(req.body)
-  //         : JSON.stringify(req.query)
-  //     }`
-  //   );
-  //   next();
-  // });
+
   process.on("unhandledRejection", function (reason, p) {
-    throw new Error(reason);
+    process.exit(1);
   });
 
   process.on("uncaughtException", function (err) {
     console.log("Caught exception: " + err);
+    process.exit(1);
   });
 
   app.use((err, req, res, next) => {
-    console.log(err);
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
+    // // set locals, only providing error in development
+    // res.locals.message = err.message;
+    // res.locals.error = req.app.get("env") === "development" ? err : {};
     // add this line to include winston logging
     // render the error page
-    res.status(err.status || 500);
+    res.status(err.status || 500).json({
+      message: err.message,
+      error: req.app.get("env") === "development" ? err : {},
+      success: false,
+    });
     res.render("error");
     next();
   });
-
   connect(config.DB, {
     useFindAndModify: false,
     useUnifiedTopology: true,
