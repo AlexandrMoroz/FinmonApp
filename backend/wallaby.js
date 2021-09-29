@@ -15,13 +15,13 @@ module.exports = function () {
       "mock/*.json",
       "validation/*.js",
       "index.js",
-      "test/test.js",
+      //"test/test.js",
       "server.js",
     ],
 
     tests: [
-      "test/questions.js",
-      //  "test/company.js"
+      //"test/questions.js",
+      "test/person.js"
     ],
     testFramework: "mocha",
     setup: function () {

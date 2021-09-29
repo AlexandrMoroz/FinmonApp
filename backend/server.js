@@ -36,12 +36,13 @@ let initServer = (config) => {
   app.use("/api/person", require("./routes/person"));
 
   process.on("unhandledRejection", function (reason, p) {
-    process.exit(1);
+    console.log("Caught exception: " + reason);
+    //process.exit(1);
   });
 
   process.on("uncaughtException", function (err) {
     console.log("Caught exception: " + err);
-    process.exit(1);
+    //process.exit(1);
   });
 
   app.use((err, req, res, next) => {

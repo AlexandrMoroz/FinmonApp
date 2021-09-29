@@ -190,7 +190,7 @@ const XLMS = async (req, res, next) => {
 
 const FinRate = async (req, res, next) => {
   try {
-    throw new Error("qweqweqwe");
+    //throw new Error("qweqweqwe");
     let personData = await PersonFormData.findOne({ _id: req.query.id });
     let union = new UnionOfQuestionGroup(personData, INDIVIDUALS);
     let answers = await union.calcGroups();
