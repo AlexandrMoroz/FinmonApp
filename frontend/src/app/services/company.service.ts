@@ -27,7 +27,7 @@ export class CompanyService {
     });
   }
   getRate(id: string) {
-    return this.http.get(`${environment.apiUrl}person/finrate`, {
+    return this.http.get(`${environment.apiUrl}company/finrate`, {
       params: new HttpParams().set('id', id),
     });
   }

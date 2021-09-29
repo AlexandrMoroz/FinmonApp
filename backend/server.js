@@ -74,7 +74,7 @@ let initServer = (config) => {
     badge: true,
   });
 
-  return app.listen(0, "localhost", () => {
+  return app.listen(0, "0.0.0.0", () => {
     console.log(`Server started on PORT ${config.PORT}`);
   });
 };

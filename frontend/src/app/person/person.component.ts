@@ -114,12 +114,13 @@ export class PersonComponent implements OnInit {
         });
       }
       if (item?.key === 'CheckClientByQuestion') {
-        item?.fieldGroup[1].templateOptions.onClick = () => {
+        item.fieldGroup[1].templateOptions.onClick = function () {
           let answers = this.dataService.getRate(
             this.SelectedItem.formDataResultId
           );
           this.model['CheckClientByQuestion']['QuestionDescription'] =
             JSON.stringify(answers);
+          this.model = { ...this.model };
         };
       }
     });

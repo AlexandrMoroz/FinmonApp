@@ -64,7 +64,7 @@ function Question5() {
     "види діяльності, які передбачають отримання спеціальних дозволів на користування надрами в межах території України, її континентального шельфу та виключної (морської) економічної зони",
     "державні закупівлі",
   ];
-  let answer =
+  let answer = //?
     this.result["TypesOfBusiness"] ||
     ResolvePath(this.result, "FOP.TypesOfBusiness");
 
@@ -114,16 +114,16 @@ function Question15() {
 function Question16() {
   let resultArr = [];
   let director = this.result["Director"];
-  if (!director || !director.lenght == 0) resultArr.push(false);
+  if (!director || !director.length == 0) resultArr.push(false);
   else {
     let isFinaleOwner = director.filter((item) => item["IsFinaleOwner"])[0];
     if (isFinaleOwner) resultArr.push(true);
   }
   let owners = this.result["Owner"];
-  if (!owners || !owners.lenght == 0) resultArr.push(false);
+  if (!owners || !owners.length == 0) resultArr.push(false);
   else {
     let connectedPerson = owners.filter((item) => {
-      return item["ConnectedPerson"]?.lenght != 0;
+      return item["ConnectedPerson"]?.length != 0;
     })[0];
     if (connectedPerson) resultArr.push(true);
 
@@ -160,43 +160,77 @@ async function Question17() {
   let owners = this.result["Owner"];
 
   let OfshoreCountry = await Helper.findOne({ name: "OfshoreCountry" });
-  if (!owners || owners.lenght == 0) resultArr.push(false);
-  else if (!director || director.lenght == 0) resultArr.push(false);
+  if (!owners || owners.length == 0) resultArr.push(false);
+  else {
+    owners.forEach((item) => {
+      let dirCountry = item["Regist"]?.Country;
+      if (!dirCountry) return;
+      resultArr.push(OfshoreCountry?.content.includes(dirCountry));
+    });
+    //////////9///////////
+    owners.forEach((item) => {
+      resultArr.push(
+        ClosedQuestion.call({ result: item }, "HasFactOfChangeDirectorIfPEP")
+      );
+    });
+  }
+  if (!director || director.length == 0) resultArr.push(false);
   else {
     director.forEach((item) => {
       let dirCountry = item["Regist"]?.Country;
       if (!dirCountry) return;
       resultArr.push(OfshoreCountry?.content.includes(dirCountry));
     });
-    owners.forEach((item) => {
-      let dirCountry = item["Regist"]?.Country;
-      if (!dirCountry) return;
-      resultArr.push(OfshoreCountry?.content.includes(dirCountry));
+    //////////5///////////
+    director.forEach((item) => {
+      resultArr.push(
+        ClosedQuestion.call({ result: item }, "IsVulnerablePeople")
+      );
+      resultArr.push(ClosedQuestion.call({ result: item }, "IsPoorOrHomless"));
+      resultArr.push(
+        ClosedQuestion.call({ result: item }, "IsTooYoungOrTooOld")
+      );
+      resultArr.push(ClosedQuestion.call({ result: item }, "IsImmigrant"));
+    });
+    //////////9///////////
+    director.forEach((item) => {
+      resultArr.push(
+        ClosedQuestion.call({ result: item }, "HasFactOfChangeDirectorIfPEP")
+      );
     });
   }
   //////////3////////////
   let history = await diffHistory.getDiffs("CompanyFormData", this.id);
   if (history) {
     let translate_arr = await Helper.findOne({ name: "translate" });
-    let formater = new Formater(translate_arr.content);
+    let formater = new Formater({});
 
     let companyHistory = history.map((item) => {
       return {
         diff: formater.format(item.diff),
       };
     });
-    function personChanged(position, item) {
-      if (item.path.includes(position) && item.Operation == OPERATIONS.add) {
-        return item.value;
-      }
-      return;
+
+    function personChanged(position, obj) {
+      return obj.diff
+        .map((item) => {
+          if (
+            item.path.split("/").some((item) => item == position) &&
+            (item.op == OPERATIONS.add || item.op == OPERATIONS.remove)
+          ) {
+            console.log(item.path);
+            return true;
+          }
+          return false;
+        })
+        .includes(true);
     }
     let previousOwnersDirectors = [];
     companyHistory.forEach((item) => {
       previousOwnersDirectors.push(personChanged("Director", item));
       previousOwnersDirectors.push(personChanged("Owner", item));
     });
-    if (previousOwnersDirectors.lenght != 0) {
+    if (previousOwnersDirectors.length != 0) {
       resultArr.push(true);
     }
   }
@@ -204,13 +238,7 @@ async function Question17() {
   resultArr.push(
     ClosedQuestion.call(this, "CheckList.HasInfoThatCompanyRegistOnTheftDoc")
   );
-  //////////5///////////
-  director.forEach((item) => {
-    resultArr.push(ClosedQuestion.call({result:item}, "IsVulnerablePeople"));
-    resultArr.push(ClosedQuestion.call({result:item}, "IsPoorOrHomless"));
-    resultArr.push(ClosedQuestion.call({result:item}, "IsTooYoungOrTooOld"));
-    resultArr.push(ClosedQuestion.call({result:item}, "IsImmigrant"));
-  });
+
   //////////6///////////
   resultArr.push(
     ClosedQuestion.call(this, "CheckList.RegistAdressInFlatWithAnotherCompany")
@@ -219,13 +247,7 @@ async function Question17() {
   resultArr.push(ClosedQuestion.call(this, "CheckList.HasInfoAboutFroudOwner"));
   //////////8///////////
   resultArr.push(ClosedQuestion.call(this, "RegistPlace.AdressIsNotTrue"));
-  //////////9///////////
-  director.forEach((item) => {
-    resultArr.push(ClosedQuestion.call({result:item}, "HasFactOfChangeDirectorIfPEP"));
-  });
-  owners.forEach((item) => {
-    resultArr.push(ClosedQuestion.call({result:item}, "HasFactOfChangeDirectorIfPEP"));
-  });
+
   return resultArr.includes(true);
 }
 

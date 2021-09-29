@@ -2571,12 +2571,6 @@
                 "cancelButtonClass": "ml-1",
                 "type": "array"
               },
-              "fieldArray": {
-                "type": "autocomplete",
-                "templateOptions": {
-                  "inputClassName": "col mb-3 autocomplete"
-                }
-              },
               "fieldArray": [
                 {
                   "type": "autocomplete",
@@ -3082,9 +3076,8 @@
                 {
                   "className": "col",
                   "key": "QuestionDescription",
-                  "type": "input",
+                  "type": "textarea",
                   "templateOptions": {
-                    "type": "textarea",
                     "label": "Список відповідей"
                   }
                 },
@@ -3093,8 +3086,8 @@
                   "key": "GetQuestions",
                   "type": "button",
                   "templateOptions": {
-                    "type": "textarea",
-                    "label": "Отримат список відповідей"
+                    "addButtonClass": "justify-content-center col-3 mb-4",
+                    "text": "Отримат список відповідей"
                   }
                 }
               ]

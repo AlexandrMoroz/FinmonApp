@@ -51,6 +51,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component';
 import { TabsType } from './tabstype/tabs.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
+import { ButtonType } from './buttontype/button.companent';
 
 
 
@@ -71,6 +72,7 @@ import { AutocompleteComponent } from './autocomplete/autocomplete.component';
     RepeatOneRowComponent,
     TabsType,
     AutocompleteComponent,
+    ButtonType,
   ],
   imports: [
     BrowserModule,
@@ -97,6 +99,10 @@ import { AutocompleteComponent } from './autocomplete/autocomplete.component';
     FormlyModule.forRoot({
       types: [
         {
+          name: 'button',
+          component: ButtonType,
+        },
+        {
           name: 'repeat',
           component: RepeatComponent,
         },{
@@ -108,7 +114,8 @@ import { AutocompleteComponent } from './autocomplete/autocomplete.component';
         },{
           name:'autocomplete',
           component:AutocompleteComponent,
-        }
+        },
+        
       ],
     }),
     FormlyBootstrapModule,

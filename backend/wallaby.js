@@ -19,24 +19,27 @@ module.exports = function () {
       "server.js",
     ],
 
-    tests: ["test/questions.js"],
+    tests: [
+      "test/questions.js",
+      //  "test/company.js"
+    ],
     testFramework: "mocha",
     setup: function () {
       global.should = require("chai").should;
       var mocha = wallaby.testFramework;
-      mocha.suite.beforeAll(() =>
-        require(wallaby.projectCacheDir + "/test/test.js")
-      );
+      // mocha.suite.beforeAll(() =>
+      //   require(wallaby.projectCacheDir + "/test/test.js")
+      // );
     },
     env: {
       type: "node",
       runner: "node",
     },
-    runMode:'onsave', 
+    //runMode: "onsave",
     workers: {
       initial: 4,
       regular: 4,
       //recycle: true
-    }
+    },
   };
 };

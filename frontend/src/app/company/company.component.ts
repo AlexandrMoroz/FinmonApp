@@ -1,8 +1,4 @@
-import {
-  
-  Component,
-  OnInit,
-  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CompanyService } from '../services/company.service';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FormGroup } from '@angular/forms';
@@ -81,8 +77,10 @@ export class CompanyComponent implements OnInit {
                 tap((value) => {
                   if (value) {
                     console.log(this.model);
-                    delete this.model["MoutherCompany"]["MoutherCompanyInfoForNonResident"]
-                     console.log(this.model);
+                    delete this.model['MoutherCompany'][
+                      'MoutherCompanyInfoForNonResident'
+                    ];
+                    console.log(this.model);
                   }
                   field.parent.parent.fieldGroup.find((e) => {
                     return e.key == 'MoutherCompany';
@@ -91,6 +89,24 @@ export class CompanyComponent implements OnInit {
               )
               .subscribe();
           },
+        };
+      }
+      if (item?.key === 'CheckClientByQuestion') {
+        item.fieldGroup[1].templateOptions.onClick = () => {
+          if (!this.SelectedItem) {
+            this.flashMessagesService.show('Оберіть клієнта', {
+              cssClass: 'alert-danger',
+              timeout: 5000,
+            });
+            return;
+          }
+          this.dataService
+            .getRate(this.SelectedItem.formDataResultId)
+            .subscribe((data) => {
+              this.model['CheckClientByQuestion']['QuestionDescription'] =
+                JSON.stringify(data['result']);
+              this.model = { ...this.model };
+            });
         };
       }
     });

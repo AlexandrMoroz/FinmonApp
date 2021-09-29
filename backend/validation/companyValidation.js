@@ -330,6 +330,7 @@ const CompanyValidator = {
            if (!mongoose.Types.ObjectId.isValid(value))
               throw new Error("Невірний тип id");
             let flag = await CompanyFormData.exists({ _id: value });
+            console.log(flag)
             if (!flag) throw new Error("Невірний id");
             return true;
           },

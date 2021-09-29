@@ -11,7 +11,9 @@ const Company = require("../models/company");
 const CompanyFormData = require("../models/companyFormData");
 let translate = require("../mock/personTranslate.json");
 
-const server = "http://localhost:4000";
+//const server = "http://localhost:4000";
+const { testConfig } = require("../config/index");
+let server = require("../server")(testConfig);
 let token = "";
 const user = {
   block: false,
@@ -29,8 +31,7 @@ chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
 
-let test = () => {
-  describe("test company api", () => {
+describe("test company api", () => {
     before((done) => {
       chai
         .request(server)
@@ -679,5 +680,5 @@ let test = () => {
       });
     });
   });
-};
-module.exports = test;
+
+//module.exports = test;

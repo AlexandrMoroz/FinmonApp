@@ -14,8 +14,7 @@ import { FieldArrayType } from '@ngx-formly/core';
       <button nbButton hero status="danger" type="button"  class="{{to.cancelButtonClass}}" size="small" (click)="remove(i)">-</button>
     </div>
     <button nbButton hero status="primary" type="button"  class="{{to.addButtonClass}}" (click)="add()">+</button>
-
-    </div>
+  </div>
   `,
 })
 export class RepeatOneRowComponent extends FieldArrayType {
