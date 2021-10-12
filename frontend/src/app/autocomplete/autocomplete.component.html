@@ -8,13 +8,13 @@
   [formControl]="formControl"
   [formlyAttributes]="field"
   [fullWidth]="true"
-  class="{{ to.inputClassName }}"
+  class="autocomplete"
 />
-<nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">
+<nb-autocomplete class="autocomlete_dropdown" #auto (selectedChange)="onSelectionChange($event)">
   <nb-option
     *ngFor="let option of filteredinputOptions$ | async"
     [value]="option"
-    class="{{ to.inputClassName }}"
+    class="options"
   >
     {{ option }}
   </nb-option>
