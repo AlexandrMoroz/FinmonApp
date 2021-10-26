@@ -19,7 +19,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.10.1",
     "express-winston": "^4.1.0",
-    "jsondiffpatch": "^0.4.1",
+    "jsondiffpatch": "AlexandrMoroz/mongoose-diff-history",
     "jsonwebtoken": "^8.5.1",
     "lodash.clonedeepwith": "^4.5.0",
     "mongoose": "^5.12.8",
