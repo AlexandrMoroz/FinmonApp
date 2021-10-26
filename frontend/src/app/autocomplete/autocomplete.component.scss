@@ -2,9 +2,17 @@
     background-color: #fff !important;
     border-color: #fff !important;
     color: #495057 !important;
+    margin-bottom: .5rem;
 }
-.autocomplete:hover{
+.autocomlete_dropdown{
     background-color: #fff !important;
-    border-color: #fff !important;
+}
+.options{
+    background-color: #fff !important;
     color: #495057 !important;
+}
+.options:hover{
+    background-color: rgba(143, 155, 179, 0.16) !important;
+    color: #222b45 !important;
+    background-color: --gray 
 }
