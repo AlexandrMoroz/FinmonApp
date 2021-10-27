@@ -1,8 +1,7 @@
-import { ElementRef, Injectable, ViewChild } from '@angular/core';
+import {  Injectable } from '@angular/core';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
-import { iif, of } from 'rxjs';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import cloneDeepWith from 'lodash.clonedeepwith';
