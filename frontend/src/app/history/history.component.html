@@ -14,7 +14,7 @@
             *ngFor="let item of list"
             (click)="ItemOnClick($event, item)"
           >
-           <p [innerHTML]="item.toHTMLSearchString()"></p> 
+           <p [innerHTML]="item.toHTMLSerchString()"></p> 
           </nb-list-item>
         </nb-list>
       </nb-card-body>

@@ -26,14 +26,17 @@ function Question19() {
     "Гана",
   ];
   let owners = this.result["Owner"];
-  if (owners) {
+  if (owners?.length!=0) {
     let flag = owners.some((item) => {
       let regCountry = item["Regist"].Country;
       let liveCountry = item["Live"].Country;
+      console.log(regCountry)
+      console.log(liveCountry)
       if (blackList?.includes(regCountry) || blackList?.includes(liveCountry)) {
         return true;
       }
     });
+    console.log(flag)
     if (flag) return true;
   }
   let registCountry =
@@ -45,6 +48,7 @@ function Question19() {
     (registCountry && blackList.includes(registCountry)) ||
     (liveCountry && blackList.includes(liveCountry))
   ) {
+    console.log(2)
     return true;
   }
 

@@ -7,7 +7,7 @@
       "fieldGroup": [
         {
           "templateOptions": { "label": "Дати" },
-          "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
+          "fieldGroupClassName": "d-flex flex-wrap  align-items-start",
           "fieldGroup": [
             {
               "className": "col-4",
@@ -80,33 +80,37 @@
               }
             },
             {
-              "className": "col-6",
-              "key": "DateOfFreeze",
-              "type": "repeat-one-row",
-              "templateOptions": {
-                "title": "Дата замороження активів",
-                "cancelButtonClass": "ml-1"
+              "fieldGroupClassName": "col-6",
+              "fieldGroup": [{
+                "className": "col-12",
+                "key": "DateOfFreeze",
+                "type": "repeat-one-row",
+                "templateOptions": {
+                  "title": "Дата замороження активів",
+                  "cancelButtonClass": "ml-1"
+                },
+                "fieldArray": {
+                  "className": "justify-content-center",
+                  "type": "input",
+                  "templateOptions": { "type": "date", "required": true }
+                }
               },
-              "fieldArray": {
-                "className": "justify-content-center",
-                "type": "input",
-                "templateOptions": { "type": "date", "required": true }
-              }
-            },
-            {
-              "className": "col-6",
-              "key": "DateOfUnfreeze",
-              "type": "repeat-one-row",
-              "templateOptions": {
-                "title": "Дата розмороження активів",
-                "cancelButtonClass": "ml-1"
-              },
-              "fieldArray": {
-                "className": "justify-content-center",
-                "type": "input",
-                "templateOptions": { "type": "date", "required": true }
-              }
+              {
+                "className": "col-12",
+                "key": "DateOfUnfreeze",
+                "type": "repeat-one-row",
+                "templateOptions": {
+                  "title": "Дата розмороження активів",
+                  "cancelButtonClass": "ml-1"
+                },
+                "fieldArray": {
+                  "className": "justify-content-center",
+                  "type": "input",
+                  "templateOptions": { "type": "date", "required": true }
+                }
+              }]
             }
+            
           ]
         },
         {
@@ -169,8 +173,7 @@
               "modelOptions": { "updateOn": "blur" },
               "templateOptions": {
                 "label": "Реєстраційний (обліковий) номер",
-                "placeholder": "Реєстраційний (обліковий) номер",
-                "required": true
+                "placeholder": "Реєстраційний (обліковий) номер"
               }
             },
             {
@@ -3068,30 +3071,6 @@
             },
             {
               "className": "col-12",
-              "key": "CheckClientByQuestion",
-              "fieldGroupClassName": "d-flex flex-wrap align-items-start justify-content-center",
-              "fieldGroup": [
-                {
-                  "className": "col",
-                  "key": "QuestionDescription",
-                  "type": "textarea",
-                  "templateOptions": {
-                    "label": "Список відповідей"
-                  }
-                },
-                {
-                  "className": "col",
-                  "key": "GetQuestions",
-                  "type": "button",
-                  "templateOptions": {
-                    "addButtonClass": "justify-content-center col-3 mb-4",
-                    "text": "Отримат список відповідей"
-                  }
-                }
-              ]
-            },
-            {
-              "className": "col-12",
               "key": "ClienRisk",
               "type": "repeat-one-row",
               "templateOptions": {
@@ -3129,6 +3108,30 @@
                   }
                 ]
               }
+            }, {
+              "className": "col-12",
+              "key": "CheckClientByQuestion",
+              "fieldGroupClassName": "d-flex flex-wrap align-items-center justify-content-center",
+              "fieldGroup": [
+                {
+                  "className": "col question_description",
+                  "key": "QuestionDescription",
+                  "type": "textarea",
+                  "templateOptions": {
+                    "disabled":true, 
+                    "label": "Список відповідей"
+                  }
+                },
+                {
+                  "className": "col get_questions_button",
+                  "key": "GetQuestions",
+                  "type": "button",
+                  "templateOptions": {
+                    "addButtonClass": "justify-content-center col-3 mb-4",
+                    "text": "Отримат список відповідей"
+                  }
+                }
+              ]
             }
           ]
         }

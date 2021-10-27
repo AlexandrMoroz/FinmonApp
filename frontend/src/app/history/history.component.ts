@@ -21,7 +21,7 @@ class CompanyService {
 }
 class Company {
   shortName: string;
-  registNumber: string;
+  clientCode: string;
   createdAt: string;
   user: string;
   formDataResultId: string;
@@ -29,18 +29,18 @@ class Company {
     this.createdAt = new Date(arg.createdAt).toLocaleString();
     this.user = arg.username;
     this.shortName = arg.shortName;
-    this.registNumber = arg.registNumber;
+    this.clientCode = arg.clientCode;
     this.formDataResultId = arg.formDataResultId;
   }
-  toHTMLSeachString() {
+  toHTMLSerchString() {
     return `Назва: ${this.shortName} <br>
-            Реєстраціїний номер ${this.registNumber}<br>`;
+            Реєстраціїний номер ${this.clientCode}<br>`;
   }
   toHTMLHeaderString() {
-    return `${this.shortName}  ${this.registNumber}`;
+    return `${this.shortName}  ${this.clientCode}`;
   }
   toFileNameString() {
-    return `${this.shortName}_${this.registNumber}`;
+    return `${this.shortName}_${this.clientCode}`;
   }
 }
 class PersonService {
@@ -71,7 +71,7 @@ class Person {
     this.inn = arg.INN;
     this.formDataResultId = arg.formDataResultId;
   }
-  toHTMLSearchString() {
+  toHTMLSerchString() {
     return `Ім'я: ${this.name} <br>
             Призвище: ${this.family}<br>
             По батьковій: ${this.surname}<br>

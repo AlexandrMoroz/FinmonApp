@@ -46,7 +46,7 @@ export class HelperService {
         .pipe(
           map((data) => {
             let countries = data['result'].map((item, index) => {
-              return { label: item.name };
+              return { label: item };
             });
             localStorage.setItem(this.countryHelper, JSON.stringify(countries));
             return countries;

@@ -8,7 +8,7 @@ let order = require("../mock/personOrder.json");
 const { INDIVIDUALS } =
   require("../models/GroupOfQuestions/groupOfQuestions").Types;
 const UnionOfQuestionGroup = require("../models/GroupOfQuestions/unionOfQuestionGroup");
-const { logger } = require("express-winston");
+
 /**
  *
  * @DESC person create 1. create form result. 2 create person documen with result id

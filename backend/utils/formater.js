@@ -113,7 +113,7 @@ class Formater extends formatters.base.default {
   }
 
   format_textdiff() {
-    throw new Error("Not implemented");
+    //throw new Error("Not implemented");
   }
 
   format(delta, left) {

@@ -13,7 +13,6 @@ function Question25() {
 }
 
 function Question26() {
-  
   return ClosedQuestion.call(this, "ClientUseProduct")||ClosedQuestion.call(this, "CheckList.ClientUseProduct");
 }
 

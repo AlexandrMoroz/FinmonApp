@@ -76,11 +76,9 @@ export class CompanyComponent implements OnInit {
               .pipe(
                 tap((value) => {
                   if (value) {
-                    console.log(this.model);
                     delete this.model['MoutherCompany'][
                       'MoutherCompanyInfoForNonResident'
                     ];
-                    console.log(this.model);
                   }
                   field.parent.parent.fieldGroup.find((e) => {
                     return e.key == 'MoutherCompany';
@@ -103,19 +101,19 @@ export class CompanyComponent implements OnInit {
           this.dataService
             .getRate(this.SelectedItem.formDataResultId)
             .subscribe((data) => {
-              this.model['CheckClientByQuestion']['QuestionDescription'] =
-                JSON.stringify(data['result']);
-              this.model = { ...this.model };
+              this.model = {
+                ...this.model,
+                CheckClientByQuestion: { QuestionDescription: data['result'] },
+              };
             });
         };
       }
     });
   }
-
-  cleanObject(object) {
+  recurseCleanObj(object) {
     Object.entries(object).forEach(([k, v]) => {
       if (v && typeof v === 'object') {
-        this.cleanObject(v);
+        this.recurseCleanObj(v);
       }
       if (
         (v && typeof v === 'object' && !Object.keys(v).length) ||
@@ -131,11 +129,19 @@ export class CompanyComponent implements OnInit {
     });
     return object;
   }
+  cleanObject(object) {
+    delete object['CheckClientByQuestion'];
+    console.log(object);
+    if (object['IsResident']) {
+      delete object['MoutherCompany']['MoutherCompanyInfoForNonResident'];
+    }
+    return this.recurseCleanObj(object);
+  }
   Submit(model) {
-    console.log(model);
     //if selected item true than create person
     if (!this.SelectedItem) {
       this.cleanObject(model);
+      console.log(model);
       let tempModel = {
         result: model,
         user: this.authService.currentUserValue.username,
@@ -160,6 +166,7 @@ export class CompanyComponent implements OnInit {
     //if selected item true than edit person
     else {
       this.cleanObject(model);
+      console.log(model);
       let submitModel = {
         _id: this.SelectedItem._id,
         formDataResultId: this.SelectedItem.formDataResultId,
@@ -227,7 +234,7 @@ export class CompanyComponent implements OnInit {
 
         XLSX.writeFile(
           wb,
-          `${this.SelectedItem.shortName}_${this.SelectedItem.registNumber}.xlsx`
+          `${this.SelectedItem.shortName}_${this.SelectedItem.clientCode}.xlsx`
         );
         this.isLoading = false;
       },

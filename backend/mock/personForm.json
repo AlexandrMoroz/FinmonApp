@@ -1208,120 +1208,149 @@
           }
         },
         {
-          "className": "col-6",
-          "key": "ClienReputations",
-          "type": "repeat-one-row",
-          "templateOptions": {
-            "label": "Репутація клієнта",
-            "addButtonClass": "justify-content-center col-3 mb-4",
-            "cancelButtonClass": "ml-1 align-self-end form-group",
-            "inputClass": "col-6",
-            "title": "Репутація клієнта"
-          },
-          "fieldArray": {
-            "fieldGroupClassName": "row justify-content-center align-items-center mb-0",
-            "fieldGroup": [
-              {
-                "className": "col",
-                "key": "Reputation",
-                "type": "select",
-                "templateOptions": {
-                  "label": "Репутація",
-                  "options": [
-                    { "label": "позитивна", "value": 1 },
-                    { "label": "негативна", "value": 2 }
-                  ]
-                }
+          "templateOptions": { "label": "Оцінки" },
+          "fieldGroupClassName": "d-flex flex-wrap align-items-end justify-content-center",
+          "fieldGroup": [
+            {
+              "className": "col-12",
+              "key": "ClienReputations",
+              "type": "repeat-one-row",
+              "templateOptions": {
+                "addButtonClass": "justify-content-center col-3 mb-4",
+                "cancelButtonClass": "ml-1 align-self-end form-group",
+                "inputClass": "col-10",
+                "title": "Репутація клієнта"
               },
-              {
-                "className": "col",
-                "key": "CreateDate",
-                "type": "input",
-                "templateOptions": {
-                  "type": "date",
-                  "label": "Дата розрахунку"
-                }
+              "fieldArray": {
+                "fieldGroupClassName": "d-flex justify-content-center align-items-center mb-0",
+                "fieldGroup": [
+                  {
+                    "className": "col",
+                    "key": "Reputation",
+                    "type": "select",
+                    "templateOptions": {
+                      "label": "Репутація",
+                      "options": [
+                        { "label": "позитивна", "value": 1 },
+                        { "label": "негативна", "value": 2 }
+                      ]
+                    }
+                  },
+                  {
+                    "className": "col",
+                    "key": "CreateDate",
+                    "type": "input",
+                    "templateOptions": {
+                      "type": "date",
+                      "label": "Дата розрахунку"
+                    }
+                  }
+                ]
               }
-            ]
-          }
-        },
-        {
-          "className": "col-6",
-          "key": "ClienFinancialStand",
-          "type": "repeat-one-row",
-          "templateOptions": {
-            "label": "Фінансовий стан ",
-            "addButtonClass": "justify-content-center col-3 mb-4",
-            "cancelButtonClass": "ml-1 align-self-end form-group",
-            "inputClass": "col-6",
-            "title": "Фінансовий стан "
-          },
-          "fieldArray": {
-            "fieldGroupClassName": "row justify-content-center align-items-center mb-0",
-            "fieldGroup": [
-              {
-                "className": "col",
-                "key": "FinancialStand",
-                "type": "select",
-                "templateOptions": {
-                  "label": "Фінансовий стан",
-                  "options": [
-                    { "label": "задовільний", "value": 1 },
-                    { "label": "незадовільний", "value": 2 }
-                  ]
-                }
+            },
+            {
+              "className": "col-12",
+              "key": "ClienFinancialStand",
+              "type": "repeat-one-row",
+              "templateOptions": {
+                "addButtonClass": "justify-content-center col-3 mb-4",
+                "cancelButtonClass": "ml-1 align-self-end form-group",
+                "inputClass": "col-10",
+                "title": "Фінансовий стан "
               },
-              {
-                "className": "col",
-                "key": "CreateDate",
-                "type": "input",
-                "templateOptions": {
-                  "type": "date",
-                  "label": "Дата розрахунку"
-                }
+              "fieldArray": {
+                "fieldGroupClassName": "d-flex justify-content-center align-items-center mb-0",
+                "fieldGroup": [
+                  {
+                    "className": "col",
+                    "key": "FinancialStand",
+                    "type": "select",
+                    "templateOptions": {
+                      "label": "Фінансовий стан",
+                      "options": [
+                        { "label": "задовільний", "value": 1 },
+                        { "label": "незадовільний", "value": 2 }
+                      ]
+                    }
+                  },
+                  {
+                    "className": "col",
+                    "key": "CreateDate",
+                    "type": "input",
+                    "templateOptions": {
+                      "type": "date",
+                      "label": "Дата розрахунку"
+                    }
+                  }
+                ]
               }
-            ]
-          }
-        },
-        {
-          "className": "col-6",
-          "key": "ClienRisk",
-          "type": "repeat-one-row",
-          "templateOptions": {
-            "label": "Ризик клієнта",
-            "addButtonClass": "justify-content-center col-3 mb-4",
-            "cancelButtonClass": "ml-1 align-self-end form-group",
-            "inputClass": "col-6",
-            "title": "Ризик клієнта"
-          },
-          "fieldArray": {
-            "fieldGroupClassName": "d-flex justify-content-center align-items-center mb-0",
-            "fieldGroup": [
-              {
-                "className": "col",
-                "key": "Risk",
-                "type": "select",
-                "templateOptions": {
-                  "label": "Ризик",
-                  "options": [
-                    { "label": "низький", "value": 1 },
-                    { "label": "середній", "value": 2 },
-                    { "label": "високий", "value": 3 },
-                    { "label": "неприйнятно високий", "value": 4 }
-                  ]
+            },
+            {
+              "className": "col-12",
+              "key": "CheckClientByQuestion",
+              "fieldGroupClassName": "d-flex flex-wrap align-items-start justify-content-center",
+              "fieldGroup": [
+                {
+                  "className": "col",
+                  "key": "QuestionDescription",
+                  "type": "textarea",
+                  "templateOptions": {
+                    "disabled": true,
+                    "label": "Список відповідей"
+                  }
+                },
+                {
+                  "className": "col",
+                  "key": "GetQuestions",
+                  "type": "button",
+                  "templateOptions": {
+                    "addButtonClass": "justify-content-center col-3 mb-4",
+                    "text": "Отримат список відповідей"
+                  }
                 }
+              ]
+            },
+            {
+              "className": "col-12",
+              "key": "ClienRisk",
+              "type": "repeat-one-row",
+              "templateOptions": {
+                "addButtonClass": "justify-content-center col-3 mb-4",
+                "cancelButtonClass": "ml-1 align-self-end form-group",
+                "inputClass": "col-10",
+                "title": "Ризик клієнта"
               },
-              {
-                "className": "col",
-                "key": "OnCreateDate",
-                "type": "input",
-                "templateOptions": {
-                  "type": "date",
-                  "label": "Дата розрахунку"
-                }
+              "fieldArray": {
+                "fieldGroupClassName": "d-flex justify-content-center align-items-center mb-0",
+                "fieldGroup": [
+                  {
+                    "className": "col",
+                    "key": "Risk",
+                    "type": "select",
+                    "templateOptions": {
+                      "required": true,
+                      "label": "Ризик",
+                      "options": [
+                        { "label": "низький", "value": 1 },
+                        { "label": "середній", "value": 2 },
+                        { "label": "високий", "value": 3 },
+                        { "label": "неприйнятно високий", "value": 4 }
+                      ]
+                    }
+                  },
+                  {
+                    "className": "col",
+                    "key": "OnCreateDate",
+                    "type": "input",
+                    "templateOptions": {
+                      "type": "date",
+                      "label": "Дата розрахунку"
+                    }
+                  }
+                ]
               }
-            ]
-          }
+            }
+          ]
         }
       ]
     }

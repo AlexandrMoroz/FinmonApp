@@ -152,59 +152,68 @@ function Question16() {
 async function Question17() {
   let resultArr = [];
   /////////1/////////
-  resultArr.push(
-    ClosedQuestion.call(this, "CheckList.AdressOfRegistHasMassiveRegistCompany")
-  );
+  resultArr.push({
+    1: ClosedQuestion.call(
+      this,
+      "CheckList.AdressOfRegistHasMassiveRegistCompany"
+    ),
+  });
   //////////2/////////
   let director = this.result["Director"];
   let owners = this.result["Owner"];
 
   let OfshoreCountry = await Helper.findOne({ name: "OfshoreCountry" });
-  if (!owners || owners.length == 0) resultArr.push(false);
-  else {
+  if (owners || owners.length != 0) {
     owners.forEach((item) => {
       let dirCountry = item["Regist"]?.Country;
       if (!dirCountry) return;
-      resultArr.push(OfshoreCountry?.content.includes(dirCountry));
+      resultArr.push({ 2.1: OfshoreCountry?.content.includes(dirCountry) });
     });
     //////////9///////////
     owners.forEach((item) => {
-      resultArr.push(
-        ClosedQuestion.call({ result: item }, "HasFactOfChangeDirectorIfPEP")
-      );
+      resultArr.push({
+        9.1: ClosedQuestion.call(
+          { result: item },
+          "HasFactOfChangeDirectorIfPEP"
+        ),
+      });
     });
   }
-  if (!director || director.length == 0) resultArr.push(false);
-  else {
+  if (director || director.length != 0) {
     director.forEach((item) => {
       let dirCountry = item["Regist"]?.Country;
       if (!dirCountry) return;
-      resultArr.push(OfshoreCountry?.content.includes(dirCountry));
+      resultArr.push({ 2.2: OfshoreCountry?.content.includes(dirCountry) });
     });
     //////////5///////////
     director.forEach((item) => {
-      resultArr.push(
-        ClosedQuestion.call({ result: item }, "IsVulnerablePeople")
-      );
-      resultArr.push(ClosedQuestion.call({ result: item }, "IsPoorOrHomless"));
-      resultArr.push(
-        ClosedQuestion.call({ result: item }, "IsTooYoungOrTooOld")
-      );
-      resultArr.push(ClosedQuestion.call({ result: item }, "IsImmigrant"));
+      resultArr.push({
+        5.1: ClosedQuestion.call({ result: item }, "IsVulnerablePeople"),
+      });
+      resultArr.push({
+        5.2: ClosedQuestion.call({ result: item }, "IsPoorOrHomless"),
+      });
+      resultArr.push({
+        5.3: ClosedQuestion.call({ result: item }, "IsTooYoungOrTooOld"),
+      });
+      resultArr.push({
+        5.4: ClosedQuestion.call({ result: item }, "IsImmigrant"),
+      });
     });
     //////////9///////////
     director.forEach((item) => {
-      resultArr.push(
-        ClosedQuestion.call({ result: item }, "HasFactOfChangeDirectorIfPEP")
-      );
+      resultArr.push({
+        9.2: ClosedQuestion.call(
+          { result: item },
+          "HasFactOfChangeDirectorIfPEP"
+        ),
+      });
     });
   }
   //////////3////////////
   let history = await diffHistory.getDiffs("CompanyFormData", this.id);
   if (history) {
-    let translate_arr = await Helper.findOne({ name: "translate" });
     let formater = new Formater({});
-
     let companyHistory = history.map((item) => {
       return {
         diff: formater.format(item.diff),
@@ -215,8 +224,9 @@ async function Question17() {
       return obj.diff
         .map((item) => {
           if (
-            item.path.split("/").some((item) => item == position) &&
-            (item.op == OPERATIONS.add || item.op == OPERATIONS.remove)
+            item.path.split("/")[0] == position &&
+            item.path.split("/").includes("INN") &&
+            (item.op == OPERATIONS.add)
           ) {
             return true;
           }
@@ -229,25 +239,39 @@ async function Question17() {
       previousOwnersDirectors.push(personChanged("Director", item));
       previousOwnersDirectors.push(personChanged("Owner", item));
     });
-    if (previousOwnersDirectors.length != 0) {
-      resultArr.push(true);
+    if (
+      previousOwnersDirectors.length != 0 &&
+      previousOwnersDirectors.includes(true)
+    ) {
+      resultArr.push({ 3: true });
     }
   }
   //////////4///////////
-  resultArr.push(
-    ClosedQuestion.call(this, "CheckList.HasInfoThatCompanyRegistOnTheftDoc")
-  );
+  resultArr.push({
+    4: ClosedQuestion.call(
+      this,
+      "CheckList.HasInfoThatCompanyRegistOnTheftDoc"
+    ),
+  });
 
   //////////6///////////
-  resultArr.push(
-    ClosedQuestion.call(this, "CheckList.RegistAdressInFlatWithAnotherCompany")
-  );
+  resultArr.push({
+    6: ClosedQuestion.call(
+      this,
+      "CheckList.RegistAdressInFlatWithAnotherCompany"
+    ),
+  });
   //////////7///////////
-  resultArr.push(ClosedQuestion.call(this, "CheckList.HasInfoAboutFroudOwner"));
+  resultArr.push({
+    7: ClosedQuestion.call(this, "CheckList.HasInfoAboutFroudOwner"),
+  });
   //////////8///////////
-  resultArr.push(ClosedQuestion.call(this, "RegistPlace.AdressIsNotTrue"));
+  resultArr.push({
+    8: ClosedQuestion.call(this, "RegistPlace.AdressIsNotTrue"),
+  });
 
-  return resultArr.includes(true);
+  console.log(resultArr);
+  return resultArr.map((item) => Object.entries(item)[0][1]).includes(true);
 }
 
 function Question18() {
