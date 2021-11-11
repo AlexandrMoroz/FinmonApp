@@ -10,8 +10,8 @@
 ::ng-deep .mat-tab-header-pagination-chevron {
   border-color: rgba(255, 255, 255, 0.87);
 }
-.invalid .mat-ripple {
-  border: 2px solid red;
-  border-radius: 10px 10px 0 0;
-  z-index: 1000;
+.invalid{
+  border: 2px solid red !important;
+  border-radius: 10px 10px 0 0 !important;
+  z-index: 1000 !important;
 }

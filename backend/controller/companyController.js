@@ -7,7 +7,8 @@ const Helper = require("../models/helper");
 let order = require("../mock/companyOrder.json");
 const { LEGALENTITES } =
   require("../models/GroupOfQuestions/groupOfQuestions").Types;
-const UnionOfQuestionGroup = require("../models/GroupOfQuestions/unionOfQuestionGroup");
+const UnionOfFinRateQuestionGroup = require("../models/GroupOfQuestions/unionOfFinRateQuestionGroup");
+const UnionOfReputationQuestions = require("../models/GroupOfQuestions/UnionOfReputationQuestions");
 /**
  * @DESC comapny create 1. create form result. 2 create person documen with result id
  * req.body: {
@@ -16,8 +17,6 @@ const UnionOfQuestionGroup = require("../models/GroupOfQuestions/unionOfQuestion
  */
 const Create = async (req, res, next) => {
   try {
-    
-    
     // create a new user
     const newForm = await new CompanyFormData({
       result: req.body.result,
@@ -157,8 +156,8 @@ const XLMS = async (req, res, next) => {
 const FinRate = async (req, res, next) => {
   try {
     let companyFormData = await CompanyFormData.findOne({ _id: req.query.id });
-    let union = new UnionOfQuestionGroup(companyFormData, LEGALENTITES);
-    let answers = await union.calcGroups();
+    let union = new UnionOfFinRateQuestionGroup(companyFormData, LEGALENTITES);
+    let answers = await union.calcGroupsForTest();
     res.status(200).json({
       message: "Company get calculate fin rating ",
       result: answers,
@@ -168,6 +167,21 @@ const FinRate = async (req, res, next) => {
     next({ message: "Unable get calculate company fin rating.", error: err });
   }
 };
+const Reputation = async (req, res, next) => {
+  try {
+    let companyFormData = await CompanyFormData.findOne({ _id: req.query.id });
+    let union = new UnionOfReputationQuestions(companyFormData);
+    let answers = await union.calcGroupsForTest();
+    res.status(200).json({
+      message: "Company get calculate fin rating ",
+      result: answers,
+      success: true,
+    });
+  } catch (err) {
+    next({ message: "Unable get calculate company fin rating.", error: err });
+  }
+};
+
 module.exports = {
   FormDataById,
   Create,
@@ -175,4 +189,5 @@ module.exports = {
   Search,
   XLMS,
   FinRate,
+  Reputation
 };

@@ -152,6 +152,11 @@ const CompanyValidator = {
           errorMessage: "Поле Резидент порожне",
           bail: true,
         },
+        custom: {
+          options: async (value) => {
+            
+          },
+        },
       },
       "result.ShortName": {
         exists: {
@@ -311,7 +316,7 @@ const CompanyValidator = {
       },
     };
   },
-  getFinRateValidation: () => {
+  getCalculationValidation: () => {
     return {
       id: {
         in: ["query"],
@@ -342,6 +347,7 @@ const CompanyValidator = {
       },
     };
   },
+  
 };
 
 module.exports = CompanyValidator;

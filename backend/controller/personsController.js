@@ -7,7 +7,9 @@ const Helper = require("../models/helper");
 let order = require("../mock/personOrder.json");
 const { INDIVIDUALS } =
   require("../models/GroupOfQuestions/groupOfQuestions").Types;
-const UnionOfQuestionGroup = require("../models/GroupOfQuestions/unionOfQuestionGroup");
+const UnionOfFinRateQuestionGroup = require("../models/GroupOfQuestions/UnionOfFinRateQuestionGroup");
+const UnionOfReputationQuestions = require("../models/GroupOfQuestions/UnionOfReputationQuestions");
+
 
 /**
  *
@@ -190,18 +192,36 @@ const XLMS = async (req, res, next) => {
 
 const FinRate = async (req, res, next) => {
   try {
-    //throw new Error("qweqweqwe");
     let personData = await PersonFormData.findOne({ _id: req.query.id });
-    let union = new UnionOfQuestionGroup(personData, INDIVIDUALS);
-    let answers = await union.calcGroups();
+    let union = new UnionOfFinRateQuestionGroup(personData, INDIVIDUALS);
+    let answers = await union.calcGroupsForTest();
     res.status(200).json({
       message: "Person get calculate person fin rating ",
       result: answers,
       success: true,
     });
   } catch (err) {
-    // Implement logger function (winston)
-    next({ message: "Unable get calculate person fin rating.", error: err });
+    next({
+      message: "Unable get calculate person fin rating.",
+      error: { ...err },
+    });
+  }
+};
+const Reputation = async (req, res, next) => {
+  try {
+    let personData = await PersonFormData.findOne({ _id: req.query.id });
+    let union = new UnionOfReputationQuestions(personData);
+    let answers = await union.calcGroupsForTest();
+    res.status(200).json({
+      message: "Person get calculate person fin rating ",
+      result: answers,
+      success: true,
+    });
+  } catch (err) {
+    next({
+      message: "Unable get calculate person fin rating.",
+      error: { ...err },
+    });
   }
 };
 module.exports = {
@@ -211,4 +231,5 @@ module.exports = {
   Search,
   XLMS,
   FinRate,
+  Reputation,
 };

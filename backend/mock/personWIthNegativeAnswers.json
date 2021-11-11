@@ -3,9 +3,9 @@
   "result": {
     "IsResident": true,
     "CheckList": {
-      "HasQuestionFromPolice": false,
-      "HasQuestionFromFinmon": false,
-      "HasBadReputation": false,
+      "HasQuestionFromPolice": true,
+      "HasQuestionFromFinmon": true,
+      "HasBadReputation": true,
       "ClientProfessionIsDifferent": true,
       "ClientHideFromCheck": true,
       "HasNotIncome": true,

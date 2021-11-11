@@ -1,5 +1,12 @@
-const ResolvePath = (object, path, defaultValue) =>
-  path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
+const ResolvePath = (object, path, defaultValue) => {
+  if (isEmpty(object) || !path) return object;
+  return path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
+};
+
+function isEmpty(obj) {
+  for (var i in obj) return false;
+  return true;
+}
 
 function OperationShoudinclude(nameOfField) {
   let answer = this.result["Operations"];

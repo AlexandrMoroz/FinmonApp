@@ -1,4 +1,4 @@
-const { ClosedQuestion } = require("../../utils/helpers");
+const { ClosedQuestion } = require("../../../utils/helpers");
 function Question23() {
   return ClosedQuestion.call(this, "CheckList.ClientVIPService");
 }

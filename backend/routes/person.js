@@ -10,7 +10,8 @@ const {
   Edit,
   Search,
   XLMS,
-  FinRate
+  FinRate,
+  Reputation
 } = require("../controller/personsController");
 router.post(
   "/create",
@@ -78,10 +79,20 @@ router.get(
   "/finrate",
   userAuth,
   checkRole(["user", "admin"]),
-  checkSchema(PersonValidator.getFinRateValidation()),
+  checkSchema(PersonValidator.getCalculationValidation()),
   validate,
   async (req, res, next) => {
     await FinRate(req, res, next);
+  }
+);
+router.get(
+  "/reputation",
+  userAuth,
+  checkRole(["user", "admin"]),
+  checkSchema(PersonValidator.getCalculationValidation()),
+  validate,
+  async (req, res, next) => {
+    await Reputation(req, res, next);
   }
 );
 module.exports = router;

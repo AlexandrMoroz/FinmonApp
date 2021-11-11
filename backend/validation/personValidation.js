@@ -278,7 +278,7 @@ const PersonValidator = {
       },
     };
   },
-  getFinRateValidation: () => {
+  getCalculationValidation: () => {
     return {
       id: {
         in: ["query"],

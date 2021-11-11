@@ -10,6 +10,7 @@ const {
   Search,
   XLMS,
   FinRate,
+  Reputation
 } = require("../controller/companyController");
 
 router.post(
@@ -78,10 +79,20 @@ router.get(
   "/finrate",
   userAuth,
   checkRole(["user", "admin"]),
-  checkSchema(CompanyValidator.getFinRateValidation()),
+  checkSchema(CompanyValidator.getCalculationValidation()),
   validate,
   async (req, res, next) => {
     await FinRate(req, res, next);
+  }
+);
+router.get(
+  "/reputation",
+  userAuth,
+  checkRole(["user", "admin"]),
+  checkSchema(CompanyValidator.getCalculationValidation()),
+  validate,
+  async (req, res, next) => {
+    await Reputation(req, res, next);
   }
 );
 module.exports = router;

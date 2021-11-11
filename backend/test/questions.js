@@ -1,9 +1,9 @@
 const chai = require("chai");
 const chaihttp = require("chai-http");
 const chaiExclude = require("chai-exclude");
-const UnionOfQuestionGroup = require("../models/GroupOfQuestions/unionOfQuestionGroup");
-const mockNegativePerson = require("../mock/personWithNegativeAnswers");
-const mockNegativeCompany = require("../mock/companyWithNegativeAnswers");
+const UnionOfFinRateQuestionGroup = require("../models/GroupOfQuestions/UnionOfFinRateQuestionGroup");
+const mockNegativePerson = require("../mock/personWIthNegativeAnswers.json");
+const mockNegativeCompany = require("../mock/companyWithNegativeAnswers.json");
 const Helper = require("../models/helper");
 const PersonFormData = require("../models/personFormData");
 const Person = require("../models/person");
@@ -16,6 +16,7 @@ const { INDIVIDUALS, LEGALENTITES } =
   require("../models/GroupOfQuestions/groupOfQuestions").Types;
 //const server = "http://localhost:4000";
 const { testConfig } = require("../config/index");
+const UnionOfReputationQuestions = require("../models/GroupOfQuestions/UnionOfReputationQuestions");
 let server = require("../server")(testConfig);
 
 let token = "";
@@ -52,7 +53,6 @@ describe("test fin rate question classes", () => {
     await History.deleteMany({});
     oldCompany = mockNegativeCompany;
     newCompanyFormData = await new CompanyFormData({
-      //?
       result: oldCompany.result,
     }).save();
     newCompany = await new Company({
@@ -162,9 +162,12 @@ describe("test fin rate question classes", () => {
       }
     );
   });
-  it("question classes with only all negative person answers  ", async () => {
-    let union = new UnionOfQuestionGroup(mockNegativePerson, INDIVIDUALS);
-    let answers = await union.calcGroups();
+  it("fin rate question classes for test func with only all negative person answers  ", async () => {
+    let union = new UnionOfFinRateQuestionGroup(
+      mockNegativePerson,
+      INDIVIDUALS
+    );
+    let answers = await union.calcGroupsForTest();
     const expect = [
       true,
       true,
@@ -183,15 +186,24 @@ describe("test fin rate question classes", () => {
       true,
       true,
     ];
-    answers.forEach((item, i, arr) => {
+    answers.flat().forEach((item, i, arr) => {
       item.should.equals(expect[i]);
     });
-    return true;
   });
-
-  it("question classes with only all negative company answers  ", async () => {
-    let union = new UnionOfQuestionGroup(newCompanyFormData, LEGALENTITES);
+  it("fin rate question classes with only all negative person answers  ", async () => {
+    let union = new UnionOfFinRateQuestionGroup(
+      mockNegativePerson,
+      INDIVIDUALS
+    );
     let answers = await union.calcGroups();
+    answers.should.equals("Високий");
+  });
+  it("fin rate question classes for test func with only all negative company answers  ", async () => {
+    let union = new UnionOfFinRateQuestionGroup(
+      newCompanyFormData,
+      LEGALENTITES
+    );
+    let answers = await union.calcGroupsForTest();
     const expect = [
       true,
       true,
@@ -218,12 +230,59 @@ describe("test fin rate question classes", () => {
       true,
       true,
     ];
-    answers.forEach((item, i, arr) => {
+    answers.flat().forEach((item, i, arr) => {
       item.should.equals(expect[i]);
     });
   });
-  it("question 17", async () => {
-    let question = require("../models/Questions/firstGroupQuestion");
+  it("fin rate question classes with only all negative company answers", async () => {
+    let union = new UnionOfFinRateQuestionGroup(
+      newCompanyFormData,
+      LEGALENTITES
+    );
+    let answers = await union.calcGroups();
+    answers.should.equals("Високий");
+  });
+  it("negative fin rate question classes with empty formdata", async () => {
+    try {
+      let union = new UnionOfFinRateQuestionGroup({}, LEGALENTITES);
+      let answers = await union.calcGroups();
+    } catch (err) {
+      err.message.should.equals("FormData is empty");
+    }
+  });
+  it("reputation question classes for test func with only all negative company answers", async () => {
+    let union = new UnionOfReputationQuestions(newCompanyFormData);
+    let answers = await union.calcGroupsForTest();
+    let expect = [true, true, true];
+    answers.forEach((item, i) => {
+      item.should.equals(expect[i]);
+    });
+  });
+  it("reputation question classes with only all negative company answers", async () => {
+    let union = new UnionOfReputationQuestions(newCompanyFormData);
+    let answers = await union.calcGroups();
+    answers.should.equals("Негативна");
+  });
+  it("reputation question classes for test func with only all negative person answers", async () => {
+    let union = new UnionOfReputationQuestions(mockNegativePerson);
+    let answers = await union.calcGroupsForTest();
+    let expect = [true, true, true];
+    answers.forEach((item, i) => {
+      item.should.equals(expect[i]);
+    });
+  });
+  it("reputation question classes with only all negative company answers", async () => {
+    let union = new UnionOfReputationQuestions(mockNegativePerson);
+    let answers = await union.calcGroups();
+    answers.should.equals("Негативна");
+  });
+  it("negative test reputation question classes with empty questions", async () => {
+    try {
+      let union = new UnionOfReputationQuestions({});
+      let answers = await union.calcGroups();
+    } catch (err) {
+      err.message.should.equals("FormData is empty");
+    }
   });
 });
 describe("test fin rate api", () => {
@@ -303,7 +362,7 @@ describe("test fin rate api", () => {
           true,
           true,
         ];
-        res.body.result.forEach((item, i, arr) => {
+        res.body.result.flat().forEach((item, i, arr) => {
           item.should.equals(expect[i]);
         });
         done();
@@ -343,14 +402,13 @@ describe("test fin rate api", () => {
           true,
           true,
         ];
-        res.body.result.forEach((item, i, arr) => {
+        res.body.result.flat().forEach((item, i, arr) => {
           item.should.equals(expect[i]);
         });
 
         done();
       });
   });
-
   it("it negative test get company fin rate with wrong id", (done) => {
     chai
       .request(server)
@@ -400,5 +458,132 @@ describe("test fin rate api", () => {
       });
   });
 });
-
-
+describe("test reputation api", () => {
+  before(async () => {
+    await User.deleteMany({});
+    let password = await bcrypt.hash(user.password, 12);
+    newuser = await new User({ ...user, password }).save();
+    try {
+      let res = await chai.request(server).post("/api/user/login").send({
+        username: user.username,
+        password: user.password,
+      });
+      res.status;
+      token = res.body.token;
+    } catch (err) {
+      err; //?
+    }
+    await PersonFormData.deleteMany({});
+    await Person.deleteMany({});
+    await Helper.deleteMany({});
+    let ofshore = require("../mock/ofshoreCountry.json");
+    await new Helper({ name: ofshore.name, content: ofshore.content }).save();
+    let translate = require("../mock/personTranslate.json");
+    await new Helper({
+      name: translate.name,
+      content: translate.content,
+    }).save();
+    let oldPerson = require("../mock/personWIthNegativeAnswers.json").result;
+    let newPersonFormData = await new PersonFormData({
+      result: oldPerson,
+    }).save();
+    newPerson = await new Person({
+      name: oldPerson.Name,
+      family: oldPerson.Family,
+      surname: oldPerson.Surname,
+      INN: oldPerson.INN,
+      username: user.username,
+      formDataResultId: newPersonFormData._id,
+    }).save();
+    let oldCompany = require("../mock/companyWithNegativeAnswers.json").result;
+    await CompanyFormData.deleteMany({});
+    await Company.deleteMany({});
+    let newCompanyFormData = await new CompanyFormData({
+      result: oldCompany,
+    }).save();
+    newCompany = await new Company({
+      shortName: oldCompany.ShortName,
+      clientCode: oldCompany.ClientCode,
+      username: user.username,
+      formDataResultId: newCompanyFormData._id,
+    }).save();
+  });
+  it("it get Person reputation", (done) => {
+    chai
+      .request(server)
+      .get("/api/person/reputation")
+      .set("Authorization", token)
+      .query({ id: newPerson.formDataResultId.toString() })
+      .end((err, res) => {
+        res.should.have.status(200);
+        let expect = [true, true, true];
+        res.body.result.flat().forEach((item, i, arr) => {
+          item.should.equals(expect[i]);
+        });
+        done();
+      });
+  });
+  it("it get Company reputation", (done) => {
+    chai
+      .request(server)
+      .get("/api/company/reputation")
+      .set("Authorization", token)
+      .query({ id: newCompany.formDataResultId.toString() })
+      .end((err, res) => {
+        res.should.have.status(200);
+        let expect = [true, true, true];
+        res.body.result.flat().forEach((item, i, arr) => {
+          item.should.equals(expect[i]);
+        });
+        done();
+      });
+  });
+  it("it negative test get Person reputation without id", (done) => {
+    chai
+      .request(server)
+      .get("/api/person/reputation")
+      .set("Authorization", token)
+      .query({ id: "" })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              value: "",
+              msg: "Невірний тип id",
+              param: "id",
+              location: "query",
+            },
+          ],
+        });
+        done();
+      });
+  });
+  it("it negative test get Company reputation without id", (done) => {
+    chai
+      .request(server)
+      .get("/api/company/reputation")
+      .set("Authorization", token)
+      .query({ id: "" })
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              value: "",
+              msg: "Невірний тип id",
+              param: "id",
+              location: "query",
+            },
+          ],
+        });
+        done();
+      });
+  });
+});

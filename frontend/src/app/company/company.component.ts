@@ -138,10 +138,17 @@ export class CompanyComponent implements OnInit {
     return this.recurseCleanObj(object);
   }
   Submit(model) {
-    //if selected item true than create person
+    // if (!this.form.valid) {
+    //   this.flashMessagesService.show('Анкета успешно обновлена', {
+    //     cssClass: 'alert-success',
+    //     timeout: 5000,
+    //   });
+    //   return; 
+    // }
+    this.cleanObject(model);
+    console.log(model);
+    //if selected item false than create person
     if (!this.SelectedItem) {
-      this.cleanObject(model);
-      console.log(model);
       let tempModel = {
         result: model,
         user: this.authService.currentUserValue.username,
@@ -165,9 +172,7 @@ export class CompanyComponent implements OnInit {
     }
     //if selected item true than edit person
     else {
-      this.cleanObject(model);
-      console.log(model);
-      let submitModel = {
+     let submitModel = {
         _id: this.SelectedItem._id,
         formDataResultId: this.SelectedItem.formDataResultId,
         user: this.authService.currentUserValue.username,

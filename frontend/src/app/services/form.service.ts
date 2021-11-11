@@ -25,7 +25,6 @@ export class FormService {
       .pipe(
         map((data) => {
           //localStorage.setItem(name, JSON.stringify({result:data['result'],expiresIn: 28800}));
-
           return this.mapFormFields(data['result'], name);
         })
       );

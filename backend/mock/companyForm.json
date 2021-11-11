@@ -80,7 +80,7 @@
               }
             },
             {
-              "fieldGroupClassName": "col-6",
+              "className": "col-6",
               "fieldGroup": [{
                 "className": "col-12",
                 "key": "DateOfFreeze",
@@ -2783,9 +2783,18 @@
                   "type": "checkbox",
                   "className": "col-6",
                   "defaultValue": false,
-                  "key": "HasQuestionFromTaxOffice",
+                  "key": "HasQuestionFromFinmon",
                   "templateOptions": {
                     "label": "Наявність запитів/рішень ДСФМУ або відповідального працівника"
+                  }
+                },
+                {
+                  "className": "col-6",
+                  "key": "HasBadReputation",
+                  "type": "checkbox",
+                  "defaultValue": false,
+                  "templateOptions": {
+                    "label": "Наявність негативних фактів співпраці з клієнтом"
                   }
                 },
                 {

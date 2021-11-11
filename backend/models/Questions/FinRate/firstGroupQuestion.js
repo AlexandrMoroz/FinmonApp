@@ -3,9 +3,9 @@ const {
   OperationShoudinclude,
   ClosedQuestion,
   DateDiffInDays,
-} = require("../../utils/helpers");
-const Helper = require("../helper");
-const { Formater, OPERATIONS } = require("../../utils/formater");
+} = require("../../../utils/helpers");
+const Helper = require("../../helper");
+const { Formater, OPERATIONS } = require("../../../utils/formater");
 const diffHistory = require("mongoose-diff-history/diffHistory");
 
 function Question1() {
@@ -270,7 +270,6 @@ async function Question17() {
     8: ClosedQuestion.call(this, "RegistPlace.AdressIsNotTrue"),
   });
 
-  console.log(resultArr);
   return resultArr.map((item) => Object.entries(item)[0][1]).includes(true);
 }
 

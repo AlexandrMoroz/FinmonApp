@@ -5,7 +5,7 @@ const { testConfig } = require("../config/index");
 
 //  require("./user")();
 //   require("./company")();
-   require("./person")();
+ //  require("./person")();
 //   require("./form")();
 //   require("./helper")();
 //   require("./history")();
