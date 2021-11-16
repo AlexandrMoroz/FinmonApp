@@ -1,4 +1,4 @@
-const questions = require("../Questions/Reputation/GroupQuestions");
+const questions = require("../Questions/Reputation/Questions");
 const GroupOfQuestions = require("./groupOfQuestions");
 class UnionOfReputationQuestions {
   constructor(formData) {

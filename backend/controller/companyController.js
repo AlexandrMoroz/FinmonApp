@@ -6,9 +6,9 @@ const { recursFormResult } = require("../utils/history");
 const Helper = require("../models/helper");
 let order = require("../mock/companyOrder.json");
 const { LEGALENTITES } =
-  require("../models/GroupOfQuestions/groupOfQuestions").Types;
-const UnionOfFinRateQuestionGroup = require("../models/GroupOfQuestions/unionOfFinRateQuestionGroup");
-const UnionOfReputationQuestions = require("../models/GroupOfQuestions/UnionOfReputationQuestions");
+  require("../models/Unions/groupOfQuestions").Types;
+const UnionOfRiskQuestionGroup = require("../models/Unions/UnionOfRiskQuestionGroup");
+const UnionOfReputationQuestions = require("../models/Unions/UnionOfReputationQuestions");
 /**
  * @DESC comapny create 1. create form result. 2 create person documen with result id
  * req.body: {
@@ -156,7 +156,7 @@ const XLMS = async (req, res, next) => {
 const FinRate = async (req, res, next) => {
   try {
     let companyFormData = await CompanyFormData.findOne({ _id: req.query.id });
-    let union = new UnionOfFinRateQuestionGroup(companyFormData, LEGALENTITES);
+    let union = new UnionOfRiskQuestionGroup(companyFormData, LEGALENTITES);
     let answers = await union.calcGroupsForTest();
     res.status(200).json({
       message: "Company get calculate fin rating ",

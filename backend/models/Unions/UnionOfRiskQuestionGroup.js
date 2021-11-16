@@ -1,9 +1,9 @@
 const GroupOfQuestions = require("./groupOfQuestions");
-const firstGroupOfQuestions = require("../Questions/FinRate/firstGroupQuestion");
-const secondGroupOfQuestions = require("../Questions/FinRate/secondGroupQuestion");
-const thirdGroupOfQuestions = require("../Questions/FinRate/thirdGroupQuestion");
+const firstGroupOfQuestions = require("../Questions/Risk/firstGroupQuestion");
+const secondGroupOfQuestions = require("../Questions/Risk/secondGroupQuestion");
+const thirdGroupOfQuestions = require("../Questions/Risk/thirdGroupQuestion");
 
-class UnionOfFinRateQuestionGroup {
+class UnionOfRiskQuestionGroup {
   constructor(formData, selectGroupType) {
     this.groups = {
       INDIVIDUALS: [
@@ -52,4 +52,4 @@ class UnionOfFinRateQuestionGroup {
   }
 }
 
-module.exports = UnionOfFinRateQuestionGroup;
+module.exports = UnionOfRiskQuestionGroup;

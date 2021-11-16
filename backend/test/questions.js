@@ -1,7 +1,8 @@
 const chai = require("chai");
 const chaihttp = require("chai-http");
 const chaiExclude = require("chai-exclude");
-const UnionOfFinRateQuestionGroup = require("../models/GroupOfQuestions/UnionOfFinRateQuestionGroup");
+const UnionOfRiskQuestionGroup = require("../models/Unions/UnionOfRiskQuestionGroup");
+const UnionOfReputationQuestions = require("../models/Unions/UnionOfReputationQuestions");
 const mockNegativePerson = require("../mock/personWIthNegativeAnswers.json");
 const mockNegativeCompany = require("../mock/companyWithNegativeAnswers.json");
 const Helper = require("../models/helper");
@@ -13,10 +14,10 @@ const CompanyFormData = require("../models/companyFormData");
 const Company = require("../models/company");
 const History = require("mongoose-diff-history/diffHistoryModel").model;
 const { INDIVIDUALS, LEGALENTITES } =
-  require("../models/GroupOfQuestions/groupOfQuestions").Types;
+  require("../models/Unions/groupOfQuestions").Types;
 //const server = "http://localhost:4000";
 const { testConfig } = require("../config/index");
-const UnionOfReputationQuestions = require("../models/GroupOfQuestions/UnionOfReputationQuestions");
+
 let server = require("../server")(testConfig);
 
 let token = "";
@@ -163,10 +164,7 @@ describe("test fin rate question classes", () => {
     );
   });
   it("fin rate question classes for test func with only all negative person answers  ", async () => {
-    let union = new UnionOfFinRateQuestionGroup(
-      mockNegativePerson,
-      INDIVIDUALS
-    );
+    let union = new UnionOfRiskQuestionGroup(mockNegativePerson, INDIVIDUALS);
     let answers = await union.calcGroupsForTest();
     const expect = [
       true,
@@ -191,18 +189,12 @@ describe("test fin rate question classes", () => {
     });
   });
   it("fin rate question classes with only all negative person answers  ", async () => {
-    let union = new UnionOfFinRateQuestionGroup(
-      mockNegativePerson,
-      INDIVIDUALS
-    );
+    let union = new UnionOfRiskQuestionGroup(mockNegativePerson, INDIVIDUALS);
     let answers = await union.calcGroups();
     answers.should.equals("Високий");
   });
   it("fin rate question classes for test func with only all negative company answers  ", async () => {
-    let union = new UnionOfFinRateQuestionGroup(
-      newCompanyFormData,
-      LEGALENTITES
-    );
+    let union = new UnionOfRiskQuestionGroup(newCompanyFormData, LEGALENTITES);
     let answers = await union.calcGroupsForTest();
     const expect = [
       true,
@@ -235,16 +227,13 @@ describe("test fin rate question classes", () => {
     });
   });
   it("fin rate question classes with only all negative company answers", async () => {
-    let union = new UnionOfFinRateQuestionGroup(
-      newCompanyFormData,
-      LEGALENTITES
-    );
+    let union = new UnionOfRiskQuestionGroup(newCompanyFormData, LEGALENTITES);
     let answers = await union.calcGroups();
     answers.should.equals("Високий");
   });
   it("negative fin rate question classes with empty formdata", async () => {
     try {
-      let union = new UnionOfFinRateQuestionGroup({}, LEGALENTITES);
+      let union = new UnionOfRiskQuestionGroup({}, LEGALENTITES);
       let answers = await union.calcGroups();
     } catch (err) {
       err.message.should.equals("FormData is empty");

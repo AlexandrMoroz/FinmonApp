@@ -25,10 +25,18 @@ function DateDiffInDays(a, b) {
   const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
-
+function DateDiffInMounth(dateFrom, dateTo) {
+  return (
+    dateTo.getMonth() -
+    dateFrom.getMonth() +
+    12 * (dateTo.getFullYear() - dateFrom.getFullYear()) +
+    1
+  );
+}
 module.exports = {
   ResolvePath,
   OperationShoudinclude,
   ClosedQuestion,
   DateDiffInDays,
+  DateDiffInMounth,
 };
