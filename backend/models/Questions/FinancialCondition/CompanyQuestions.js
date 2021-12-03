@@ -1,11 +1,11 @@
-const { DateDiffInMounth } = require("../../../utils/helpers");
+const { DateDiffInMounth,ResolvePath } = require("../../../utils/helpers");
 
 function Question1() {
   let govProc = this.result["GovProcentInCapital"];
   if (govProc) {
     if (govProc == 100) return 2.0;
   }
-  let nonProf = this.result["ClientIsNotProfitable"];
+  let nonProf = ResolvePath(this.result,"CheckList.ClientIsNotProfitable");
   if (nonProf) return 0.5;
   let capital = this.result["BusinessCapital"];
   if (!capital || capital < 100000) return 0.5;
@@ -22,6 +22,7 @@ function Question2() {
   let regDate = this.result["DateOfRegistration"];
   if (!regDate) throw Error("Registration Date is empty");
   let mouthDiff = DateDiffInMounth(new Date(regDate), new Date());
+
   if (mouthDiff < 3) return 0.5;
   if (mouthDiff >= 3 && mouthDiff <= 12) return 0.75;
   if (mouthDiff >= 13 && mouthDiff <= 24) return 1.0;
@@ -30,7 +31,8 @@ function Question2() {
 }
 function Question3() {
   let employers = this.result["EmployersNum"];
-  if (!employers) return 0;
+ 
+  if (!employers) return 1;
   if (employers == 1) return 0.5;
   if (employers >= 2 && employers <= 4) return 0.75;
   if (employers >= 5 && employers <= 10) return 1.0;
@@ -40,18 +42,18 @@ function Question3() {
 function Question4() {
   let director = this.result["Director"];
   let arr = [];
-  if (!director && director.length != 0) {
+  if (director && director.length != 0) {
     arr.push(
-      director.map((element) => {
-        return element["VulnerablePeople"];
+      ...director.map((element) => {
+        return element["IsVulnerablePerson"];
       })
     );
   }
   let owner = this.result["Owner"];
-  if (!owner && owner.length != 0) {
+  if (owner && owner.length != 0) {
     arr.push(
-      owner.map((element) => {
-        return element["VulnerablePeople"];
+      ...owner.map((element) => {
+        return element["IsVulnerablePerson"];
       })
     );
   }
@@ -68,7 +70,7 @@ function Question5() {
 function Question6() {
   let mounthIncome = this.result["MounthIncome"];
   let clearMounthIncome = this.result["ClearMounthIncome"];
-  if (!mounthIncome || !clearMounthIncome) return 0;
+  if (!mounthIncome || !clearMounthIncome) return 1;
   let res = (clearMounthIncome / mounthIncome) * 100;
   if (res < 1) return 0.5;
   if (res >= 1.0 && res <= 1.99) return 0.75;

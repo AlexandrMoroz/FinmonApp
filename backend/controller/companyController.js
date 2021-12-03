@@ -5,10 +5,10 @@ const XLSXAnceta = require("../utils/anceta");
 const { recursFormResult } = require("../utils/history");
 const Helper = require("../models/helper");
 let order = require("../mock/companyOrder.json");
-const { LEGALENTITES } =
-  require("../models/Unions/groupOfQuestions").Types;
-const UnionOfRiskQuestionGroup = require("../models/Unions/UnionOfRiskQuestionGroup");
-const UnionOfReputationQuestions = require("../models/Unions/UnionOfReputationQuestions");
+const { LEGALENTITES } = require("../models/Unions/groupOfQuestions").Types;
+const CalculatorRiskQuestions = require("../models/Unions/CalculatorRiskQuestions");
+const CalculatorReputationQuestions = require("../models/Unions/CalculatorReputationQuestions");
+const CalculatorFinansialRiskQuestions = require("../models/Unions/CalculatorFinansialRiskQuestions");
 /**
  * @DESC comapny create 1. create form result. 2 create person documen with result id
  * req.body: {
@@ -153,41 +153,64 @@ const XLMS = async (req, res, next) => {
   }
 };
 
-const FinRate = async (req, res, next) => {
+const RiskRate = async (req, res, next) => {
   try {
     let companyFormData = await CompanyFormData.findOne({ _id: req.query.id });
-    let union = new UnionOfRiskQuestionGroup(companyFormData, LEGALENTITES);
+    let union = new CalculatorRiskQuestions(companyFormData, LEGALENTITES);
     let answers = await union.calcGroupsForTest();
     res.status(200).json({
-      message: "Company get calculate fin rating ",
+      message: "Company get calculate risk rating ",
       result: answers,
       success: true,
     });
   } catch (err) {
-    next({ message: "Unable get calculate company fin rating.", error: err });
+    next({ message: "Unable get calculate company risk rating.", error: err });
   }
 };
 const Reputation = async (req, res, next) => {
   try {
     let companyFormData = await CompanyFormData.findOne({ _id: req.query.id });
-    let union = new UnionOfReputationQuestions(companyFormData);
+    let union = new CalculatorReputationQuestions(companyFormData);
     let answers = await union.calcGroupsForTest();
     res.status(200).json({
-      message: "Company get calculate fin rating ",
+      message: "Company get calculate reputation rating ",
       result: answers,
       success: true,
     });
   } catch (err) {
-    next({ message: "Unable get calculate company fin rating.", error: err });
+    next({
+      message: "Unable get calculate company reputation rating.",
+      error: err,
+    });
   }
 };
-
+const FinansialRisk = async (req, res, next) => {
+  try {
+    let companyFormData = await CompanyFormData.findOne({ _id: req.query.id });
+ 
+    let union = new CalculatorFinansialRiskQuestions(companyFormData);
+   
+    let answers = await union.calcGroupsForTest();
+ 
+    res.status(200).json({
+      message: "Company get calculate fin risk rating ",
+      result: answers,
+      success: true,
+    });
+  } catch (err) {
+    next({
+      message: "Unable get calculate company fin risk rating.",
+      error: err,
+    });
+  }
+};
 module.exports = {
   FormDataById,
   Create,
   Edit,
   Search,
   XLMS,
-  FinRate,
-  Reputation
+  RiskRate,
+  Reputation,
+  FinansialRisk,
 };

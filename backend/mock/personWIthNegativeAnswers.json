@@ -52,7 +52,7 @@
       "GovRegDocDateRelise": "2021-08-01",
       "ClientAge": "7 дней 1 месяцев "
     },
-    "EmploymentType": ["власник бізнеса"],
+    "EmploymentType": ["власник/співвласник бізнесу"],
     "Operations": [
       { "Operation": "128", "CreateDate": "2021-09-08" },
       { "Operation": "116", "CreateDate": "2021-09-08" },

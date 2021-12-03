@@ -12,8 +12,8 @@ const CompanyFormData = require("../models/companyFormData");
 let translate = require("../mock/personTranslate.json");
 
 //const server = "http://localhost:4000";
-const { testConfig } = require("../config/index");
-let server = require("../server")(testConfig);
+// const { testConfig } = require("../config/index");
+// let server = require("../server")(testConfig);
 let token = "";
 const user = {
   block: false,
@@ -30,8 +30,8 @@ const user = {
 chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
-
-describe("test company api", () => {
+module.exports = (server) => {
+  describe("test company api", () => {
     before((done) => {
       chai
         .request(server)
@@ -65,8 +65,6 @@ describe("test company api", () => {
           .set("Authorization", token)
           .send(company)
           .end((err, res) => {
-            
-            
             res.should.have.status(201);
             done();
           });
@@ -385,7 +383,7 @@ describe("test company api", () => {
       });
       it("it negative test search company with wrong searchtext name ", (done) => {
         let searchCompany = {
-          searchText1: "1234567",//err
+          searchText1: "1234567", //err
         };
         chai
           .request(server)
@@ -483,7 +481,7 @@ describe("test company api", () => {
             res.body.result.should.deep.equal({
               ShortName: oldCompany.result.ShortName,
               ClientCode: oldCompany.result.ClientCode,
-              IsResident: false 
+              IsResident: false,
             });
             if (err) {
               done(err);
@@ -503,11 +501,11 @@ describe("test company api", () => {
             res.body.should.have.property("validation").eql(false);
             res.body.should.have.property("error").deep.equal([
               {
-                value: '60a6240e9874e015b03b25f2',
-                msg: 'Дані компанії за _id не знайденно ',
-                param: 'id',
-                location: 'query'
-              }
+                value: "60a6240e9874e015b03b25f2",
+                msg: "Дані компанії за _id не знайденно ",
+                param: "id",
+                location: "query",
+              },
             ]);
             if (err) {
               done(err);
@@ -597,15 +595,21 @@ describe("test company api", () => {
                 },
                 B2: {
                   t: 's',
-                  v: 'moroz1 alexandr1 sergeevich1',
-                  h: 'moroz1 alexandr1 sergeevich1',
-                  w: 'moroz1 alexandr1 sergeevich1'
+                  v: 'moroz1 alexandr2 sergeevich1',
+                  h: 'moroz1 alexandr2 sergeevich1',
+                  w: 'moroz1 alexandr2 sergeevich1'
                 },
                 C2: {
                   t: 's',
                   v: 'Дата створення:',
                   h: 'Дата створення:',
                   w: 'Дата створення:'
+                },
+                D2: {
+                  t: 's',
+                  v: '03.12.2021, 16:04:01',
+                  h: '03.12.2021, 16:04:01',
+                  w: '03.12.2021, 16:04:01'
                 },
                 A3: {
                   t: 's',
@@ -680,5 +684,4 @@ describe("test company api", () => {
       });
     });
   });
-
-//module.exports = test;
+};

@@ -5,7 +5,7 @@ chai.config.includeStack = true;
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 
-const server = "http://localhost:4000";
+// const server = "http://localhost:4000";
 let token = "";
 const user = {
   block: false,
@@ -24,7 +24,7 @@ chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
 
-let test = () => {
+let test = (server) => {
   describe("test user api", () => {
     describe("user/create ", () => {
       before(async () => {
@@ -41,7 +41,7 @@ let test = () => {
           console.log(err);
         }
       });
-      it("it create new user", (done) => {
+      it("it create new user", async () => {
         const CreateUser = {
           block: false,
           role: "admin",
@@ -54,32 +54,30 @@ let test = () => {
           username: "vadim",
           password: "123qwe123qwe",
         };
-        chai
+        let res = await chai
           .request(server)
           .post("/api/user/create")
           .set("Authorization", token)
-          .send(CreateUser)
-          .end((err, res) => {
-            res.body.should.excluding(["result"]).deep.equal({
-              message: "User was created",
-              success: true,
-            });
-            res.body.result.should.excluding(["id", "password"]).deep.equal({
-              block: false,
-              role: "user",
-              name: "vadim",
-              family: "tkalenko",
-              surname: "anatolievich",
-              cashboxAdress:
-                "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
-              email: "vadim@gmail.com",
-              username: "vadim",
-            });
-            res.should.have.status(201);
-            done();
-          });
+          .send(CreateUser);
+
+        res.body.should.excluding(["result"]).deep.equal({
+          message: "User was created",
+          success: true,
+        });
+        res.body.result.should.excluding(["id", "password"]).deep.equal({
+          block: false,
+          role: "user",
+          name: "vadim",
+          family: "tkalenko",
+          surname: "anatolievich",
+          cashboxAdress:
+            "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
+          email: "vadim@gmail.com",
+          username: "vadim",
+        });
+        res.should.have.status(201);
       });
-      it("it create new user with auth err ", (done) => {
+      it("it create new user with auth err ", async () => {
         const CreateUser = {
           block: false,
           role: "admin",
@@ -92,17 +90,15 @@ let test = () => {
           username: "vadim",
           password: "123qwe123qwe",
         };
-        chai
+        let res = await chai
           .request(server)
           .post("/api/user/create")
           .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9")
-          .send(CreateUser)
-          .end((err, res) => {
-            res.should.have.status(401);
-            done();
-          });
+          .send(CreateUser);
+
+        res.should.have.status(401);
       });
-      it("it negative test send create new user with mistake property name suspect username not found validation err ", (done) => {
+      it("it negative test send create new user with mistake property name suspect username not found validation err ", async () => {
         const CreateUser = {
           block: false,
           role: "admin",
@@ -115,29 +111,27 @@ let test = () => {
           username1: "vadim", //err
           password: "123qwe123qwe",
         };
-        chai
+        let res = await chai
           .request(server)
           .post("/api/user/create")
           .set("Authorization", token)
-          .send(CreateUser)
-          .end((err, res) => {
-            res.should.have.status(400);
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  msg: "Поле логин не найденно",
-                  param: "username",
-                  location: "body",
-                },
-              ],
-            });
-            done();
-          });
+          .send(CreateUser);
+
+        res.should.have.status(400);
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              msg: "Поле логин не найденно",
+              param: "username",
+              location: "body",
+            },
+          ],
+        });
       });
-      it("it negative test send create new user with mistake property name suspect username unique validation err ", (done) => {
+      it("it negative test send create new user with mistake property name suspect username unique validation err ", async () => {
         const CreateUser = {
           block: false,
           role: "admin",
@@ -150,74 +144,70 @@ let test = () => {
           username: "vadim", //err
           password: "123qwe123qwe",
         };
-        chai
+        let res = await chai
           .request(server)
           .post("/api/user/create")
           .set("Authorization", token)
-          .send(CreateUser)
-          .end((err, res) => {
-            res.should.have.status(400);
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  value: "vadim",
-                  msg: "Логин уже используется",
-                  param: "username",
-                  location: "body",
-                },
-              ],
-            });
-            done();
-          });
+          .send(CreateUser);
+
+        res.should.have.status(400);
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              value: "vadim",
+              msg: "Логин уже используется",
+              param: "username",
+              location: "body",
+            },
+          ],
+        });
       });
-      it("it negative test send create new helper with null result suspesct validation err ", (done) => {
+      it("it negative test send create new helper with null result suspesct validation err ", async () => {
         const CreateUser = {};
-        chai
+        let res = await chai
           .request(server)
           .post("/api/user/create")
           .set("Authorization", token)
-          .send(CreateUser)
-          .end((err, res) => {
-            res.should.have.status(400);
-            res.body.should.have.property("message").eql("Validation error");
-            res.body.should.have.property("validation").eql(false);
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  msg: "Поле имя не найденно",
-                  param: "name",
-                  location: "body",
-                },
-                {
-                  msg: "Поле фамилия не найденно",
-                  param: "family",
-                  location: "body",
-                },
-                {
-                  msg: "Поле логин не найденно",
-                  param: "username",
-                  location: "body",
-                },
-                {
-                  location: "body",
-                  msg: "Поле пароль пустое",
-                  param: "password",
-                },
-              ],
-            });
-            done();
-          });
+          .send(CreateUser);
+
+        res.should.have.status(400);
+        res.body.should.have.property("message").eql("Validation error");
+        res.body.should.have.property("validation").eql(false);
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              msg: "Поле имя не найденно",
+              param: "name",
+              location: "body",
+            },
+            {
+              msg: "Поле фамилия не найденно",
+              param: "family",
+              location: "body",
+            },
+            {
+              msg: "Поле логин не найденно",
+              param: "username",
+              location: "body",
+            },
+            {
+              location: "body",
+              msg: "Поле пароль пустое",
+              param: "password",
+            },
+          ],
+        });
       });
     });
 
     describe("user/edit", () => {
-      let newEditUser;
+      let newCreatedUser;
       before(async () => {
         let res = await chai
           .request(server)
@@ -235,11 +225,11 @@ let test = () => {
             username: "vadim23",
             password: "123qwe123qwe",
           });
-        newEditUser = res.body.result;
+        newCreatedUser = res.body.result;
       });
-      it("it edit user", (done) => {
+      it("it edit user", async () => {
         const EditUser = {
-          id: newEditUser.id.toString(),
+          id: newCreatedUser.id.toString(),
           block: false,
           role: "admin",
           name: "vadim2",
@@ -251,34 +241,32 @@ let test = () => {
           username: "vadim1",
           password: "123qwe123qwe",
         };
-        chai
+        let res = await chai
           .request(server)
           .put("/api/user/edit")
           .set("Authorization", token)
-          .send(EditUser)
-          .end((err, res) => {
-            res.body.should.deep.equal({
-              message: "User success edited",
-              result: {
-                id: EditUser.id,
-                block: EditUser.block,
-                role: EditUser.role,
-                name: EditUser.name,
-                family: EditUser.family,
-                surname: EditUser.surname,
-                cashboxAdress: EditUser.cashboxAdress,
-                email: EditUser.email,
-                username: EditUser.username,
-              },
-              success: true,
-            });
-            res.should.have.status(200);
-            done();
-          });
+          .send(EditUser);
+
+        res.body.should.deep.equal({
+          message: "User success edited",
+          result: {
+            id: EditUser.id,
+            block: EditUser.block,
+            role: EditUser.role,
+            name: EditUser.name,
+            family: EditUser.family,
+            surname: EditUser.surname,
+            cashboxAdress: EditUser.cashboxAdress,
+            email: EditUser.email,
+            username: EditUser.username,
+          },
+          success: true,
+        });
+        res.should.have.status(200);
       });
-      it("it edit user with non password property", (done) => {
+      it("it edit user with non password property", async () => {
         const EditUser = {
-          id: newEditUser.id.toString(),
+          id: newCreatedUser.id.toString(),
           block: false,
           role: "admin",
           name: "vadim2",
@@ -290,34 +278,32 @@ let test = () => {
           username: "vadim1",
         };
 
-        chai
+        let res = await chai
           .request(server)
           .put("/api/user/edit")
           .set("Authorization", token)
-          .send(EditUser)
-          .end((err, res) => {
-            res.body.should.deep.equal({
-              message: "User success edited",
-              result: {
-                id: EditUser.id,
-                block: EditUser.block,
-                role: EditUser.role,
-                name: EditUser.name,
-                family: EditUser.family,
-                surname: EditUser.surname,
-                cashboxAdress: EditUser.cashboxAdress,
-                email: EditUser.email,
-                username: EditUser.username,
-              },
-              success: true,
-            });
-            res.should.have.status(200);
-            done();
-          });
+          .send(EditUser);
+
+        res.body.should.deep.equal({
+          message: "User success edited",
+          result: {
+            id: EditUser.id,
+            block: EditUser.block,
+            role: EditUser.role,
+            name: EditUser.name,
+            family: EditUser.family,
+            surname: EditUser.surname,
+            cashboxAdress: EditUser.cashboxAdress,
+            email: EditUser.email,
+            username: EditUser.username,
+          },
+          success: true,
+        });
+        res.should.have.status(200);
       });
-      it("it negative test edit user with empty username", (done) => {
+      it("it negative test edit user with empty username", async () => {
         const EditUser = {
-          id: newEditUser.id.toString(),
+          id: newCreatedUser.id.toString(),
           block: false,
           role: "admin",
           name: "vadim2",
@@ -329,32 +315,30 @@ let test = () => {
           username: "",
           password: "123qwe123qwe",
         };
-        chai
+        let res = await chai
           .request(server)
           .put("/api/user/edit")
           .set("Authorization", token)
-          .send(EditUser)
-          .end((err, res) => {
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  value: "",
-                  msg: "Поле логин не найденно",
-                  param: "username",
-                  location: "body",
-                },
-              ],
-            });
-            res.should.have.status(400);
-            done();
-          });
+          .send(EditUser);
+
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              value: "",
+              msg: "Поле логин не найденно",
+              param: "username",
+              location: "body",
+            },
+          ],
+        });
+        res.should.have.status(400);
       });
-      it("it negative test edit user with non username property", (done) => {
+      it("it negative test edit user with non username property", async () => {
         const EditUser = {
-          id: newEditUser.id.toString(),
+          id: newCreatedUser.id.toString(),
           block: false,
           role: "admin",
           name: "vadim2",
@@ -366,33 +350,28 @@ let test = () => {
           username1: "",
           password: "123qwe123qwe",
         };
-
-        chai
-          .request(server)
-          .put("/api/user/edit")
-          .set("Authorization", token)
-          .send(EditUser)
-          .end((err, res) => {
-            try {
-              res.body.should.deep.equal({
-                message: "Validation error",
-                validation: false,
-                success: false,
-                error: [
-                  {
-                    msg: "Поле логин не найденно",
-                    param: "username",
-                    location: "body",
-                  },
-                ],
-              });
-              res.should.have.status(400);
-              done();
-            } catch (err) {
-              console.log(err);
-              done();
-            }
+        try {
+          let res = await chai
+            .request(server)
+            .put("/api/user/edit")
+            .set("Authorization", token)
+            .send(EditUser);
+          res.body.should.deep.equal({
+            message: "Validation error",
+            validation: false,
+            success: false,
+            error: [
+              {
+                msg: "Поле логин не найденно",
+                param: "username",
+                location: "body",
+              },
+            ],
           });
+          res.should.have.status(400);
+        } catch (err) {
+          console.log(err);
+        }
       });
     });
   });

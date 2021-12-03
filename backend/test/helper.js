@@ -6,7 +6,7 @@ chai.config.includeStack = true;
 const Helper = require("../models/helper");
 let translate = require("../mock/personTranslate.json");
 
-const server = "http://localhost:4000";
+//const server = "http://localhost:4000";
 let token = "";
 const user = {
   block: false,
@@ -24,7 +24,7 @@ chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
 
-let test = () => {
+let test = (server) => {
   describe("test Helper api", () => {
     before((done) => {
       chai

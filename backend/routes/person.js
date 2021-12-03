@@ -10,8 +10,9 @@ const {
   Edit,
   Search,
   XLMS,
-  FinRate,
-  Reputation
+  RiskRate,
+  Reputation,
+  FinansialRisk
 } = require("../controller/personsController");
 router.post(
   "/create",
@@ -76,13 +77,13 @@ router.get(
   }
 );
 router.get(
-  "/finrate",
+  "/risk",
   userAuth,
   checkRole(["user", "admin"]),
   checkSchema(PersonValidator.getCalculationValidation()),
   validate,
   async (req, res, next) => {
-    await FinRate(req, res, next);
+    await RiskRate(req, res, next);
   }
 );
 router.get(
@@ -93,6 +94,16 @@ router.get(
   validate,
   async (req, res, next) => {
     await Reputation(req, res, next);
+  }
+);
+router.get(
+  "/finansial-risk",
+  userAuth,
+  checkRole(["user", "admin"]),
+  checkSchema(PersonValidator.getCalculationValidation()),
+  validate,
+  async (req, res, next) => {
+    await FinansialRisk(req, res, next);
   }
 );
 module.exports = router;

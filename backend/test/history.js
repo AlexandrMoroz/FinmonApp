@@ -8,7 +8,7 @@ const PersonFormData = require("../models/personFormData");
 const Company = require("../models/company");
 const CompanyFormData = require("../models/companyFormData");
 const History = require("mongoose-diff-history/diffHistoryModel").model;
-const server = "http://localhost:4000";
+// const server = "http://localhost:4000";
 let token = "";
 const user = {
   block: false,
@@ -26,7 +26,7 @@ const user = {
 chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
-let init = async (oldResult, editResult, url) => {
+let init = async (server, oldResult, editResult, url) => {
   let newResult = (
     await chai
       .request(server)
@@ -39,7 +39,7 @@ let init = async (oldResult, editResult, url) => {
     formDataResultId: newResult.formDataResultId.toString(),
     _id: newResult._id.toString(),
   };
-  let edit = await chai
+  await chai
     .request(server)
     .put("/api/" + url + "/edit")
     .set("Authorization", token)
@@ -47,7 +47,7 @@ let init = async (oldResult, editResult, url) => {
   return newResult;
 };
 
-let test = () => {
+let test = (server) => {
   describe("test History api", () => {
     before((done) => {
       chai
@@ -65,7 +65,6 @@ let test = () => {
     describe("History/getPersonJSONHistory ", () => {
       let newPerson;
       let oldPerson;
-
       before(async () => {
         await PersonFormData.deleteMany({});
         await Person.deleteMany({});
@@ -76,7 +75,7 @@ let test = () => {
             Family: "Moroz",
             Surname: "Sergeevich",
             INN: "2312234312",
-            IsResident:false,
+            IsResident: false,
           },
         };
         let editResult = {
@@ -86,10 +85,10 @@ let test = () => {
             Surname: "Sergeevich2",
             DateOfFirstSigned: "12.12.2021",
             INN: "2312234312",
-            IsResident:false,
+            IsResident: false,
           },
         };
-        newPerson = await init(oldPerson, editResult, "person");
+        newPerson = await init(server, oldPerson, editResult, "person");
       });
 
       it("it get Person json History", (done) => {
@@ -215,7 +214,7 @@ let test = () => {
             Family: "Moroz",
             Surname: "Sergeevich",
             INN: "2312234312",
-            IsResident:false,
+            IsResident: false,
           },
         };
         let editResult = {
@@ -225,21 +224,18 @@ let test = () => {
             Surname: "Sergeevich2",
             DateOfFirstSigned: "12.12.2021",
             INN: "2312234312",
-            IsResident:false,
+            IsResident: false,
           },
         };
-        newPerson = await init(oldPerson, editResult, "person");
+        newPerson = await init(server, oldPerson, editResult, "person");
       });
 
-      it("it get Person  History file", (done) => {
-        const HistoryCred = {
-          id: newPerson.formDataResultId.toString(),
-        };
+      it("it get person history file", (done) => {
         chai
           .request(server)
           .get("/api/history/person-history-file")
           .set("Authorization", token)
-          .query({ ...HistoryCred })
+          .query({ id: newPerson.formDataResultId.toString(),})
           .end((err, res) => {
             const wb = XLSX.read(res.body.result, { type: "base64" });
             let obj = {
@@ -253,9 +249,9 @@ let test = () => {
                 },
                 B1: {
                   t: "s",
-                  v: "alexandr1 moroz1 sergeevich1",
-                  h: "alexandr1 moroz1 sergeevich1",
-                  w: "alexandr1 moroz1 sergeevich1",
+                  v: "alexandr2 moroz1 sergeevich1",
+                  h: "alexandr2 moroz1 sergeevich1",
+                  w: "alexandr2 moroz1 sergeevich1",
                 },
                 C1: {
                   t: "s",
@@ -401,7 +397,7 @@ let test = () => {
           result: {
             ShortName: "ТОВ ФИНОД",
             ClientCode: "12321141",
-            IsResident:false,
+            IsResident: false,
           },
         };
         editResult = {
@@ -410,10 +406,10 @@ let test = () => {
             ClientCode: "12321141",
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
-            IsResident:false,
+            IsResident: false,
           },
         };
-        newCompany = await init(oldCompany, editResult, "company");
+        newCompany = await init(server, oldCompany, editResult, "company");
       });
 
       it("it get Company json History", (done) => {
@@ -527,7 +523,7 @@ let test = () => {
           result: {
             ShortName: "ТОВ ФИНОД",
             ClientCode: "12321141",
-            IsResident:false,
+            IsResident: false,
           },
         };
         editResult = {
@@ -536,10 +532,10 @@ let test = () => {
             ClientCode: "12321141",
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
-            IsResident:false,
+            IsResident: false,
           },
         };
-        newCompany = await init(oldCompany, editResult, "company");
+        newCompany = await init(server, oldCompany, editResult, "company");
       });
 
       it("it get company History file", (done) => {

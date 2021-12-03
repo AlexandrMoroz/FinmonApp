@@ -1,13 +1,11 @@
-const server = require("../server");
+
 const { testConfig } = require("../config/index");
+let server = require("../server")(testConfig);
 
-//server(testConfig);
-
-//  require("./user")();
-//   require("./company")();
- //  require("./person")();
-//   require("./form")();
-//   require("./helper")();
-//   require("./history")();
-
-require("./questions");
+require("./user")(server);
+require("./company")(server);
+require("./person")(server);
+require("./form")(server);
+require("./helper")(server);
+require("./history")(server);
+require("./questions")(server);

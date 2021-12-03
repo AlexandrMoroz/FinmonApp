@@ -79,36 +79,38 @@
                 ]
               }
             },
-            { 
+            {
               "className": "col-6",
-               "fieldGroup": [{
-                "className": "col-12",
-                "key": "DateOfFreeze",
-                "type": "repeat-one-row",
-                "templateOptions": {
-                  "title": "Дата замороження активів",
-                  "cancelButtonClass": "ml-1"
+              "fieldGroup": [
+                {
+                  "className": "col-12",
+                  "key": "DateOfFreeze",
+                  "type": "repeat-one-row",
+                  "templateOptions": {
+                    "title": "Дата замороження активів",
+                    "cancelButtonClass": "ml-1"
+                  },
+                  "fieldArray": {
+                    "className": "justify-content-center",
+                    "type": "input",
+                    "templateOptions": { "type": "date", "required": true }
+                  }
                 },
-                "fieldArray": {
-                  "className": "justify-content-center",
-                  "type": "input",
-                  "templateOptions": { "type": "date", "required": true }
+                {
+                  "className": "col-12",
+                  "key": "DateOfUnfreeze",
+                  "type": "repeat-one-row",
+                  "templateOptions": {
+                    "title": "Дата розмороження активів",
+                    "cancelButtonClass": "ml-1"
+                  },
+                  "fieldArray": {
+                    "className": "justify-content-center",
+                    "type": "input",
+                    "templateOptions": { "type": "date", "required": true }
+                  }
                 }
-              },
-              {
-                "className": "col-12",
-                "key": "DateOfUnfreeze",
-                "type": "repeat-one-row",
-                "templateOptions": {
-                  "title": "Дата розмороження активів",
-                  "cancelButtonClass": "ml-1"
-                },
-                "fieldArray": {
-                  "className": "justify-content-center",
-                  "type": "input",
-                  "templateOptions": { "type": "date", "required": true }
-                }
-              }]
+              ]
             }
           ]
         },
@@ -584,11 +586,17 @@
                 "label": "Вид (види) зайнятості:",
                 "multiple": true,
                 "options": [
-                  { "label": "найманий працівник", "value": 1 },
-                  { "label": "власник бізнеса", "value": 2 },
-                  { "label": "безробітний", "value": 3 },
-                  { "label": "студент/пенсіонер", "value": 4 },
-                  { "label": "суспільний активіст/волонтер", "value": 4 }
+                  { "label": "не зайнятий (безробітний)", "value": 1 },
+                  { "label": "студент", "value": 2 },
+                  { "label": "пенсіонер", "value": 3 },
+                  { "label": "найманий працівник", "value": 4 },
+                  {
+                    "label": "перша особа (керівник) юридичної особи",
+                    "value": 5
+                  },
+                  { "label": "підприємець", "value": 6 },
+                  { "label": "власник/співвласник бізнесу", "value": 7 },
+                  { "label": "суспільний активіст/волонтер", "value": 8 }
                 ]
               }
             },
@@ -643,8 +651,12 @@
                         },
                         { "label": "нерухомість", "value": 4 },
                         {
-                          "label": "грошові кошти на рахунку в банках",
-                          "value": "5"
+                          "label": "грошові кошти на рахунку в банках (у т.ч. на депозитних) за виключенням кредитних",
+                          "value": 5
+                        },
+                        {
+                          "label": "товари в обороті та/або нематеріальні активи",
+                          "value": 6
                         }
                       ]
                     }
@@ -1327,7 +1339,8 @@
                   }
                 ]
               }
-            }, {
+            },
+            {
               "className": "col-12",
               "key": "CheckClientByQuestion",
               "fieldGroupClassName": "d-flex flex-wrap align-items-center justify-content-center",
@@ -1337,7 +1350,7 @@
                   "key": "QuestionDescription",
                   "type": "textarea",
                   "templateOptions": {
-                    "disabled":true, 
+                    "disabled": true,
                     "label": "Список відповідей"
                   }
                 },

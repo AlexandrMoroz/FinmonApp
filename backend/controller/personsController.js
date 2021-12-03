@@ -5,11 +5,10 @@ const XLSXAnceta = require("../utils/anceta");
 const { recursFormResult } = require("../utils/history");
 const Helper = require("../models/helper");
 let order = require("../mock/personOrder.json");
-const { INDIVIDUALS } =
-  require("../models/Unions/groupOfQuestions").Types;
-const UnionOfRiskQuestionGroup = require("../models/Unions/UnionOfRiskQuestionGroup");
-const UnionOfReputationQuestions = require("../models/Unions/UnionOfReputationQuestions");
-
+const { INDIVIDUALS } = require("../models/Unions/groupOfQuestions").Types;
+const CalculatorRiskQuestions = require("../models/Unions/CalculatorRiskQuestions");
+const CalculatorReputationQuestions = require("../models/Unions/CalculatorReputationQuestions");
+const CalculatorFinansialRiskQuestions = require("../models/Unions/CalculatorFinansialRiskQuestions");
 
 /**
  *
@@ -190,11 +189,12 @@ const XLMS = async (req, res, next) => {
   }
 };
 
-const FinRate = async (req, res, next) => {
+const RiskRate = async (req, res, next) => {
   try {
     let personData = await PersonFormData.findOne({ _id: req.query.id });
-    let union = new UnionOfRiskQuestionGroup(personData, INDIVIDUALS);
-    let answers = await union.calcGroupsForTest();
+    let calc = new CalculatorRiskQuestions(personData, INDIVIDUALS);
+    let answers = await calc.calcGroupsForTest();
+ 
     res.status(200).json({
       message: "Person get calculate person fin rating ",
       result: answers,
@@ -210,7 +210,7 @@ const FinRate = async (req, res, next) => {
 const Reputation = async (req, res, next) => {
   try {
     let personData = await PersonFormData.findOne({ _id: req.query.id });
-    let union = new UnionOfReputationQuestions(personData);
+    let union = new CalculatorReputationQuestions(personData);
     let answers = await union.calcGroupsForTest();
     res.status(200).json({
       message: "Person get calculate person fin rating ",
@@ -220,7 +220,24 @@ const Reputation = async (req, res, next) => {
   } catch (err) {
     next({
       message: "Unable get calculate person fin rating.",
-      error: { ...err },
+      error: err,
+    });
+  }
+};
+const FinansialRisk = async (req, res, next) => {
+  try {
+    let personData = await PersonFormData.findOne({ _id: req.query.id });
+    let union = new CalculatorFinansialRiskQuestions(personData);
+    let answers = await union.calcGroupsForTest();
+    res.status(200).json({
+      message: "Person get calculate person fin risk rating ",
+      result: answers,
+      success: true,
+    });
+  } catch (err) {
+    next({
+      message: "Unable get calculate person fin risk rating.",
+      error: err,
     });
   }
 };
@@ -230,6 +247,7 @@ module.exports = {
   Edit,
   Search,
   XLMS,
-  FinRate,
+  RiskRate,
   Reputation,
+  FinansialRisk
 };

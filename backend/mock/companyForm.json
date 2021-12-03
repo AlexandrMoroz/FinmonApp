@@ -686,7 +686,7 @@
               },
               {
                 "className": "col-6",
-                "key": "IsVulnerablePeople",
+                "key": "IsVulnerablePerson",
                 "type": "checkbox",
                 "defaultValue": false,
                 "templateOptions": {
@@ -1134,7 +1134,7 @@
                     },
                     {
                       "className": "col-6",
-                      "key": "IsVulnerablePeople",
+                      "key": "IsVulnerablePerson",
                       "type": "checkbox",
                       "defaultValue": false,
                       "templateOptions": {

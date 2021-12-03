@@ -37,12 +37,12 @@ let initServer = (config) => {
 
   process.on("unhandledRejection", function (reason, p) {
     console.log("Caught exception: " + reason);
-    process.exit(1);
+    //process.exit(1);
   });
 
   process.on("uncaughtException", function (err) {
     console.log("Caught exception: " + err);
-    process.exit(1);
+    //process.exit(1);
   });
 
   app.use((err, req, res, next) => {
