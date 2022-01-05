@@ -26,8 +26,28 @@ export class CompanyService {
       params: new HttpParams().set('id', id),
     });
   }
-  getRate(id: string) {
-    return this.http.get(`${environment.apiUrl}company/finrate`, {
+  calcAnswer(id: string, funcName: string) {
+    switch (funcName) {
+      case 'Risk':
+        return this.getRisk(id);
+      case 'Reputation':
+        return this.getReputation(id);
+      case 'FinansialRisk':
+        return this.getFinansialRisk(id);
+    }
+  }
+  private getRisk(id: string) {
+    return this.http.get(`${environment.apiUrl}company/risk`, {
+      params: new HttpParams().set('id', id),
+    });
+  }
+  private getReputation(id: string) {
+    return this.http.get(`${environment.apiUrl}company/reputation`, {
+      params: new HttpParams().set('id', id),
+    });
+  }
+  private getFinansialRisk(id: string) {
+    return this.http.get(`${environment.apiUrl}company/finansial-risk`, {
       params: new HttpParams().set('id', id),
     });
   }

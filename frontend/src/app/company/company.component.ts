@@ -89,26 +89,40 @@ export class CompanyComponent implements OnInit {
           },
         };
       }
-      if (item?.key === 'CheckClientByQuestion') {
-        item.fieldGroup[1].templateOptions.onClick = () => {
-          if (!this.SelectedItem) {
-            this.flashMessagesService.show('Оберіть клієнта', {
-              cssClass: 'alert-danger',
-              timeout: 5000,
-            });
-            return;
-          }
-          this.dataService
-            .getRate(this.SelectedItem.formDataResultId)
-            .subscribe((data) => {
-              this.model = {
-                ...this.model,
-                CheckClientByQuestion: { QuestionDescription: data['result'] },
-              };
-            });
-        };
+      if (item?.key === 'CheckClientRisk') {
+        this.SetButtonHandler(item, 'CheckClientRisk', 'Risk');
+      }
+      if (item?.key === 'CheckClientReputation') {
+        this.SetButtonHandler(item, 'CheckClientReputation', 'Reputation');
+      }
+      if (item?.key === 'CheckClientFinansialRisk') {
+        this.SetButtonHandler(
+          item,
+          'CheckClientFinansialRisk',
+          'FinansialRisk'
+        );
       }
     });
+  }
+  private SetButtonHandler(item, fieldKey, funcName) {
+    item.fieldGroup[1].templateOptions.onClick = () => {
+      if (!this.SelectedItem) {
+        this.flashMessagesService.show('Оберіть клієнта', {
+          cssClass: 'alert-danger',
+          timeout: 5000,
+        });
+        return;
+      }
+      this.dataService
+        .calcAnswer(this.SelectedItem.formDataResultId, funcName)
+        .subscribe((data) => {
+          //use = answer in prod
+           this.model = {
+            ...this.model,
+            [fieldKey]: { "Description": data['result'] },
+          };
+        });
+    };
   }
   recurseCleanObj(object) {
     Object.entries(object).forEach(([k, v]) => {

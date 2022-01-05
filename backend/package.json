@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/test.js --exit --timeout 5000",
+    "test": "mocha test/test.js --exit --timeout 1000000",
     "start": "node index.js",
     "debug": "node --debug-brk index.js"
   },
@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -19,15 +20,17 @@
     "express": "^4.17.1",
     "express-validator": "^6.10.1",
     "express-winston": "^4.1.0",
-    "jsondiffpatch": "AlexandrMoroz/mongoose-diff-history",
+    "jsondiffpatch": "^0.4.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.8",
-    "mongoose-diff-history": "^2.1.0",
+    "mongoose-diff-history": "AlexandrMoroz/mongoose-diff-history",
+    "mongoose-fuzzy-searching": "^2.0.2",
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "winston": "^3.3.3",
-    "xlsx": "^0.16.7"
+    "xlsx": "^0.17.4",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "chai": "^4.3.4",

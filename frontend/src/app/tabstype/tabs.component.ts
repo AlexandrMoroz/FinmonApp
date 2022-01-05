@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ChangeDetectionStrategy } from '@angular/core';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FieldType } from '@ngx-formly/core';
 
@@ -17,14 +17,15 @@ import { FieldType } from '@ngx-formly/core';
     </mat-tab-group>
   `,
   styleUrls: ['./tabs.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TabsType extends FieldType {
+export class TabsType  extends FieldType {
   isValid(field: FormlyFieldConfig) {
     if (field.key) {
-      console.log(false)
+      // console.log(false)
       return field.formControl.valid;
     }
-    console.log(true)
+    // console.log(true)
     return field.fieldGroup.every((f) => this.isValid(f));
   }
 }

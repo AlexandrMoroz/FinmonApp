@@ -6,6 +6,10 @@
 }
 ::ng-deep .mat-tab-body-content {
   padding: 3rem 0 !important;
+  overflow-y: hidden !important;
+}
+::ng-deep .mat-tab-body{
+  overflow-y: hidden !important;
 }
 ::ng-deep .mat-tab-header-pagination-chevron {
   border-color: rgba(255, 255, 255, 0.87);
@@ -15,3 +19,4 @@
   border-radius: 10px 10px 0 0 !important;
   z-index: 1000 !important;
 }
+

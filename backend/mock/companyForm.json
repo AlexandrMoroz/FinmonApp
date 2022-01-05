@@ -1905,7 +1905,7 @@
             "title": "Дані про виконавчий орган (назва органу / ПІБ):"
           },
           "fieldArray": {
-            "fieldGroupClassName": "row justify-content-center align-items-center mb-0",
+            "fieldGroupClassName": "row justify-content-center align-items-center mb-0 pl-2",
             "fieldGroup": [
               {
                 "className": "col-6",
@@ -3043,6 +3043,31 @@
             },
             {
               "className": "col-12",
+              "key": "CheckClientReputation",
+              "fieldGroupClassName": "d-flex flex-wrap align-items-center justify-content-center",
+              "fieldGroup": [
+                {
+                  "className": "col question_description",
+                  "key": "Description",
+                  "type": "textarea",
+                  "templateOptions": {
+                    "disabled": true,
+                    "label": "Список відповідей"
+                  }
+                },
+                {
+                  "className": "col get_questions_button",
+                  "key": "GetAnswer",
+                  "type": "button",
+                  "templateOptions": {
+                    "addButtonClass": "justify-content-center col-3 mb-4",
+                    "text": "Отримат список відповідей"
+                  }
+                }
+              ]
+            },
+            {
+              "className": "col-12",
               "key": "ClienFinancialStand",
               "type": "repeat-one-row",
               "templateOptions": {
@@ -3077,6 +3102,31 @@
                   }
                 ]
               }
+            },
+            {
+              "className": "col-12",
+              "key": "CheckClientFinansialRisk",
+              "fieldGroupClassName": "d-flex flex-wrap align-items-center justify-content-center",
+              "fieldGroup": [
+                {
+                  "className": "col question_description",
+                  "key": "Description",
+                  "type": "textarea",
+                  "templateOptions": {
+                    "disabled": true,
+                    "label": "Список відповідей"
+                  }
+                },
+                {
+                  "className": "col get_questions_button",
+                  "key": "GetAnswer",
+                  "type": "button",
+                  "templateOptions": {
+                    "addButtonClass": "justify-content-center col-3 mb-4",
+                    "text": "Отримат список відповідей"
+                  }
+                }
+              ]
             },
             {
               "className": "col-12",
@@ -3117,23 +3167,24 @@
                   }
                 ]
               }
-            }, {
+            },
+            {
               "className": "col-12",
-              "key": "CheckClientByQuestion",
+              "key": "CheckClientRisk",
               "fieldGroupClassName": "d-flex flex-wrap align-items-center justify-content-center",
               "fieldGroup": [
                 {
                   "className": "col question_description",
-                  "key": "QuestionDescription",
+                  "key": "Description",
                   "type": "textarea",
                   "templateOptions": {
-                    "disabled":true, 
+                    "disabled": true,
                     "label": "Список відповідей"
                   }
                 },
                 {
                   "className": "col get_questions_button",
-                  "key": "GetQuestions",
+                  "key": "GetAnswer",
                   "type": "button",
                   "templateOptions": {
                     "addButtonClass": "justify-content-center col-3 mb-4",

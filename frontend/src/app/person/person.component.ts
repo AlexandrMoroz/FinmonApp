@@ -34,8 +34,7 @@ export class PersonComponent implements OnInit {
     private dataService: PersonService,
     private searchService: SearchService,
     private formservice: FormService,
-    private flashMessagesService: FlashMessagesService,
-    private authService: AuthService
+    private flashMessagesService: FlashMessagesService
   ) {}
   ngOnInit(): void {
     this.isLoading = true;
@@ -113,20 +112,43 @@ export class PersonComponent implements OnInit {
           }
         });
       }
-      if (item?.key === 'CheckClientByQuestion') {
-        item.fieldGroup[1].templateOptions.onClick = function () {
-          let answers = this.dataService.getRate(
-            this.SelectedItem.formDataResultId
-          );
-          this.model['CheckClientByQuestion']['QuestionDescription'] =
-            JSON.stringify(answers);
-          this.model = { ...this.model };
-        };
+      if (item?.key === 'CheckClientRisk') {
+        this.SetButtonHandler(item, 'CheckClientRisk', 'Risk');
+      }
+      if (item?.key === 'CheckClientReputation') {
+        this.SetButtonHandler(item, 'CheckClientReputation', 'Reputation');
+      }
+      if (item?.key === 'CheckClientFinansialRisk') {
+        this.SetButtonHandler(
+          item,
+          'CheckClientFinansialRisk',
+          'FinansialRisk'
+        );
       }
     });
   }
 
-  private GetRate() {}
+  private SetButtonHandler(item, fieldKey, funcName) {
+    item.fieldGroup[1].templateOptions.onClick = () => {
+      if (!this.SelectedItem) {
+        this.flashMessagesService.show('Оберіть клієнта', {
+          cssClass: 'alert-danger',
+          timeout: 5000,
+        });
+        return;
+      }
+      this.dataService
+        .calcAnswer(this.SelectedItem.formDataResultId, funcName)
+        .subscribe((data) => {
+          //use = answer in prod
+          console.log(fieldKey)
+          this.model = {
+            ...this.model,
+            [fieldKey]: { "Description": data['result'] },
+          };
+        });
+    };
+  }
   private CopyRegistAdressToLiveAdress(field: FormlyFieldConfig, event?: any) {
     if (event.target.checked) {
       this.model = { ...this.model, Live: this.model['Regist'] };

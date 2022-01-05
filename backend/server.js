@@ -59,10 +59,12 @@ let initServer = (config) => {
     res.render("error");
     next();
   });
+
   connect(config.DB, {
     useFindAndModify: false,
     useUnifiedTopology: true,
     useNewUrlParser: true,
+    useCreateIndex: true,
   });
   console.log({
     message: `Successfully connected with the Database \n${config.DB}`,
