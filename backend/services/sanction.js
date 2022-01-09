@@ -73,6 +73,14 @@ class SanctionService {
     // req.end();
     //return true;
   }
+  async updateFromSite() {
+    let arr = [
+      await this.updateCompanyFromSite(),
+      await this.updatePersonFromSite(),
+    ];
+
+    return !arr.includes(false);
+  }
   async searchPerson(name) {
     return await personSanction.fuzzySearch(name).limit(10);
   }

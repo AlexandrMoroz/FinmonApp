@@ -11,6 +11,11 @@ export class MenuComponent implements OnInit {
   @Output() sidebarToggle: EventEmitter<any> = new EventEmitter();
   userLinks: Array<NbMenuItem> = [
     {
+      title: 'Пошук в базі',
+      link: '/search',
+      icon: 'search',
+    },
+    {
       title: 'Фізична особи',
       link: '/person',
       icon: 'user-alt',

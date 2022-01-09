@@ -1,8 +1,9 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const bcrypt = require("bcryptjs");
 const { devConfig } = require("../config");
 const { serializeUser } = require("../utils/Auth");
+
 
 /**
  * @DESC To register the user (ADMIN, SUPER_ADMIN, USER)
@@ -10,7 +11,7 @@ const { serializeUser } = require("../utils/Auth");
 const Create = async (body, res, next) => {
   try {
     // Get the hashed password
-    //const password = await bcrypt.hash(body.password, 12);
+    const password = await bcrypt.hash(body.password, 12);
     // create a new user
     let createdUser = await new User({
       block: false,
@@ -21,7 +22,7 @@ const Create = async (body, res, next) => {
       email: body.email ? body.email : "",
       role: "user",
       username: body.username,
-      password: body.password,
+      password: password,
     }).save();
 
     res.status(201).json({

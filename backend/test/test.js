@@ -8,5 +8,5 @@ let server = require("../server")(testConfig);
 // require("./helper")(server);
 // require("./history")(server);
 // require("./questions")(server);
-require("./sanction")(server);
-//require("./terrorist")(server);
+// require("./sanction")(server);
+// require("./terrorist")(server);

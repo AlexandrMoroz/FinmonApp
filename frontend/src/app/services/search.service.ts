@@ -1,6 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { debounceTime } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +11,13 @@ export class SearchService {
   constructor(private http: HttpClient) {}
 
   search(serchController, searchText) {
-    
-    return this.http.get(
-      `${environment.apiUrl}${serchController}/search`,
-      {
-        params: new HttpParams().set('searchText', searchText),
-      }
-    );
+    return this.http.get(`${environment.apiUrl}${serchController}/search`, {
+      params: new HttpParams().set('searchText', searchText),
+    });
+  }
+  externalBaseSearch(type, searchText) {
+    return this.http.get(`${environment.apiUrl}externalbase/search`, {
+      params: new HttpParams().set('searchText', searchText).set('type', type),
+    });
   }
 }

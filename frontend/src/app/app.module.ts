@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -52,6 +51,7 @@ import { RepeatOneRowComponent } from './repeat-one-row/repeat-one-row.component
 import { TabsType } from './tabstype/tabs.component';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { ButtonType } from './buttontype/button.companent';
+import { SearchComponent } from './search/search.component';
 
 
 
@@ -73,6 +73,7 @@ import { ButtonType } from './buttontype/button.companent';
     TabsType,
     AutocompleteComponent,
     ButtonType,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

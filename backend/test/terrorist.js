@@ -23,38 +23,38 @@ chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
 module.exports = (server) => {
-  describe("test terrorist update functions ", () => {
-    before(async () => {
-      await PersonTerrorist.deleteMany();
-      await CompanyTerrorist.deleteMany();
-    });
-    // it("update company terrorist from site", async () => {
-    //   let service = new TerroristService();
-    //   let flag = await service.updateTerroristFromSite();
-    //   flag.should.be.true;
-    //   let answer = await CompanyTerrorist.find();
-    //   console.log(answer.length);
-    //   (answer.length > 0).should.be.true;
-    //   let answer2 = await PersonTerrorist.find();
-    //   console.log(answer2.length);
-    //   (answer2.length > 0).should.be.true;
-    // });
-  });
+  // describe("test terrorist update functions ", () => {
+  //   before(async () => {
+  //     await PersonTerrorist.deleteMany();
+  //     await CompanyTerrorist.deleteMany();
+  //   });
+  //   it("update company terrorist from site", async () => {
+  //     let service = new TerroristService();
+  //     let flag = await service.updateFromSite();
+  //     flag.should.be.true;
+  //     let answer = await CompanyTerrorist.find();
+  //     console.log(answer.length);
+  //     (answer.length > 0).should.be.true;
+  //     let answer2 = await PersonTerrorist.find();
+  //     console.log(answer2.length);
+  //     (answer2.length > 0).should.be.true;
+  //   });
+  // });
   describe("test terrorist search functions ", () => {
-    before(async () => {
-      await PersonTerrorist.deleteMany();
-      await CompanyTerrorist.deleteMany();
-      await PersonTerrorist.insertMany(
-        require("../mock/personTerrorist.json").map((item) => {
-          return { name: item.name };
-        })
-      );
-      await CompanyTerrorist.insertMany(
-        require("../mock/companyTerrorist.json").map((item) => {
-          return { name: item.name };
-        })
-      );
-    });
+    // before(async () => {
+    //   await PersonTerrorist.deleteMany();
+    //   await CompanyTerrorist.deleteMany();
+    //   await PersonTerrorist.insertMany(
+    //     require("../mock/personTerrorist.json").map((item) => {
+    //       return { name: item.name };
+    //     })
+    //   );
+    //   await CompanyTerrorist.insertMany(
+    //     require("../mock/companyTerrorist.json").map((item) => {
+    //       return { name: item.name };
+    //     })
+    //   );
+    // });
     it("Cheak if person get from terrorist service by name", async () => {
       let searchtext = "MOHAMMAD HAQQANI ";
       let service = new TerroristService();
@@ -64,13 +64,12 @@ module.exports = (server) => {
       console.log(answer[2]);
       console.log(answer[3]);
       (answer.length > 0).should.be.true;
-      
     });
     it("Cheak if company get from terrorist service by name", async () => {
       let searchtext = "AL-AKHTAR TRUST INTERNATIONAL";
       let service = new TerroristService();
       let answer = await service.searchCompany(searchtext);
-     //console.log(answer);
+      console.log(answer);
       (answer.length > 0).should.be.true;
     });
   });

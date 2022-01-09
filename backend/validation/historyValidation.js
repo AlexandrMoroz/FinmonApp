@@ -16,9 +16,12 @@ const HistoryValidator = {
         },
         custom: {
           options: async (value) => {
+           
             if (!mongoose.Types.ObjectId.isValid(value))
               throw new Error("Неверный тип id");
             let flag = await Collection.exists({ _id: value });
+            console.log(value)
+            console.log(await Collection.findOne({_id:value}))
             if (!flag) throw new Error("Неверный id");
             return true;
           },

@@ -34,7 +34,7 @@ let initServer = (config) => {
   app.use("/api/helper", require("./routes/helper"));
   app.use("/api/history", require("./routes/history"));
   app.use("/api/person", require("./routes/person"));
-
+  app.use("/api/externalbase", require("./routes/externalbase"));
   process.on("unhandledRejection", function (reason, p) {
     console.log("Caught exception: " + reason);
     //process.exit(1);

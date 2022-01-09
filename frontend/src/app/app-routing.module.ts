@@ -8,6 +8,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { Role } from './shared/models';
 import { SettingsComponent } from './settings/settings.component';
 import { HistoryComponent } from './history/history.component';
+import { SearchComponent } from './search/search.component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,11 @@ const routes: Routes = [
     path: 'person',
     canActivate: [AuthGuard],
     component: PersonComponent,
+  },
+  {
+    path: 'search',
+    canActivate: [AuthGuard],
+    component: SearchComponent,
   },
   {
     path: '',

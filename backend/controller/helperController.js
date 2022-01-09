@@ -7,12 +7,12 @@ const Create = async (body, res, next) => {
   try {
     const helper = await new Helper({
       name: body.name,
-      content: body.content,
+      result: body.result,
     }).save();
 
     res.status(201).json({
       message: "helper was create",
-      result: { name: helper.name, content: helper.content },
+      result: { name: helper.name, result: helper.result },
       success: true,
     });
   } catch (err) {

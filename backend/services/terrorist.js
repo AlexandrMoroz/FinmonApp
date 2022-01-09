@@ -6,7 +6,7 @@ const CompanyTerrorist = require("../models/companyTerrorist");
 class TerroristService {
   constructor() {}
 
-  async updateTerroristFromSite() {
+  async updateFromSite() {
     try {
       let res = await axios.get(
         "https://fiu.gov.ua/assets/userfiles/Terror/zBlackListFull.xml"
@@ -35,9 +35,6 @@ class TerroristService {
             companeis.push(this.mapAkaList(el["aka-list"]));
           }
         });
-        console.log(persons.flat(Infinity));
-        console.log(companeis.flat(Infinity));
-
         await PersonTerrorist.deleteMany();
         await CompanyTerrorist.deleteMany();
         await PersonTerrorist.insertMany(
@@ -50,7 +47,6 @@ class TerroristService {
             return { name: item.trim() };
           })
         );
-
         return true;
       }
       return false;

@@ -1,0 +1,21 @@
+<div class="col-sm col-md-9 col-lg-9 col-xl-9">
+    <nb-card
+      [nbSpinner]="isLoading"
+      nbSpinnerSize="giant"
+      nbSpinnerStatus="primary"
+      class="nd-card-form"
+    >
+      <nb-card-body>
+        <form [formGroup]="form" (ngSubmit)="Submit(model)">
+          <formly-form
+            [form]="form"
+            [fields]="fields"
+            [model]="model"
+            [options]="options"
+            class="d-flex flex-wrap "
+          ></formly-form>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  

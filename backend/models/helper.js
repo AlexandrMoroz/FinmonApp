@@ -6,7 +6,7 @@ const Helper = new Schema(
       type: String,
       required: true,
     },
-    content: {
+    result: {
       type: Object,
       required: true,
     },
