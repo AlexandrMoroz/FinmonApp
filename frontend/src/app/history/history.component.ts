@@ -4,7 +4,6 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { FlashMessagesService } from 'angular2-flash-messages';
 import { HistoryService } from '../services/history.service';
 import { SearchService } from '../services/search.service';
 import { PersonFormater } from '../shared/models/person';
@@ -26,12 +25,10 @@ export class HistoryComponent {
   history: Array<any>;
   selectedItem: any = null;
   timelineReverceFlag: boolean = false;
-  @ViewChild('historyContainer', { static: false })
-  historyContainer: ElementRef;
+  @ViewChild('historyContainer', { static: false }) historyContainer: ElementRef;
   constructor(
     private historyService: HistoryService,
     private searchService: SearchService,
-    private flashMessagesService: FlashMessagesService
   ) {
     this.dataServices = [new CompanyFormater(), new PersonFormater()];
   }
