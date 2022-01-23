@@ -1,4 +1,4 @@
-import {  Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
@@ -68,9 +68,7 @@ export class FormService {
   };
 
   private personFieldsMap = (item) => {
-    if (item !== undefined) {
-      
-    }
+   
   };
 
   private companyFieldsMap = (item) => {
@@ -82,7 +80,7 @@ export class FormService {
               return !c.value || c.value.length >= 1;
             },
             message: (error, field: FormlyFieldConfig) =>
-              `Обовьязково повинен бути хоча б один рахунок в банку`,
+              `Обов'язково повинен бути хоча б один рахунок в банку`,
           },
         };
       }
@@ -93,7 +91,7 @@ export class FormService {
               return !c.value || c.value.length >= 1;
             },
             message: (error, field: FormlyFieldConfig) =>
-              `Обовьязково повинен бути хоча б один орган`,
+              `Обов'язково повинен бути хоча б один орган`,
           },
         };
       }
@@ -104,7 +102,7 @@ export class FormService {
               return !c.value || c.value.length >= 1;
             },
             message: (error, field: FormlyFieldConfig) =>
-              `Обовьязково повинен бути хоча б один керівник`,
+              `Обов'язково повинен бути хоча б один керівник`,
           },
         };
       }
