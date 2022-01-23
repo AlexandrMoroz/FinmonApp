@@ -153,7 +153,8 @@
               "type": "input",
               "templateOptions": {
                 "label": "ІНПП",
-                "placeholder": "ІНПП"
+                "placeholder": "ІНПП",
+                "required": true
               }
             },
             {
@@ -324,25 +325,13 @@
               "className": "col-4",
               "key": "Country",
               "type": "select",
-              "templateOptions": { "label": "Країна" }
+              "templateOptions": { "label": "Країна", "required": true }
             },
             {
-              "className": "col-4",
-              "key": "State",
-              "type": "input",
-              "templateOptions": { "label": "Область (за наявності)" }
-            },
-            {
-              "className": "col-4",
-              "key": "District",
-              "type": "input",
-              "templateOptions": { "label": "Район (за наявності)" }
-            },
-            {
-              "className": "col-12",
+              "className": "col-8",
               "key": "Adress",
               "type": "input",
-              "templateOptions": { "label": "Адреса" }
+              "templateOptions": { "label": "Адреса", "required": true }
             },
             {
               "className": "col-12",
@@ -363,25 +352,14 @@
               "className": "col-4",
               "key": "Country",
               "type": "select",
-              "templateOptions": { "label": "Країна" }
+              "templateOptions": { "label": "Країна", "required": true }
             },
+
             {
-              "className": "col-4",
-              "type": "input",
-              "key": "State",
-              "templateOptions": { "label": "Область (за наявності)" }
-            },
-            {
-              "className": "col-4",
-              "type": "input",
-              "key": "District",
-              "templateOptions": { "label": "Район (за наявності)" }
-            },
-            {
-              "className": "col-12",
+              "className": "col-8",
               "key": "Adress",
               "type": "input",
-              "templateOptions": { "label": "Адреса" }
+              "templateOptions": { "label": "Адреса", "required": true }
             }
           ]
         },
@@ -390,6 +368,32 @@
           "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
           "key": "FOP",
           "fieldGroup": [
+            {
+              "className": "col-4",
+              "key": "GovRegDocDateRelise",
+              "type": "input",
+              "templateOptions": {
+                "type": "date",
+                "label": "Дата державної реєстрації",
+                "placeholder": "Дата державної реєстрації"
+              }
+            },
+            {
+              "className": "col-8",
+              "key": "TypesOfBusiness",
+              "type": "repeat-one-row",
+              "templateOptions": {
+                "title": "Вид підприємницької діяльності",
+                "cancelButtonClass": "ml-1",
+                "type": "array"
+              },
+              "fieldArray": {
+                "type": "autocomplete",
+                "templateOptions": {
+                  "inputClassName": "col mb-3 autocomplete"
+                }
+              }
+            },
             {
               "className": "col-4",
               "key": "GovRegDoc",
@@ -421,22 +425,7 @@
                 "placeholder": "Номер документу"
               }
             },
-            {
-              "className": "col-4",
-              "key": "TypesOfBusiness",
-              "type": "repeat-one-row",
-              "templateOptions": {
-                "title": "Вид підприємницької діяльності",
-                "cancelButtonClass": "ml-1",
-                "type": "array"
-              },
-              "fieldArray": {
-                "type": "autocomplete",
-                "templateOptions": {
-                  "inputClassName": "col mb-3 autocomplete"
-                }
-              }
-            },
+
             {
               "className": "col-4",
               "key": "ProfessionType",
@@ -455,16 +444,7 @@
                 "placeholder": "Номер запису про державну реєстрацію"
               }
             },
-            {
-              "className": "col-4",
-              "key": "GovRegDocDateRelise",
-              "type": "input",
-              "templateOptions": {
-                "type": "date",
-                "label": "Дата державної реєстрації",
-                "placeholder": "Дата державної реєстрації"
-              }
-            },
+
             {
               "className": "col-4",
               "key": "GovRegDocDepartment",
@@ -482,6 +462,15 @@
                 "label": "Термін діяльності клієнта",
                 "placeholder": "Термін діяльності клієнта",
                 "disabled": true
+              }
+            },
+            {
+              "className": "col-12",
+              "key": "Licenses",
+              "type": "textarea",
+              "templateOptions": {
+                "label": "Ліцензії (дозволи) на право здійснення певних операцій (діяльності) (найменування, серії, номери, ким видані, термін дії)",
+                "rows": 4
               }
             }
           ]
@@ -574,7 +563,7 @@
           ]
         },
         {
-          "templateOptions": { "label": "Ліцензії та види зайнятості:" },
+          "templateOptions": { "label": "Види зайнятості:" },
           "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
           "fieldGroup": [
             {
@@ -605,15 +594,6 @@
               "key": "EmploymentTypeDescribe",
               "type": "textarea",
               "templateOptions": { "label": "Опис виду зайнятості", "rows": 2 }
-            },
-            {
-              "className": "col-12",
-              "key": "Licenses",
-              "type": "textarea",
-              "templateOptions": {
-                "label": "Ліцензії (дозволи) на право здійснення певних операцій (діяльності) (найменування, серії, номери, ким видані, термін дії)",
-                "rows": 4
-              }
             }
           ]
         },
@@ -1129,19 +1109,7 @@
                     "templateOptions": { "label": "Країна" }
                   },
                   {
-                    "className": "col-4",
-                    "type": "input",
-                    "key": "State",
-                    "templateOptions": { "label": "Область (за наявності)" }
-                  },
-                  {
-                    "className": "col-4",
-                    "type": "input",
-                    "key": "District",
-                    "templateOptions": { "label": "Район (за наявності)" }
-                  },
-                  {
-                    "className": "col-12",
+                    "className": "col-8",
                     "key": "Adress",
                     "type": "input",
                     "templateOptions": { "label": "Адреса" }
@@ -1160,19 +1128,7 @@
                     "templateOptions": { "label": "Країна" }
                   },
                   {
-                    "className": "col-4",
-                    "type": "input",
-                    "key": "State",
-                    "templateOptions": { "label": "Область (за наявності)" }
-                  },
-                  {
-                    "className": "col-4",
-                    "type": "input",
-                    "key": "District",
-                    "templateOptions": { "label": "Район (за наявності)" }
-                  },
-                  {
-                    "className": "col-12",
+                    "className": "col-8",
                     "key": "Adress",
                     "type": "input",
                     "templateOptions": { "label": "Адреса" }
