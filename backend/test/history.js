@@ -8,6 +8,7 @@ const PersonFormData = require("../models/personFormData");
 const Company = require("../models/company");
 const CompanyFormData = require("../models/companyFormData");
 const History = require("mongoose-diff-history/diffHistoryModel").model;
+const Helper= require("../models/helper");
 // const server = "http://localhost:4000";
 let token = "";
 const user = {
@@ -89,6 +90,8 @@ let test = (server) => {
           },
         };
         newPerson = await init(server, oldPerson, editResult, "person");
+        let translate = require("../mock/personTranslate.json");
+        await new Helper({name:translate.name,result:translate.result}).save()
       });
 
       it("it get Person json History", (done) => {
@@ -99,7 +102,7 @@ let test = (server) => {
           .request(server)
           .get("/api/history/person-history")
           .set("Authorization", token)
-          .query({ ...HistoryCred })
+          .query(HistoryCred)
           .end((err, res) => {
             res.body.result[0].diff.should.deep.equal([
               {
