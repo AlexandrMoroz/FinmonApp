@@ -8,13 +8,13 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле result порожне",
+          errorMessage: "Поле result порожнє",
         },
       },
       "result.IsResident": {
         exists: {
           checkNull: true,
-          errorMessage: "Поле Резидент порожне",
+          errorMessage: "Поле Резидент порожнє",
           bail: true,
         },
       },
@@ -22,7 +22,7 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле Имя порожне",
+          errorMessage: "Поле Имя порожнє",
           bail: true,
         },
         isString: {
@@ -39,7 +39,7 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле Фамилия порожне",
+          errorMessage: "Поле Фамилия порожнє",
           bail: true,
         },
         isString: {
@@ -57,12 +57,16 @@ const PersonValidator = {
           options: async (value, { req }) => {
             if (req.body.result["IsResident"]) {
               if (!value || value.length == 0)
-                throw new Error("Поле ИНН порожне");
+                throw new Error("Поле ИНН порожнє");
+              
               if (value.toString().length != 10)
                 throw new Error("Поле ИНН повинно містити 10 символів");
-              let person = await Person.find({ INN: value });
-              if (person.length > 1)
-                throw new Error("ИНН вже використовується");
+              
+              if(value!="9999999999") {
+                let person = await Person.find({ INN: value });
+                if (person.length >= 1)
+                  throw new Error("ИНН вже використовується");
+              }
             }
             return true;
           },
@@ -77,6 +81,66 @@ const PersonValidator = {
           },
         },
       },
+      "result.Regist": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле місце реєстрації порожнє",
+          bail: true,
+        },
+      },
+      "result.Regist.Country": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле країна порожнє",
+          bail: true,
+        },
+      },
+      "result.Regist.Adress": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле адресс порожнє",
+          bail: true,
+        },
+      },
+      "result.Live": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле місце проживання порожнє",
+          bail: true,
+        },
+      },
+      "result.Live.Country": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле країна порожнє",
+          bail: true,
+        },
+      },
+      "result.Live.Adress": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле адресс порожнє",
+          bail: true,
+        },
+      },
+      "result.Citizen": {
+        custom: {
+          options: async (value, { req }) => {
+           if(!req.body.result["IsResident"]&&!value){
+            throw new Error("В не резидента повинено бути громадянство")
+           }
+           return true;
+          },
+          bail: true,
+        },
+      },
+      
     };
   },
   getEditValidation: () => {
@@ -85,14 +149,14 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле result порожне",
+          errorMessage: "Поле result порожнє",
         },
       },
       formDataResultId: {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле formDataResultId порожне",
+          errorMessage: "Поле formDataResultId порожнє",
           bail: true,
         },
         isString: {
@@ -116,7 +180,7 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле _id порожне",
+          errorMessage: "Поле _id порожнє",
           bail: true,
         },
         isString: {
@@ -137,7 +201,7 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле Имя порожне",
+          errorMessage: "Поле Имя порожнє",
           bail: true,
         },
         isString: {
@@ -154,7 +218,7 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле Фамилия порожне",
+          errorMessage: "Поле Фамилия порожнє",
           bail: true,
         },
         isString: {
@@ -171,13 +235,13 @@ const PersonValidator = {
         custom: {
           options: async (value, { req }) => {
             if (req.body.result["IsResident"]) {
-              if (!value) throw new Error("Поле ИНН порожне");
+              if (!value) throw new Error("Поле ИНН порожнє");
               if (value.toString().length != 10)
                 throw new Error("Поле ИНН повинно містити 10 символів");
               let personById = await Person.findOne({
                 _id: req.body.result["_id"],
               });
-              let personByCode = await Person.find({ clientCode: value });
+              let personByCode = await Person.find({ INN: value });
               if (
                 !personByCode &&
                 personByCode.filter((e) => e._id != personById._id) != 0
@@ -196,6 +260,65 @@ const PersonValidator = {
           },
         },
       },
+      "result.Regist": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле місце реєстрації порожнє",
+          bail: true,
+        },
+      },
+      "result.Regist.Country": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле країна порожнє",
+          bail: true,
+        },
+      },
+      "result.Regist.Adress": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле адресс порожнє",
+          bail: true,
+        },
+      },
+      "result.Live": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле місце проживання порожнє",
+          bail: true,
+        },
+      },
+      "result.Live.Country": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле країна порожнє",
+          bail: true,
+        },
+      },
+      "result.Live.Adress": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле адресс порожнє",
+          bail: true,
+        },
+      },
+      "result.Citizen": {
+        custom: {
+          options: async (value, { req }) => {
+           if(!req.body.result["IsResident"]&&!value){
+            throw new Error("В не резидента повинено бути громадянство")
+           }
+           return true;
+          },
+          bail: true,
+        },
+      },
     };
   },
   getFormDataValidation: () => {
@@ -205,7 +328,7 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле id порожне",
+          errorMessage: "Поле id порожнє",
           bail: true,
         },
         isString: {
@@ -236,7 +359,7 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле Поиска порожне",
+          errorMessage: "Поле Поиска порожнє",
           bail: true,
         },
         isString: {
@@ -259,7 +382,7 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле id порожне",
+          errorMessage: "Поле id порожнє",
           bail: true,
         },
         isString: {
@@ -285,7 +408,7 @@ const PersonValidator = {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле id порожне",
+          errorMessage: "Поле id порожнє",
           bail: true,
         },
         isString: {
