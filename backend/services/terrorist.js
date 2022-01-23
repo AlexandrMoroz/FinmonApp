@@ -12,6 +12,7 @@ class TerroristService {
         "https://fiu.gov.ua/assets/userfiles/Terror/zBlackListFull.xml"
       );
       if (res.status == 200) {
+        console.log("Terror update start");
         let options = {
           compact: true,
           trim: true,
@@ -47,7 +48,9 @@ class TerroristService {
             return { name: item.trim() };
           })
         );
+        console.log("Terror update over");
         return true;
+     
       }
       return false;
     } catch (err) {
@@ -91,12 +94,12 @@ class TerroristService {
   }
 
   async searchPerson(name) {
-    let res = await PersonTerrorist.fuzzySearch(name);
-    return res.filter((item) => item._doc.confidenceScore > 7).sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
+    let res = await PersonTerrorist.fuzzySearch(name).limit(100);
+    return res.sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
   }
   async searchCompany(name) {
-    let res = await CompanyTerrorist.fuzzySearch(name);
-    return res.filter((item) => item._doc.confidenceScore > 7).sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
+    let res = await CompanyTerrorist.fuzzySearch(name).limit(100);
+    return res.sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
   }
 }
 

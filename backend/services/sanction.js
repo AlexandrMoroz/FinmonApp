@@ -9,10 +9,12 @@ class SanctionService {
       let res = await axios.get(
         "https://sanctions-t.rnbo.gov.ua/api/fizosoba/"
       );
-      console.log(res.status);
+      console.log("Sanction person update start");
+
       if (res.status == 200) {
         await personSanction.deleteMany({});
         await personSanction.insertMany(res.data);
+        console.log("Sanction person update over");
         return true;
       }
       return false;
@@ -27,6 +29,7 @@ class SanctionService {
         "https://sanctions-t.rnbo.gov.ua/api/jurosoba/"
       );
       if (res.status == 200) {
+        console.log("Sanction Company update start");
         await companySanction.deleteMany({});
         await companySanction.insertMany(
           res.data.map((item) => {
@@ -37,6 +40,7 @@ class SanctionService {
             return { ...item, odrn_edrpou, ipn };
           })
         );
+        console.log("Sanction Company update over");
         return true;
       } else {
         return false;
@@ -45,33 +49,6 @@ class SanctionService {
       console.log(err);
       return false;
     }
-    // const req = https.get(options, (res) => {
-    //   if (res.statusCode == 200) {
-    //     console.log("RNBO companes santion was updated");
-    //   }
-
-    //   let data = [];
-    //   res.on("data", async (d) => {
-    //     data += d;
-    //   });
-    //   res.on("end", () => {
-    //     console.log(data);
-    //     var buf = JSON.parse(Buffer.from(data).toString());
-    //     console.log(buf);
-    //     //console.log(data)
-    //     // await companySanction.deleteMany({});
-    //     // await companySanction.insertMany(d);
-    //     console.log(data);
-    //     done();
-    //   });
-    // });
-
-    // req.on("error", (error) => {
-    //   console.error(error);
-    //   return false;
-    // });
-    // req.end();
-    //return true;
   }
   async updateFromSite() {
     let arr = [
@@ -82,10 +59,12 @@ class SanctionService {
     return !arr.includes(false);
   }
   async searchPerson(name) {
-    return await personSanction.fuzzySearch(name).limit(10);
+    let res = await personSanction.fuzzySearch(name).limit(100);
+    return res.sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
   }
   async searchCompany(name) {
-    return await companySanction.fuzzySearch(name).limit(10);
+    let res = await companySanction.fuzzySearch(name).limit(100);
+    return res.sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
   }
 }
 
