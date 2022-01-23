@@ -1,7 +1,7 @@
 {
   "_id": { "$oid": "5f6377f70961e8249062b880" },
   "name": "OfshoreCountry",
-  "content": [
+  "result": [
     "Гернсі",
     "Джерсі",
     "Острів Мен",
