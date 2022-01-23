@@ -4,7 +4,7 @@ const { connect } = require("mongoose");
 const { devConfig } = require("./config/index");
 
 (async function () {
-    connect(devConfig.DB, {
+   try{ connect(devConfig.DB, {
         useFindAndModify: false,
         useUnifiedTopology: true,
         useNewUrlParser: true,
@@ -19,5 +19,8 @@ const { devConfig } = require("./config/index");
   let flag = await terroristService.updateFromSite();
   let flag2 = await sanctionService.updateFromSite();
   console.log(flag);
-  console.log(flag2);
+  console.log(flag2);}
+  catch(err){
+    console.log(err);
+  }
 })();

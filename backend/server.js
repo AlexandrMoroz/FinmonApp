@@ -56,7 +56,13 @@ let initServer = (config) => {
       error: req.app.get("env") === "development" ? err : {},
       success: false,
     });
-    res.render("error");
+    winston.error(
+      `REQUEST: ${req.method}; url:${req.url} - ${
+        req.method == "POST"
+          ? JSON.stringify(req.body)
+          : JSON.stringify(req.query)
+      } ErrorMessage: ${JSON.stringify(err)}`
+    );
     next();
   });
 
