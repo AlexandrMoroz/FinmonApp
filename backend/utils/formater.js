@@ -1,5 +1,5 @@
 const { formatters } = require("jsondiffpatch");
-const Translate = require("./Translater");
+const Translate = require("./translate");
 const OPERATIONS = {
   add: "Додано",
   remove: "Видаленно",
