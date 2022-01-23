@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -42,7 +42,7 @@ import {
   NbSpinnerModule,
   NbAutocompleteModule
 } from '@nebular/theme';
-import { FormlyModule } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
 import { MatTabsModule } from '@angular/material/tabs';
 
@@ -116,7 +116,9 @@ import { SearchComponent } from './search/search.component';
           name:'autocomplete',
           component:AutocompleteComponent,
         },
-        
+      ],
+      validationMessages: [
+        { name: 'required', message: requireValidationMessage},
       ],
     }),
     FormlyBootstrapModule,
@@ -132,3 +134,6 @@ import { SearchComponent } from './search/search.component';
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+export function requireValidationMessage(err, field) {
+  return `Поле ${field.templateOptions.label} обов'язкове`;
+}
