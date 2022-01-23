@@ -28,12 +28,12 @@ const HelperValidation = {
           },
         },
       },
-      content: {
+      result: {
         in: ["body"],
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле content пустое",
+          errorMessage: "Поле result пустое",
           bail: true,
         },
       },
