@@ -1,5 +1,5 @@
-const Translate = require("./Translater");
-const Cellwalker = require("./cellwalker.js");
+const Translate = require("./translate");
+const Cellwalker = require("./cellwalker");
 let XLSX = require("xlsx");
 
 class XLSXAnceta {
@@ -11,8 +11,9 @@ class XLSXAnceta {
     XLSX.utils.book_append_sheet(this.wb, this.ws, "Анкета");
   }
 
-  Add(arr, cell, goDown = true) {
-    XLSX.utils.sheet_add_aoa(this.ws, [this.translate(arr)], {
+  Add(arr, cell, goDown = true, doTranslate = true) {
+    let temp = doTranslate ? this.translate(arr) : arr;
+    XLSX.utils.sheet_add_aoa(this.ws, [temp], {
       origin: cell.getCurrentCell(),
     });
     goDown ? cell.goDown() : "";
@@ -48,11 +49,12 @@ class XLSXAnceta {
   }
 
   createFormBuf(json) {
-    this.Add([json.title], this.cellwalker, true);
+    this.Add([json.title], this.cellwalker, true, false);
     this.Add(
       ["Створенно користувачем", json.user, "Дата створення:", json.createdAt],
       this.cellwalker,
-      true
+      true,
+      false
     );
 
     Object.entries(json.result).forEach(([key, val]) => {
