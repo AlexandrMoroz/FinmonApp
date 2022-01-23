@@ -4,11 +4,11 @@ const User = require("../models/user");
 const XLSXAnceta = require("../utils/anceta");
 const { recursFormResult } = require("../utils/history");
 const Helper = require("../models/helper");
-let order = require("../mock/companyOrder.json");
-const { LEGALENTITES } = require("../models/Unions/groupOfQuestions").Types;
-const CalculatorRiskQuestions = require("../models/Unions/CalculatorRiskQuestions");
-const CalculatorReputationQuestions = require("../models/Unions/CalculatorReputationQuestions");
-const CalculatorFinansialRiskQuestions = require("../models/Unions/CalculatorFinansialRiskQuestions");
+let Order = require("../mock/companyOrder.json");
+const { LEGALENTITES } = require("../models/calculators/groupOfQuestions").Types;
+const CalculatorRiskQuestions = require("../models/calculators/calculatorRiskQuestions");
+const CalculatorReputationQuestions = require("../models/calculators/calculatorReputationQuestions");
+const CalculatorFinansialRiskQuestions = require("../models/calculators/calculatorFinansialRiskQuestions");
 /**
  * @DESC comapny create 1. create form result. 2 create person documen with result id
  * req.body: {
@@ -125,7 +125,7 @@ const XLMS = async (req, res, next) => {
     });
 
     //Sort of elemets by sort table
-    let arr = recursFormResult(formdata.result, order, []);
+    let arr = recursFormResult(formdata.result, Order, []);
 
     let result = {};
     arr.forEach((item) => {
@@ -134,7 +134,7 @@ const XLMS = async (req, res, next) => {
       });
     });
     let translate = await Helper.findOne({ name: "translate" });
-    let xmls = new XLSXAnceta(translate.content);
+    let xmls = new XLSXAnceta(translate.result);
     let buf = xmls.createFormBuf({
       title: `Анкета юридичної особи ${
         formdata.result["IsResident"] ? "Резидента" : "Не резидента"
@@ -149,15 +149,16 @@ const XLMS = async (req, res, next) => {
       success: true,
     });
   } catch (err) {
-    next({ message: "Unable to get XLSX doc by id ", error: err });
+    console.log(err)
+    next({ message: "Unable to get XLSX doc by id ", error: JSON.stringify(err) });
   }
 };
 
 const RiskRate = async (req, res, next) => {
   try {
     let companyFormData = await CompanyFormData.findOne({ _id: req.query.id });
-    let union = new CalculatorRiskQuestions(companyFormData, LEGALENTITES);
-    let answers = await union.calcGroupsForTest();
+    let calculator = new CalculatorRiskQuestions(companyFormData, LEGALENTITES);
+    let answers = await calculator.calcGroupsForTest();
     res.status(200).json({
       message: "Company get calculate risk rating ",
       result: answers,
@@ -170,8 +171,8 @@ const RiskRate = async (req, res, next) => {
 const Reputation = async (req, res, next) => {
   try {
     let companyFormData = await CompanyFormData.findOne({ _id: req.query.id });
-    let union = new CalculatorReputationQuestions(companyFormData);
-    let answers = await union.calcGroupsForTest();
+    let calculator = new CalculatorReputationQuestions(companyFormData);
+    let answers = await calculator.calcGroupsForTest();
     res.status(200).json({
       message: "Company get calculate reputation rating ",
       result: answers,
@@ -188,9 +189,9 @@ const FinansialRisk = async (req, res, next) => {
   try {
     let companyFormData = await CompanyFormData.findOne({ _id: req.query.id });
  
-    let union = new CalculatorFinansialRiskQuestions(companyFormData);
+    let calculator = new CalculatorFinansialRiskQuestions(companyFormData);
    
-    let answers = await union.calcGroupsForTest();
+    let answers = await calculator.calcGroupsForTest();
  
     res.status(200).json({
       message: "Company get calculate fin risk rating ",

@@ -79,15 +79,18 @@ function Question20() {
 }
 
 async function Question21() {
-  let blackList = await Helper.findOne({ name: "OfshoreCountry" });
+  let OfshoreCountry = await Helper.findOne({ name: "OfshoreCountry" });
+  if(!OfshoreCountry && OfshoreCountry.length == 0){
+    throw Error("OfShoreCountry helper is undefided")
+  }
   let owners = this.result["Owner"];
   if (owners) {
     let flag = owners.some((item) => {
       let regCountry = item["Regist"]?.Country;
       let liveCountry = item["Live"]?.Country;
       if (
-        blackList?.content.includes(regCountry) ||
-        blackList?.content.includes(liveCountry)
+        OfshoreCountry.result.includes(regCountry) ||
+        OfshoreCountry.result.includes(liveCountry)
       ) {
         return true;
       }
@@ -100,8 +103,8 @@ async function Question21() {
     this.result["ActualLocation"]?.Country || this.result["Live"]?.Country;
 
   if (
-    (registCountry && blackList?.content.includes(registCountry)) ||
-    (liveCountry && blackList?.content.includes(liveCountry))
+    (registCountry && OfshoreCountry.result.includes(registCountry)) ||
+    (liveCountry && OfshoreCountry.result.includes(liveCountry))
   ) {
     return true;
   }

@@ -1,13 +1,13 @@
-const companyQuestions = require("../Questions/FinancialCondition/CompanyQuestions");
-const personQuestions = require("../Questions/FinancialCondition/PersonQuestions");
-const individualQuestions = require("../Questions/FinancialCondition/IndividualQuestions");
-const reputationQuestions = require("../Questions/Reputation/Questions");
+const companyQuestions = require("../questions/financialCondition/companyQuestions");
+const personQuestions = require("../questions/financialCondition/personQuestions");
+const individualQuestions = require("../questions/financialCondition/individualQuestions");
+const reputationQuestions = require("../questions/reputation/questions");
 
-const firstGroupOfQuestions = require("../Questions/Risk/firstGroupQuestion");
-const secondGroupOfQuestions = require("../Questions/Risk/secondGroupQuestion");
-const thirdGroupOfQuestions = require("../Questions/Risk/thirdGroupQuestion");
+const firstGroupOfQuestions = require("../questions/risk/firstGroupQuestion");
+const secondGroupOfQuestions = require("../questions/risk/secondGroupQuestion");
+const thirdGroupOfQuestions = require("../questions/risk/thirdGroupQuestion");
 
-const GroupOfQuestions = require("./GroupOfQuestions");
+const GroupOfQuestions = require("./groupOfQuestions");
 class GroupOfQuestionsFactory {
   constructor(formData, calcType, specificType) {
     if (!formData.result) {

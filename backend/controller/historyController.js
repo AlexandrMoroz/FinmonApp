@@ -27,7 +27,7 @@ const getHistory = async (body, collectionName, res, next) => {
   try {
     let history = await diffHistory.getDiffs(collectionName, body.id);
     let translate_arr = await Helper.findOne({ name: "translate" });
-    let formater = new Formater(translate_arr.content);
+    let formater = new Formater(translate_arr.result);
 
     let temp_history = history.map((item) => {
       return {
@@ -54,7 +54,7 @@ const getHistoryXmls = async (body, collectionName, res, next) => {
     let history = await diffHistory.getDiffs(collectionName, body.id);
     let translate_arr = await Helper.findOne({ name: "translate" });
 
-    let xmls = new XLSXHistory(translate_arr.content);
+    let xmls = new XLSXHistory(translate_arr.result);
     let buf = xmls.createHistoryBuf(history);
 
     res.status(200).json({

@@ -1,4 +1,4 @@
-const GroupOfQuestionsFactory = require("./GroupOfQuestionsFactory");
+const GroupOfQuestionsFactory = require("./groupOfQuestionsFactory");
 class CalculatorReputationQuestions {
   constructor(formData) {
     this.group = new GroupOfQuestionsFactory(formData, "Reputation").createGroup();

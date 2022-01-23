@@ -163,11 +163,17 @@ async function Question17() {
   let owners = this.result["Owner"];
 
   let OfshoreCountry = await Helper.findOne({ name: "OfshoreCountry" });
-  if (owners || owners.length != 0) {
+  if(!OfshoreCountry && OfshoreCountry.length == 0){
+    throw Error("OfShoreCountry helper is undefided")
+  }
+  if (
+    owners &&
+    owners.length != 0 
+  ) {
     owners.forEach((item) => {
       let dirCountry = item["Regist"]?.Country;
       if (!dirCountry) return;
-      resultArr.push({ 2.1: OfshoreCountry?.content.includes(dirCountry) });
+      resultArr.push({ 2.1: OfshoreCountry?.result.includes(dirCountry) });
     });
     //////////9///////////
     owners.forEach((item) => {
@@ -183,7 +189,7 @@ async function Question17() {
     director.forEach((item) => {
       let dirCountry = item["Regist"]?.Country;
       if (!dirCountry) return;
-      resultArr.push({ 2.2: OfshoreCountry?.content.includes(dirCountry) });
+      resultArr.push({ 2.2: OfshoreCountry?.result.includes(dirCountry) });
     });
     //////////5///////////
     director.forEach((item) => {
@@ -226,7 +232,7 @@ async function Question17() {
           if (
             item.path.split("/")[0] == position &&
             item.path.split("/").includes("INN") &&
-            (item.op == OPERATIONS.add)
+            item.op == OPERATIONS.add
           ) {
             return true;
           }

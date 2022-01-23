@@ -5,10 +5,10 @@ const XLSXAnceta = require("../utils/anceta");
 const { recursFormResult } = require("../utils/history");
 const Helper = require("../models/helper");
 let order = require("../mock/personOrder.json");
-const { INDIVIDUALS } = require("../models/Unions/groupOfQuestions").Types;
-const CalculatorRiskQuestions = require("../models/Unions/CalculatorRiskQuestions");
-const CalculatorReputationQuestions = require("../models/Unions/CalculatorReputationQuestions");
-const CalculatorFinansialRiskQuestions = require("../models/Unions/CalculatorFinansialRiskQuestions");
+const { INDIVIDUALS } = require("../models/calculators/groupOfQuestions").Types;
+const CalculatorRiskQuestions = require("../models/calculators/calculatorRiskQuestions");
+const CalculatorReputationQuestions = require("../models/calculators/calculatorReputationQuestions");
+const CalculatorFinansialRiskQuestions = require("../models/calculators/calculatorFinansialRiskQuestions");
 
 /**
  *
@@ -168,7 +168,7 @@ const XLMS = async (req, res, next) => {
       });
     });
     let translate = await Helper.findOne({ name: "translate" });
-    let xmls = new XLSXAnceta(translate.content);
+    let xmls = new XLSXAnceta(translate.result);
 
     let buf = xmls.createFormBuf({
       title: `Анкета фізичной особи ${

@@ -1,4 +1,4 @@
-const GroupOfQuestionsFactory = require("./GroupOfQuestionsFactory");
+const GroupOfQuestionsFactory = require("./groupOfQuestionsFactory");
 class CalculatorFinansialRiskQuestions {
   constructor(formData) {
     let factory = new GroupOfQuestionsFactory(formData, "FinansialRisk");
