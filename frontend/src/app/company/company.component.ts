@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CompanyService } from '../services/company.service';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { FormGroup } from '@angular/forms';
-import { FlashMessagesService } from 'angular2-flash-messages';
 import { FormService } from '../services/form.service';
 import cloneDeepWith from 'lodash.clonedeepwith';
 import { AuthService } from '../services/auth.service';
@@ -10,6 +9,7 @@ import { SearchService } from '../services/search.service';
 import * as XLSX from 'xlsx';
 import { FormlyFormOptions } from '@ngx-formly/core';
 import { tap } from 'rxjs/operators';
+import { HelperService } from '../services/helpers.service';
 
 @Component({
   selector: 'app-company',
@@ -30,13 +30,14 @@ export class CompanyComponent implements OnInit {
     },
   };
   fields: FormlyFieldConfig[];
+  validationFields: FormlyFieldConfig[] = [];
   formName = 'companyForm';
   constructor(
     private dataService: CompanyService,
     private searchService: SearchService,
     private formservice: FormService,
-    private flashMessagesService: FlashMessagesService,
-    private authService: AuthService
+    private authService: AuthService,
+    private helper: HelperService
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +76,7 @@ export class CompanyComponent implements OnInit {
             field.formControl.valueChanges
               .pipe(
                 tap((value) => {
+                  console.log(value)
                   if (value) {
                     delete this.model['MoutherCompany'][
                       'MoutherCompanyInfoForNonResident'
@@ -107,59 +109,37 @@ export class CompanyComponent implements OnInit {
   private SetButtonHandler(item, fieldKey, funcName) {
     item.fieldGroup[1].templateOptions.onClick = () => {
       if (!this.SelectedItem) {
-        this.flashMessagesService.show('Оберіть клієнта', {
-          cssClass: 'alert-danger',
-          timeout: 5000,
-        });
+        this.helper.ShowError('Оберіть клієнта')
         return;
       }
       this.dataService
         .calcAnswer(this.SelectedItem.formDataResultId, funcName)
         .subscribe((data) => {
           //use = answer in prod
-           this.model = {
+          this.model = {
             ...this.model,
-            [fieldKey]: { "Description": data['result'] },
+            [fieldKey]: { Description: data['result'] },
           };
         });
     };
   }
-  recurseCleanObj(object) {
-    Object.entries(object).forEach(([k, v]) => {
-      if (v && typeof v === 'object') {
-        this.recurseCleanObj(v);
-      }
-      if (
-        (v && typeof v === 'object' && !Object.keys(v).length) ||
-        v === null ||
-        v === undefined
-      ) {
-        if (Array.isArray(object)) {
-          object.splice(k as any, 1);
-        } else {
-          delete object[k];
-        }
-      }
-    });
-    return object;
-  }
-  cleanObject(object) {
-    delete object['CheckClientByQuestion'];
-    console.log(object);
-    if (object['IsResident']) {
-      delete object['MoutherCompany']['MoutherCompanyInfoForNonResident'];
-    }
-    return this.recurseCleanObj(object);
-  }
+
   Submit(model) {
-    // if (!this.form.valid) {
-    //   this.flashMessagesService.show('Анкета успешно обновлена', {
-    //     cssClass: 'alert-success',
-    //     timeout: 5000,
-    //   });
-    //   return; 
-    // }
-    this.cleanObject(model);
+    if (!this.form.valid) {
+      let validation = "";
+      cloneDeepWith(this.fields, (item) => {
+        if (
+          item?.formControl?.errors?.length != 0 &&
+          item?.formControl?.errors != null &&
+          item?.model
+        ) {
+          validation += this.helper.getErrorMessage(item)+"<br/>";
+        }
+      });
+      this.helper.ShowError(validation)
+      return;
+    }
+    this.helper.cleanObject(model);
     console.log(model);
     //if selected item false than create person
     if (!this.SelectedItem) {
@@ -169,10 +149,7 @@ export class CompanyComponent implements OnInit {
       };
       this.dataService.create(tempModel).subscribe(
         (data: any) => {
-          this.flashMessagesService.show('Анкета успешно добавлена', {
-            cssClass: 'alert-success',
-            timeout: 5000,
-          });
+          this.helper.ShowSuccess('Анкета успішно додана')
           this.list = [
             data.result,
             ...this.list.filter((item) => item._id !== data.result._id),
@@ -186,18 +163,14 @@ export class CompanyComponent implements OnInit {
     }
     //if selected item true than edit person
     else {
-     let submitModel = {
+      let submitModel = {
         _id: this.SelectedItem._id,
         formDataResultId: this.SelectedItem.formDataResultId,
         user: this.authService.currentUserValue.username,
         result: model,
       };
-
       this.dataService.edit(submitModel).subscribe((data: any) => {
-        this.flashMessagesService.show('Анкета успешно обновлена', {
-          cssClass: 'alert-success',
-          timeout: 5000,
-        });
+        this.helper.ShowSuccess('Анкета успешно обновлена')
         this.list = [
           data.result,
           ...this.list.filter((item) => item._id !== data.result._id),
@@ -262,4 +235,5 @@ export class CompanyComponent implements OnInit {
       }
     );
   }
+
 }
