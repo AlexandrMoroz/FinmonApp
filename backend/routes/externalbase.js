@@ -6,7 +6,7 @@ const { userAuth, checkRole } = require("../utils/Auth");
 const {
   CompanySearch,
   PersonSearch,
-} = require("../controller/outerBaseController");
+} = require("../controller/externalBaseController");
 
 /**
  * @DECS search form company
@@ -18,7 +18,6 @@ router.get(
   checkSchema(externalBaseValidator.getSearchValidation()),
   validate,
   async (req, res, next) => {
-   
     if (req.query.type == "company") {
       await CompanySearch(req.query, res, next);
     } else if (req.query.type == "person") {

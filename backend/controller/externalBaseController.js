@@ -7,15 +7,15 @@ const Terrorist = require("../services/terrorist");
 let sanctionService = new Sanction();
 let terroristService = new Terrorist();
 
-const CompanySearch = async (body, res, next) => {
+const CompanySearch = async (query, res, next) => {
   try {
-    let sanction = sanctionService.searchCompany(body.searchText);
-    let terror = terroristService.searchCompany(body.searchText);
+    let sanction = await sanctionService.searchCompany(query.searchText);
+    let terrorist = await terroristService.searchCompany(query.searchText);
     res.status(200).json({
       message: "Company outer base search complite",
       result: {
-        terror,
-        sanction: sanction.map((item) => sanctionSerialize(item)),
+        terrorist,
+        sanction: sanction.map((item) => {return sanctionSerialize(item)}),
       },
       success: true,
     });
@@ -27,11 +27,11 @@ const CompanySearch = async (body, res, next) => {
 const PersonSearch = async (query, res, next) => {
   try {
     let sanction = await sanctionService.searchPerson(query.searchText);
-    let terror = await terroristService.searchPerson(query.searchText);
+    let terrorist = await terroristService.searchPerson(query.searchText);
     res.status(200).json({
       message: "Person outer base search complite",
       result: {
-        terror,
+        terrorist,
         sanction: sanction.map((item) => {
           return sanctionSerialize(item);
         }),
