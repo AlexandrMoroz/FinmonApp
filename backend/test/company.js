@@ -550,7 +550,7 @@ module.exports = (server) => {
         await Helper.deleteMany({});
         await new Helper({
           name: translate.name,
-          content: translate.content,
+          result: translate.result,
         }).save();
 
         oldCompany = {

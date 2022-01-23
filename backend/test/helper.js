@@ -47,7 +47,7 @@ let test = (server) => {
       it("it create new Helper", (done) => {
         const CreateHelper = {
           name: translate.name,
-          content: translate.content,
+          result: translate.result,
         };
         chai
           .request(server)
@@ -69,7 +69,7 @@ let test = (server) => {
       it("it create new helper with auth err ", (done) => {
         const CreateHelper = {
           name: translate.name,
-          content: translate.content,
+          result: translate.result,
         };
         chai
           .request(server)
@@ -84,7 +84,7 @@ let test = (server) => {
       it("it negative test send create new helper with mistake property name suspect validation err ", (done) => {
         const CreateHelper = {
           name1: translate.name,
-          content: translate.content,
+          result: translate.result,
         };
         chai
           .request(server)
@@ -128,8 +128,8 @@ let test = (server) => {
                   location: "body",
                 },
                 {
-                  msg: "Поле content пустое",
-                  param: "content",
+                  msg: "Поле result пустое",
+                  param: "result",
                   location: "body",
                 },
               ],
@@ -146,11 +146,11 @@ let test = (server) => {
         await Helper.deleteMany({});
         oldHelper = {
           name: translate.name,
-          content: translate.content,
+          result: translate.result,
         };
         newHelper = await new Helper({
           name: oldHelper.name,
-          content: oldHelper.content,
+          result: oldHelper.result,
         }).save();
       });
       it("it get helper by id", (done) => {
@@ -164,7 +164,7 @@ let test = (server) => {
             res.body.should.deep.equal({
               message: "helper get by name was complited",
               result: {
-                ...oldHelper.content,
+                ...oldHelper.result,
               },
               success: true,
             });

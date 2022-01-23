@@ -1,9 +1,9 @@
 const chai = require("chai");
 const chaihttp = require("chai-http");
 const chaiExclude = require("chai-exclude");
-const CalculatorRiskQuestions = require("../models/Unions/CalculatorRiskQuestions");
-const CalculatorReputationQuestions = require("../models/Unions/CalculatorReputationQuestions");
-const CalculatorFinansialRiskQuestions = require("../models/Unions/CalculatorFinansialRiskQuestions");
+const CalculatorRiskQuestions = require("../models/calculators/calculatorRiskQuestions");
+const CalculatorReputationQuestions = require("../models/calculators/calculatorReputationQuestions");
+const CalculatorFinansialRiskQuestions = require("../models/calculators/calculatorFinansialRiskQuestions");
 const mockNegativePerson = require("../mock/personWIthNegativeAnswers.json");
 const mockNegativeCompany = require("../mock/companyWithNegativeAnswers.json");
 const Helper = require("../models/helper");
@@ -15,7 +15,7 @@ const CompanyFormData = require("../models/companyFormData");
 const Company = require("../models/company");
 const History = require("mongoose-diff-history/diffHistoryModel").model;
 const { INDIVIDUALS, LEGALENTITES, PERSON } =
-  require("../models/Unions/groupOfQuestions").Types;
+  require("../models/calculators/groupOfQuestions").Types;
 
 let token = "";
 const user = {
@@ -40,11 +40,11 @@ module.exports = (server) => {
     before(async () => {
       await Helper.deleteMany({});
       let ofshore = require("../mock/ofshoreCountry.json");
-      await new Helper({ name: ofshore.name, content: ofshore.content }).save();
+      await new Helper({ name: ofshore.name, result: ofshore.result }).save();
       let translate = require("../mock/personTranslate.json");
       await new Helper({
         name: translate.name,
-        content: translate.content,
+        result: translate.result,
       }).save();
       await CompanyFormData.deleteMany({});
       await Company.deleteMany({});
@@ -168,7 +168,7 @@ module.exports = (server) => {
         true,
         true,
         true,
-        true,
+        false,
         true,
         true,
         false,
@@ -199,7 +199,7 @@ module.exports = (server) => {
         true,
         true,
         true,
-        true,
+        false,
         true,
         true,
         true,
@@ -347,12 +347,12 @@ module.exports = (server) => {
         let ofshore = require("../mock/ofshoreCountry.json");
         await new Helper({
           name: ofshore.name,
-          content: ofshore.content,
+          result: ofshore.result,
         }).save();
         let translate = require("../mock/personTranslate.json");
         await new Helper({
           name: translate.name,
-          content: translate.content,
+          result: translate.result,
         }).save();
         let oldPerson =
           require("../mock/personWIthNegativeAnswers.json").result;
@@ -391,13 +391,12 @@ module.exports = (server) => {
         .get("/api/person/risk")
         .set("Authorization", token)
         .query({ id: newPerson.formDataResultId.toString() });
-      console.log(res.body);
       const expect = [
         true,
         true,
         true,
         true,
-        true,
+        false,
         true,
         true,
         false,
@@ -429,7 +428,7 @@ module.exports = (server) => {
         true,
         true,
         true,
-        true,
+        false,
         true,
         true,
         true,
@@ -517,11 +516,11 @@ module.exports = (server) => {
       await Person.deleteMany({});
       await Helper.deleteMany({});
       let ofshore = require("../mock/ofshoreCountry.json");
-      await new Helper({ name: ofshore.name, content: ofshore.content }).save();
+      await new Helper({ name: ofshore.name, result: ofshore.result }).save();
       let translate = require("../mock/personTranslate.json");
       await new Helper({
         name: translate.name,
-        content: translate.content,
+        result: translate.result,
       }).save();
       let oldPerson = require("../mock/personWIthNegativeAnswers.json").result;
       let newPersonFormData = await new PersonFormData({
@@ -635,11 +634,11 @@ module.exports = (server) => {
       await Person.deleteMany({});
       await Helper.deleteMany({});
       let ofshore = require("../mock/ofshoreCountry.json");
-      await new Helper({ name: ofshore.name, content: ofshore.content }).save();
+      await new Helper({ name: ofshore.name, result: ofshore.result }).save();
       let translate = require("../mock/personTranslate.json");
       await new Helper({
         name: translate.name,
-        content: translate.content,
+        result: translate.result,
       }).save();
       let oldPerson = require("../mock/personWIthNegativeAnswers.json").result;
       let newPersonFormData = await new PersonFormData({
