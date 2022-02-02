@@ -1,21 +1,36 @@
-<div class="col-sm col-md-9 col-lg-9 col-xl-9">
-    <nb-card
-      [nbSpinner]="isLoading"
-      nbSpinnerSize="giant"
-      nbSpinnerStatus="primary"
-      class="nd-card-form"
-    >
-      <nb-card-body>
-        <form [formGroup]="form" (ngSubmit)="Submit(model)">
-          <formly-form
-            [form]="form"
-            [fields]="fields"
-            [model]="model"
-            [options]="options"
-            class="d-flex flex-wrap "
-          ></formly-form>
-        </form>
-      </nb-card-body>
-    </nb-card>
-  </div>
-  
+<div class="col-12">
+  <nb-card nbSpinnerSize="giant" nbSpinnerStatus="primary" class="nd-card-form">
+    <nb-card-body>
+      
+      <form [formGroup]="form" (ngSubmit)="Submit(model)">
+        <formly-form
+          [form]="form"
+          [fields]="fields"
+          [model]="model"
+          [options]="options"
+          class="d-flex flex-wrap"
+        ></formly-form>
+      </form>
+      <div class="d-flex">
+        <div class="col-6 p-3">
+          <h3>Лист терористів</h3>
+          <h3 *ngIf="terrorist&&terrorist.length==0"> Не знайденно</h3>
+          <nb-list>
+            <nb-list-item *ngFor="let item of terrorist">
+              <ul [innerHTML]="item"></ul>
+            </nb-list-item>
+          </nb-list>
+        </div>
+        <div class="col-6 p-3">
+          <h3>Лист підсанційних</h3>
+          <h3 *ngIf="sanction&&sanction.length==0"> Не знайденно</h3>
+          <nb-list>
+            <nb-list-item *ngFor="let item of sanction">
+              <ul [innerHTML]="item"></ul>
+            </nb-list-item>
+          </nb-list>
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</div>
