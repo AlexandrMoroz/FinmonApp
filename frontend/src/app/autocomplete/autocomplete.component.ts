@@ -11,7 +11,6 @@ import { HelperService } from '../services/helpers.service';
 
 @Component({
   selector: 'autocomplete',
-  // changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './autocomplete.component.html',
   styleUrls: ['./autocomplete.component.scss'],
 })
@@ -23,21 +22,30 @@ export class AutocompleteComponent extends FieldType implements OnInit {
   get type() {
     return this.to.type || 'text';
   }
-  constructor(helperService: HelperService) {
+  get dataService() {
+    return this.to.dataService;
+  }
+  constructor(private helperService: HelperService) {
     super();
-    helperService.getTypeOfBusiness().subscribe((data) => {
-      this.inputOptions = data;
-    });
   }
   ngOnInit() {
+    this.helperService
+      .getAutocompleteDataService(this.to.dataService)
+      .subscribe((data) => {
+        this.inputOptions = data;
+      });
     this.filteredinputOptions$ = of(this.inputOptions);
   }
 
   private filter(value: string): string[] {
+    if (!value) {
+      return;
+    }
+
     const filterValue = value.toLowerCase();
-    return this.inputOptions.filter((optionValue) =>
-      optionValue.toLowerCase().includes(filterValue)
-    );
+    return this.inputOptions.filter((optionValue) => {
+      return optionValue.toLowerCase().includes(filterValue);
+    });
   }
 
   getFilteredinputOptions(value: string): Observable<string[]> {
