@@ -76,7 +76,7 @@ export class CompanyComponent implements OnInit {
             field.formControl.valueChanges
               .pipe(
                 tap((value) => {
-                  console.log(value)
+                  console.log(value);
                   if (value) {
                     delete this.model['MoutherCompany'][
                       'MoutherCompanyInfoForNonResident'
@@ -85,6 +85,58 @@ export class CompanyComponent implements OnInit {
                   field.parent.parent.fieldGroup.find((e) => {
                     return e.key == 'MoutherCompany';
                   }).fieldGroup[1].hide = value;
+                })
+              )
+              .subscribe();
+          },
+        };
+      }
+      if (item?.key === 'ClearMonthIncome') {
+        item.hooks = {
+          onInit: (field?: FormlyFieldConfig) => {
+            field.formControl.valueChanges
+              .pipe(
+                tap((value) => {
+                  let clearMonthIncome = this.model['ClearMonthIncome'];
+                  let monthIncome = this.model['MonthIncome'];
+                  if (!clearMonthIncome || !monthIncome) {
+                    this.model = {
+                      ...this.model,
+                      ['ProfitabilityOfSale']: 0,
+                    };
+                  }
+                  else
+                  this.model = {
+                    ...this.model,
+                    ['ProfitabilityOfSale']:
+                      (clearMonthIncome / monthIncome) * 100,
+                  };
+                })
+              )
+              .subscribe();
+          },
+        };
+      }
+      if (item?.key === 'MonthIncome') {
+        item.hooks = {
+          onInit: (field?: FormlyFieldConfig) => {
+            field.formControl.valueChanges
+              .pipe(
+                tap((value) => {
+                  let clearMonthIncome = this.model['ClearMonthIncome'];
+                  let monthIncome = this.model['MonthIncome'];
+                  if (!clearMonthIncome || !monthIncome) {
+                    this.model = {
+                      ...this.model,
+                      ['ProfitabilityOfSale']: 0,
+                    };
+                  }
+                  else
+                  this.model = {
+                    ...this.model,
+                    ['ProfitabilityOfSale']:
+                      (clearMonthIncome / monthIncome) * 100,
+                  };
                 })
               )
               .subscribe();
@@ -109,7 +161,7 @@ export class CompanyComponent implements OnInit {
   private SetButtonHandler(item, fieldKey, funcName) {
     item.fieldGroup[1].templateOptions.onClick = () => {
       if (!this.SelectedItem) {
-        this.helper.ShowError('Оберіть клієнта')
+        this.helper.ShowError('Оберіть клієнта');
         return;
       }
       this.dataService
@@ -126,17 +178,17 @@ export class CompanyComponent implements OnInit {
 
   Submit(model) {
     if (!this.form.valid) {
-      let validation = "";
+      let validation = '';
       cloneDeepWith(this.fields, (item) => {
         if (
           item?.formControl?.errors?.length != 0 &&
           item?.formControl?.errors != null &&
           item?.model
         ) {
-          validation += this.helper.getErrorMessage(item)+"<br/>";
+          validation += this.helper.getErrorMessage(item) + '<br/>';
         }
       });
-      this.helper.ShowError(validation)
+      this.helper.ShowError(validation);
       return;
     }
     this.helper.cleanObject(model);
@@ -149,7 +201,7 @@ export class CompanyComponent implements OnInit {
       };
       this.dataService.create(tempModel).subscribe(
         (data: any) => {
-          this.helper.ShowSuccess('Анкета успішно додана')
+          this.helper.ShowSuccess('Анкета успішно додана');
           this.list = [
             data.result,
             ...this.list.filter((item) => item._id !== data.result._id),
@@ -170,7 +222,7 @@ export class CompanyComponent implements OnInit {
         result: model,
       };
       this.dataService.edit(submitModel).subscribe((data: any) => {
-        this.helper.ShowSuccess('Анкета успешно обновлена')
+        this.helper.ShowSuccess('Анкета успішно оновлена');
         this.list = [
           data.result,
           ...this.list.filter((item) => item._id !== data.result._id),
@@ -235,5 +287,4 @@ export class CompanyComponent implements OnInit {
       }
     );
   }
-
 }
