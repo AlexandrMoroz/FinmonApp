@@ -53,7 +53,7 @@ const routes: Routes = [
   {
     path: '',
     canActivate: [AuthGuard],
-    redirectTo: 'person',
+    redirectTo: 'auth/login',
     pathMatch: 'full',
   },
   {
