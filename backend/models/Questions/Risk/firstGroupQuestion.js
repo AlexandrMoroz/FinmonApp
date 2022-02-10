@@ -24,7 +24,7 @@ function Question1() {
 function Question2() {
   let regDate = this.result["DateOfRegistration"];
   if (!regDate) return false;
-  let result = DateDiffInDays(new Date(regDate), new Date());
+  let result = DateDiffInDays(regDate);
   return result <= 180;
 }
 function Question3() {
@@ -74,8 +74,8 @@ function Question5() {
 function Question6() {
   let answer = this.result["DateOfFirstBissnesContact"];
   if (!answer) return false;
-  let result = DateDiffInDays(new Date(answer), new Date());
-  return result <= 90;
+  let result = DateDiffInDays(answer);
+  return result <= 92;
 }
 function Question7() {
   return ClosedQuestion.call(this, "CheckList.ClienProduceShares");
@@ -84,7 +84,7 @@ function Question8() {
   return ClosedQuestion.call(this, "Ownership.OwnershipStructureIsComplex");
 }
 function Question9() {
-  return ClosedQuestion.call(this, "Ownership.OwnershipStructureIsComplex");
+  return ClosedQuestion.call(this, "Ownership.HasRatedСontrol");
 }
 function Question10() {
   return ClosedQuestion.call(this, "Ownership.HasTrast");
@@ -99,7 +99,8 @@ function Question12() {
 }
 //Вопрос 13 такой-же как и 12 заглушка для сохранение счета
 function Question13() {
-  return false;
+  const shoudInclude = "326";
+  return OperationShoudinclude.call(this, shoudInclude);
 }
 function Question14() {
   const shoudInclude = "116";
@@ -114,39 +115,51 @@ function Question15() {
 function Question16() {
   let resultArr = [];
   let director = this.result["Director"];
-  if (!director || !director.length == 0) resultArr.push(false);
+  if (!director || director.length == 0) resultArr.push(false);
   else {
     let isFinaleOwner = director.filter((item) => item["IsFinaleOwner"])[0];
-    if (isFinaleOwner) resultArr.push(true);
+    if (isFinaleOwner) resultArr.push({ 1: true });
   }
+
   let owners = this.result["Owner"];
-  if (!owners || !owners.length == 0) resultArr.push(false);
-  else {
+  if (owners && owners.length != 0) {
     let connectedPerson = owners.filter((item) => {
-      return item["ConnectedPerson"]?.length != 0;
-    })[0];
-    if (connectedPerson) resultArr.push(true);
-
+      if (item["ConnectedPerson"] && item["ConnectedPerson"].length != 0) {
+        return item;
+      }
+    });
+    if (connectedPerson.length != 0) resultArr.push({ 2: true });
     let vulnerablePerson = owners.filter(
-      (item) => item["IsVulnerablePerson"]
-    )[0];
-    if (vulnerablePerson) resultArr.push(true);
+      (item) => item["IsLimitedСapacityPerson"]
+    );
+    if (vulnerablePerson.length != 0) resultArr.push({ 3: true });
   }
-  resultArr.push(ClosedQuestion.call(this, "CheckList.HasQuestionFromPolice"));
-  resultArr.push(
-    ClosedQuestion.call(this, "CheckList.HasInfoAboutEffectOnOwnerByRealOwners")
-  );
-  resultArr.push(
-    ClosedQuestion.call(this, "CheckList.OwnerDontHavePlaneOfBuisness")
-  );
-  resultArr.push(
-    ClosedQuestion.call(this, "CheckList.HasInfoAboutRestrictionOwnerRights")
-  );
-  resultArr.push(
-    ClosedQuestion.call(this, "CheckList.CircleOfCommunicationDeefOfReality")
-  );
+  resultArr.push({
+    4: ClosedQuestion.call(this, "CheckList.HasQuestionFromPolice"),
+  });
+  resultArr.push({
+    5: ClosedQuestion.call(
+      this,
+      "CheckList.HasInfoAboutEffectOnOwnerByRealOwners"
+    ),
+  });
+  resultArr.push({
+    6: ClosedQuestion.call(this, "CheckList.OwnerDontHavePlaneOfBuisness"),
+  });
+  resultArr.push({
+    7: ClosedQuestion.call(
+      this,
+      "CheckList.HasInfoAboutRestrictionOwnerRights"
+    ),
+  });
+  resultArr.push({
+    8: ClosedQuestion.call(
+      this,
+      "CheckList.CircleOfCommunicationDeefOfReality"
+    ),
+  });
 
-  return resultArr.includes(true);
+  return resultArr.map((item) => Object.entries(item)[0][1]).includes(true);
 }
 
 async function Question17() {
@@ -162,14 +175,11 @@ async function Question17() {
   let director = this.result["Director"];
   let owners = this.result["Owner"];
 
-  let OfshoreCountry = await Helper.findOne({ name: "OfshoreCountry" });
-  if(!OfshoreCountry && OfshoreCountry.length == 0){
-    throw Error("OfShoreCountry helper is undefided")
+  let OfshoreCountry = await Helper.findOne({ name: "ofshoreCountry" });
+  if (!OfshoreCountry && OfshoreCountry.length == 0) {
+    throw Error("OfShoreCountry helper is undefided");
   }
-  if (
-    owners &&
-    owners.length != 0 
-  ) {
+  if (owners && owners.length != 0) {
     owners.forEach((item) => {
       let dirCountry = item["Regist"]?.Country;
       if (!dirCountry) return;
@@ -194,7 +204,7 @@ async function Question17() {
     //////////5///////////
     director.forEach((item) => {
       resultArr.push({
-        5.1: ClosedQuestion.call({ result: item }, "IsVulnerablePeople"),
+        5.1: ClosedQuestion.call({ result: item }, "IsVulnerablePerson"),
       });
       resultArr.push({
         5.2: ClosedQuestion.call({ result: item }, "IsPoorOrHomless"),
@@ -205,9 +215,7 @@ async function Question17() {
       resultArr.push({
         5.4: ClosedQuestion.call({ result: item }, "IsImmigrant"),
       });
-    });
-    //////////9///////////
-    director.forEach((item) => {
+      //////////9///////////
       resultArr.push({
         9.2: ClosedQuestion.call(
           { result: item },
@@ -282,32 +290,52 @@ async function Question17() {
 function Question18() {
   let resultArr = [];
   //////////1///////////
-  resultArr.push(
-    ClosedQuestion.call(this, "CheckList.ClientDontHaveProductionCapacity")
-  );
+  resultArr.push({
+    1: ClosedQuestion.call(this, "CheckList.ClientDontHaveProductionCapacity"),
+  });
   //////////2///////////
-  resultArr.push(
-    ClosedQuestion.call(this, "CheckList.HasInfoAboutSendFroudInfoToGovFinDep")
-  );
+  resultArr.push({
+    2: ClosedQuestion.call(
+      this,
+      "CheckList.HasInfoAboutSendFroudInfoToGovFinDep"
+    ),
+  });
   //////////3///////////
-  resultArr.push(ClosedQuestion.call(this, "CheckList.WorkersCountFalsy"));
+  resultArr.push({
+    3: ClosedQuestion.call(this, "CheckList.WorkersCountFalsy"),
+  });
   //////////4///////////
-  resultArr.push(ClosedQuestion.call(this, "CheckList.CompanyPayByBarter"));
+  resultArr.push({
+    4: ClosedQuestion.call(this, "CheckList.CompanyPayByBarter"),
+  });
   //////////5///////////
-  let income = this.result["MounthIncome"];
-  if (
-    (income && parthInt(income, 10) > 0) ||
-    this.result["HasNegativeOperatingIncome"]
-  ) {
+  if (!this.result["MonthIncome"]) {
+    resultArr.push({ 5: true });
+  }
+  //////////6///////////
+  resultArr.push({
+    6: ClosedQuestion.call(this, "CheckList.HasNegativeOperatingIncome"),
+  });
+  //////////7///////////
+  resultArr.push({
+    7: ClosedQuestion.call(this, "CheckList.HasMassiveLongCredit"),
+  });
+
+  return resultArr.map((item) => Object.entries(item)[0][1]).includes(true);
+}
+function Question18FOP() {
+  let fop = this.result["FOP"];
+  if (!fop) return false;
+  let resultArr = [];
+  //////////5///////////
+  if (!this.result["MonthIncome"]) {
     resultArr.push(true);
   }
+  resultArr.push(ClosedQuestion.call(this, "CheckList.HasNotIncome"));
   //////////6///////////
   resultArr.push(
     ClosedQuestion.call(this, "CheckList.HasNegativeOperatingIncome")
   );
-  //////////7///////////
-  resultArr.push(ClosedQuestion.call(this, "CheckList.HasMassiveLongCredit"));
-
   return resultArr.includes(true);
 }
 
@@ -322,6 +350,7 @@ module.exports = {
     Question12,
     Question13,
     Question14,
+    Question18FOP,
   ],
   legalEntity: [
     Question1,
