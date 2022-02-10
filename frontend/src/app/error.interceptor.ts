@@ -23,7 +23,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((err) => {
-        if (err.status == 400 && !err.error?.validation) {
+        if ((err.status == 400 && !err.error?.validation)||err.status == 500) {
           let msg = err.error.error
             .map((item) => {
               return item.msg;
