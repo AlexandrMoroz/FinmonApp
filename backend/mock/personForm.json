@@ -378,22 +378,7 @@
                 "placeholder": "Дата державної реєстрації"
               }
             },
-            {
-              "className": "col-8",
-              "key": "TypesOfBusiness",
-              "type": "repeat-one-row",
-              "templateOptions": {
-                "title": "Вид підприємницької діяльності",
-                "cancelButtonClass": "ml-1",
-                "type": "array"
-              },
-              "fieldArray": {
-                "type": "autocomplete",
-                "templateOptions": {
-                  "inputClassName": "col mb-3 autocomplete"
-                }
-              }
-            },
+
             {
               "className": "col-4",
               "key": "GovRegDoc",
@@ -425,16 +410,6 @@
                 "placeholder": "Номер документу"
               }
             },
-
-            {
-              "className": "col-4",
-              "key": "ProfessionType",
-              "type": "input",
-              "templateOptions": {
-                "label": "Вид незалежної професійної діяльності",
-                "placeholder": "Вид незалежної професійної діяльності"
-              }
-            },
             {
               "key": "RegistrationNumber",
               "className": "col-4",
@@ -455,7 +430,42 @@
               }
             },
             {
-              "className": "col-4",
+              "className": "col-6",
+              "key": "TypesOfBusiness",
+              "type": "repeat-one-row",
+              "templateOptions": {
+                "title": "Вид підприємницької діяльності",
+                "cancelButtonClass": "ml-1",
+                "type": "array"
+              },
+              "fieldArray": {
+                "type": "autocomplete",
+                "templateOptions": {
+                  "inputClassName": "col mb-3 autocomplete",
+                  "dataService": "typesOfBusiness"
+                }
+              }
+            },
+            {
+              "className": "col-6",
+              "key": "IndependentTypesOfBusiness",
+              "type": "repeat-one-row",
+              "templateOptions": {
+                "title": "Вид незалежної професійної діяльності",
+                "cancelButtonClass": "ml-1",
+                "type": "array"
+              },
+              "fieldArray": {
+                "type": "autocomplete",
+                "templateOptions": {
+                  "inputClassName": "col mb-3 autocomplete",
+                  "dataService": "independentTypesOfBusiness"
+                }
+              }
+            },
+
+            {
+              "className": "col-8 justify-self-center",
               "key": "ClientAge",
               "type": "input",
               "templateOptions": {
@@ -476,91 +486,72 @@
           ]
         },
         {
-          "templateOptions": { "label": "PEP:" },
-          "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
+          "fieldGroupClassName": "d-flex flex-wrap align-items-end justify-content-center",
           "key": "PEP",
-          "fieldGroup": [
-            {
-              "className": "col-6",
-              "key": "Type",
-              "type": "select",
-              "templateOptions": {
-                "label": "Належність до PEP",
-                "options": [
-                  { "label": "Політично значуща особа !", "value": 1 },
-                  {
-                    "label": "Член сім’ї політично значущої особи",
-                    "value": 2
-                  },
-                  {
-                    "label": "Особа, яка пов’язана з політично значущою особою",
-                    "value": 3
-                  },
-                  { "label": "Не належить", "value": 4 }
-                ]
+          "type": "repeat",
+          "templateOptions": {
+            "addText": "Додати PEP:",
+            "title": "PEP:",
+            "label": "PEP:"
+          },
+          "fieldArray": {
+            "fieldGroupClassName": "d-flex flex-wrap  align-items-start",
+            "fieldGroup": [
+              {
+                "className": "col-6",
+                "key": "Type",
+                "type": "select",
+                "templateOptions": {
+                  "label": "Належність до PEP",
+                  "options": [
+                    { "label": "Публічний особа", "value": 1 },
+                    { "label": "Член сім'Ї публічний особа", "value": 2 },
+                    {
+                      "label": "Особа, яка пов’язана з публічний особа",
+                      "value": 3
+                    }
+                  ]
+                }
+              },
+              {
+                "className": "col-6",
+                "key": "DateOfNown",
+                "type": "input",
+                "templateOptions": {
+                  "type": "date",
+                  "label": "Дата виявлення відповідного факту"
+                }
+              },
+              {
+                "className": "col-6",
+                "key": "DateOfBossAgree",
+                "type": "input",
+                "templateOptions": {
+                  "type": "date",
+                  "label": "Дата отримання дозволу керівника установи на встановлення/продовження ділових (договірних) відносин"
+                }
+              },
+              {
+                "className": "col-6",
+                "key": "DateOffContactWithPEP",
+                "type": "input",
+                "templateOptions": {
+                  "type": "date",
+                  "label": "Дата, з якої установа припинила вживати заходи, визначені в частині тринадцятій статті 11 Закону про ПВК/ФТ"
+                }
+              },
+              {
+                "className": "col-12",
+                "key": "PEPInfo",
+                "type": "textarea",
+                "templateOptions": {
+                  "label": "Ознака належності до PEP та посада відповідної політично значущої особи",
+                  "placeholder": "Ознака належності до PEP та посада відповідної політично значущої особи",
+                  "rows": 4
+                }
               }
-            },
-            {
-              "className": "col-6",
-              "key": "Category",
-              "type": "input",
-              "templateOptions": {
-                "label": "Категорія посад політично значущої особи",
-                "placeholder": "Категорія посад політично значущої особи"
-              }
-            },
-            {
-              "className": "col-4",
-              "key": "Name",
-              "type": "input",
-              "templateOptions": { "label": "Им'я", "placeholder": "Им'я" }
-            },
-            {
-              "className": "col-4",
-              "key": "Family",
-              "type": "input",
-              "templateOptions": {
-                "label": "Призвище",
-                "placeholder": "Призвище"
-              }
-            },
-            {
-              "className": "col-4",
-              "key": "Surname",
-              "type": "input",
-              "templateOptions": {
-                "label": "По батькові",
-                "placeholder": "По батькові"
-              }
-            },
-            {
-              "className": "col-4",
-              "key": "DateOfNown",
-              "type": "input",
-              "templateOptions": {
-                "type": "date",
-                "label": "Дата виявлення відповідного факту"
-              }
-            },
-            {
-              "className": "col-4",
-              "key": "DateOfBossAgree",
-              "type": "input",
-              "templateOptions": {
-                "type": "date",
-                "label": "Дата отримання дозволу керівника установи на встановлення/продовження ділових (договірних) відносин"
-              }
-            },
-            {
-              "className": "col-4",
-              "key": "DateOffContactWithPEP",
-              "type": "input",
-              "templateOptions": {
-                "type": "date",
-                "label": "Дата, з якої установа припинила вживати заходи, визначені в частині тринадцятій статті 11 Закону про ПВК/ФТ"
-              }
-            }
-          ]
+            ]
+          }
         },
         {
           "templateOptions": { "label": "Види зайнятості:" },
@@ -623,27 +614,26 @@
                       "type": "array",
                       "multiple": true,
                       "options": [
-                        { "label": "не має", "value": 1 },
-                        { "label": "обладнання", "value": 2 },
+                        { "label": "обладнання", "value": 1 },
                         {
                           "label": "транспортні засоби, що належать державній реєстрації",
-                          "value": 3
+                          "value": 2
                         },
-                        { "label": "нерухомість", "value": 4 },
+                        { "label": "нерухомість", "value": 3 },
                         {
                           "label": "грошові кошти на рахунку в банках (у т.ч. на депозитних) за виключенням кредитних",
-                          "value": 5
+                          "value": 4
                         },
                         {
                           "label": "товари в обороті та/або нематеріальні активи",
-                          "value": 6
+                          "value": 5
                         }
                       ]
                     }
                   },
                   {
                     "key": "PropertyDescription",
-                    "type": "input",
+                    "type": "textarea",
                     "className": "col-6",
                     "templateOptions": { "label": "Опис майна" }
                   }
@@ -711,9 +701,28 @@
         },
         {
           "key": "CheckList",
-          "templateOptions": { "label": "Чек-лист:" },
+          "templateOptions": { "label": "Додаткові відомості:" },
           "fieldGroupClassName": "d-flex flex-wrap  align-items-start",
           "fieldGroup": [
+            {
+              "className": "col-6",
+              "key": "CantDoFinmonJob",
+              "type": "checkbox",
+              "defaultValue": false,
+              "templateOptions": {
+                "label": "Неможливо виконувати згідно Закону обов’язки СПФМ або мінімізувати виявлені ризики"
+              }
+            },
+
+            {
+              "className": "col-6",
+              "key": "HasContractWithFATFOwner",
+              "type": "checkbox",
+              "defaultValue": false,
+              "templateOptions": {
+                "label": "Наявність зовнішньоекономічних договорів за якими контрагент має реєстрацію, місце проживання або місцезнаходження в державі (юрисдикції) із переліку держав, що не виконують рекомендації FATF" 
+              }
+            },
             {
               "className": "col-6",
               "key": "HasQuestionFromPolice",
@@ -905,7 +914,11 @@
                 "className": "col-9",
                 "key": "Operation",
                 "type": "input",
-                "templateOptions": { "label": "Назва", "placeholder": "Назва" }
+                "templateOptions": {
+                  "type": "number",
+                  "label": "Назва",
+                  "placeholder": "Назва"
+                }
               },
               {
                 "className": "col-3",

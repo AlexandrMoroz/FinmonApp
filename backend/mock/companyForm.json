@@ -497,7 +497,7 @@
                   "placeholder": "Посада"
                 }
               },
-              { "template": "<h2> Місце проживання: </h2>" },
+              { "template": "<h2 class='col'>  Місце проживання: </h2>" },
               {
                 "key": "Regist",
                 "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
@@ -506,18 +506,18 @@
                     "className": "col-4",
                     "key": "Country",
                     "type": "select",
-                    "templateOptions": { "label": "Країна" }
+                    "templateOptions": { "label": "Країна", "required": true }
                   },
 
                   {
                     "className": "col-8",
                     "key": "Adress",
                     "type": "input",
-                    "templateOptions": { "label": "Адреса" }
+                    "templateOptions": { "label": "Адреса", "required": true }
                   }
                 ]
               },
-              { "template": "<h2> Місце перебування: </h2>" },
+              { "template": "<h2 class='col'> Місце перебування: </h2>" },
               {
                 "key": "Live",
                 "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
@@ -526,14 +526,14 @@
                     "className": "col-4",
                     "key": "Country",
                     "type": "select",
-                    "templateOptions": { "label": "Країна" }
+                    "templateOptions": { "label": "Країна", "required": true }
                   },
 
                   {
                     "className": "col-8",
                     "key": "Adress",
                     "type": "input",
-                    "templateOptions": { "label": "Адреса" }
+                    "templateOptions": { "label": "Адреса", "required": true }
                   }
                 ]
               },
@@ -594,7 +594,8 @@
                 "type": "checkbox",
                 "defaultValue": false,
                 "templateOptions": {
-                  "label": "Одночасно є кінцевим бенефіціарним власником (контролер)?"
+                  "label": "Одночасно є кінцевим бенефіціарним власником (контролер)?",
+                  "required": true
                 }
               },
               {
@@ -639,7 +640,8 @@
                 "type": "checkbox",
                 "defaultValue": false,
                 "templateOptions": {
-                  "label": "Належить до соціально вразливих верств населення"
+                  "label": "Належить до соціально вразливих верств населення",
+                  "required": true
                 }
               },
               {
@@ -648,7 +650,8 @@
                 "type": "checkbox",
                 "defaultValue": false,
                 "templateOptions": {
-                  "label": "Має специфічний соціальний статус (малозабезпечені, жебраки);"
+                  "label": "Має специфічний соціальний статус (малозабезпечені, жебраки);",
+                  "required": true
                 }
               },
               {
@@ -657,7 +660,8 @@
                 "type": "checkbox",
                 "defaultValue": false,
                 "templateOptions": {
-                  "label": "Молодого (до 20 років) чи похилого віку (після 75 років)"
+                  "label": "Молодого (до 20 років) чи похилого віку (після 75 років)",
+                  "required": true
                 }
               },
               {
@@ -666,7 +670,8 @@
                 "type": "checkbox",
                 "defaultValue": false,
                 "templateOptions": {
-                  "label": "Зареєстрована на непідконтрольній Україні території"
+                  "label": "Зареєстрована на непідконтрольній Україні території",
+                  "required": true
                 }
               },
               {
@@ -915,7 +920,7 @@
                         "placeholder": "Посада"
                       }
                     },
-                    { "template": "<h2> Місце реєстрації: </h2>" },
+                    { "template": "<h2 class='col'> Місце реєстрації: </h2>" },
                     {
                       "key": "Regist",
                       "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
@@ -935,7 +940,7 @@
                         }
                       ]
                     },
-                    { "template": "<h2> Місце перебування: </h2>" },
+                    { "template": "<h2 class='col'> Місце перебування: </h2>" },
                     {
                       "key": "Live",
                       "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
@@ -1128,9 +1133,9 @@
           "key": "Owner",
           "type": "repeat",
           "templateOptions": {
-            "label": "Кінцевий бенефіціарний власник",
-            "addText": "Додати кінцевого бенефіціарного власника:",
-            "title": "Кінцевий бенефіціарний власник:"
+            "label": "Власники",
+            "addText": "Додати власника:",
+            "title": "Власник:"
           },
           "fieldArray": {
             "fieldGroupClassName": "d-flex flex-wrap align-items-end",
@@ -1328,14 +1333,14 @@
                     "className": "col-4",
                     "key": "Country",
                     "type": "select",
-                    "templateOptions": { "label": "Країна" }
+                    "templateOptions": { "label": "Країна", "required": true }
                   },
 
                   {
                     "className": "col",
                     "key": "Adress",
                     "type": "input",
-                    "templateOptions": { "label": "Адреса" }
+                    "templateOptions": { "label": "Адреса", "required": true }
                   }
                 ]
               },
@@ -1348,14 +1353,14 @@
                     "className": "col-4",
                     "key": "Country",
                     "type": "select",
-                    "templateOptions": { "label": "Країна" }
+                    "templateOptions": { "label": "Країна", "required": true }
                   },
 
                   {
                     "className": "col",
                     "key": "Adress",
                     "type": "input",
-                    "templateOptions": { "label": "Адреса" }
+                    "templateOptions": { "label": "Адреса", "required": true }
                   }
                 ]
               },
@@ -1410,7 +1415,17 @@
                 "type": "checkbox",
                 "defaultValue": false,
                 "templateOptions": {
-                  "label": "Обмежена дієздатність, позбавлення волі,проходження військової служби"
+                  "label": "Належить до соціально вразливих верств населення"
+                }
+              },
+              {
+                "className": "col-6",
+                "key": "IsLimitedСapacityPerson",
+                "type": "checkbox",
+                "defaultValue": false,
+                "templateOptions": {
+                  "label": "Обмежена дієздатність, позбавлення волі,проходження військової служби",
+                  "required": true
                 }
               },
               {
@@ -1446,11 +1461,11 @@
               },
               {
                 "className": "col-12",
-                "key": "KDBRepresentative",
+                "key": "OwnerRepresentative",
                 "type": "repeat",
                 "templateOptions": {
-                  "addText": "Довірена особа від КБВ :",
-                  "title": "Довірена особа від КБВ :"
+                  "addText": "Довірена особа :",
+                  "title": "Довірена особа :"
                 },
                 "fieldArray": {
                   "fieldGroupClassName": "d-flex flex-wrap align-items-end ",
@@ -1652,7 +1667,7 @@
                       }
                     },
                     {
-                      "template": "<h2 class='col-12'> Місце реєстрації: </h2>"
+                      "template": "<h2 class='col'> Місце реєстрації: </h2>"
                     },
                     {
                       "key": "Regist",
@@ -1674,7 +1689,7 @@
                       ]
                     },
                     {
-                      "template": "<h2 class='col-12'> Місце перебування: </h2>"
+                      "template": "<h2 class='col'> Місце перебування: </h2>"
                     },
                     {
                       "key": "Live",
@@ -1796,7 +1811,7 @@
         {
           "key": "Ownership",
           "templateOptions": { "label": "Дані про структуру власності" },
-          "fieldGroupClassName": "d-flex flex-wrap align-items-end justify-content-center",
+          "fieldGroupClassName": "d-flex flex-wrap align-items-start justify-content-center",
           "fieldGroup": [
             {
               "className": "col-12",
@@ -1948,7 +1963,7 @@
                   ]
                 },
                 {
-                  "key": "Director",
+                  "key": "MotherCompanyDirector",
                   "type": "repeat",
                   "templateOptions": {
                     "label": "Керівники",
@@ -2163,7 +2178,9 @@
                           "placeholder": "Посада"
                         }
                       },
-                      { "template": "<h2> Місце проживання: </h2>" },
+                      {
+                        "template": "<h2 class='col'> Місце проживання: </h2>"
+                      },
                       {
                         "key": "Regist",
                         "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
@@ -2182,7 +2199,9 @@
                           }
                         ]
                       },
-                      { "template": "<h2> Місце перебування: </h2>" },
+                      {
+                        "template": "<h2 class='col'> Місце перебування: </h2>"
+                      },
                       {
                         "key": "Live",
                         "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
@@ -2224,8 +2243,8 @@
                         "type": "input",
                         "templateOptions": {
                           "type": "date",
-                          "label": "Дата державної реєстрації",
-                          "placeholder": "Дата державної реєстрації"
+                          "label": "Дата",
+                          "placeholder": "Дата"
                         }
                       },
                       {
@@ -2580,7 +2599,9 @@
                                 "placeholder": "Посада"
                               }
                             },
-                            { "template": "<h2> Місце реєстрації: </h2>" },
+                            {
+                              "template": "<h2 class='col'> Місце реєстрації: </h2>"
+                            },
                             {
                               "key": "Regist",
                               "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
@@ -2600,7 +2621,9 @@
                                 }
                               ]
                             },
-                            { "template": "<h2> Місце перебування: </h2>" },
+                            {
+                              "template": "<h2 class='col'> Місце перебування: </h2>"
+                            },
                             {
                               "key": "Live",
                               "fieldGroupClassName": "d-flex flex-wrap  align-items-end",
@@ -2662,7 +2685,7 @@
                   }
                 },
                 {
-                  "key": "ExecutiveDepartment",
+                  "key": "MotherCompanyExecutiveDepartment",
                   "type": "repeat",
                   "templateOptions": {
                     "label": "Виконавчий орган",
@@ -2699,68 +2722,70 @@
           ]
         },
         {
-          "templateOptions": { "label": "PEP:" },
           "fieldGroupClassName": "d-flex flex-wrap align-items-end justify-content-center",
           "key": "PEP",
-          "fieldGroup": [
-            {
-              "className": "col-6",
-              "key": "Type",
-              "type": "select",
-              "templateOptions": {
-                "label": "Належність до PEP",
-                "options": [
-                  { "label": "Політично значуща особа !", "value": 1 },
-                  {
-                    "label": "Член сім’ї політично значущої особи",
-                    "value": 2
-                  },
-                  {
-                    "label": "Особа, яка пов’язана з політично значущою особою",
-                    "value": 3
-                  },
-                  { "label": "Не належить", "value": 4 }
-                ]
+          "type": "repeat",
+          "templateOptions": {
+            "addText": "Додати PEP:",
+            "title": "PEP:",
+            "label": "PEP:"
+          },
+          "fieldArray": {
+            "fieldGroupClassName": "d-flex flex-wrap  align-items-start",
+            "fieldGroup": [
+              {
+                "className": "col-6",
+                "key": "Type",
+                "type": "select",
+                "templateOptions": {
+                  "label": "Належність до PEP",
+                  "options": [
+                    {
+                      "label": "Особа, яка пов’язана з політично значущою особою",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "className": "col-6",
+                "key": "DateOfNown",
+                "type": "input",
+                "templateOptions": {
+                  "type": "date",
+                  "label": "Дата виявлення відповідного факту"
+                }
+              },
+              {
+                "className": "col-6",
+                "key": "DateOfBossAgree",
+                "type": "input",
+                "templateOptions": {
+                  "type": "date",
+                  "label": "Дата отримання дозволу керівника установи на встановлення/продовження ділових (договірних) відносин"
+                }
+              },
+              {
+                "className": "col-6",
+                "key": "DateOffContactWithPEP",
+                "type": "input",
+                "templateOptions": {
+                  "type": "date",
+                  "label": "Дата, з якої установа припинила вживати заходи, визначені в частині тринадцятій статті 11 Закону про ПВК/ФТ"
+                }
+              },
+              {
+                "className": "col-12",
+                "key": "PEPInfo",
+                "type": "textarea",
+                "templateOptions": {
+                  "label": "Ознака належності до PEP та посада відповідної політично значущої особи",
+                  "placeholder": "Ознака належності до PEP та посада відповідної політично значущої особи",
+                  "rows": 4
+                }
               }
-            },
-            {
-              "className": "col-6",
-              "key": "DateOfNown",
-              "type": "input",
-              "templateOptions": {
-                "type": "date",
-                "label": "Дата виявлення відповідного факту"
-              }
-            },
-            {
-              "className": "col-6",
-              "key": "DateOfBossAgree",
-              "type": "input",
-              "templateOptions": {
-                "type": "date",
-                "label": "Дата отримання дозволу керівника установи на встановлення/продовження ділових (договірних) відносин"
-              }
-            },
-            {
-              "className": "col-6",
-              "key": "DateOffContactWithPEP",
-              "type": "input",
-              "templateOptions": {
-                "type": "date",
-                "label": "Дата, з якої установа припинила вживати заходи, визначені в частині тринадцятій статті 11 Закону про ПВК/ФТ"
-              }
-            },
-            {
-              "className": "col-12",
-              "key": "PEPInfo",
-              "type": "textarea",
-              "templateOptions": {
-                "label": "Ознака належності до PEP та посада відповідної політично значущої особи",
-                "placeholder": "Ознака належності до PEP та посада відповідної політично значущої особи",
-                "rows": 4
-              }
-            }
-          ]
+            ]
+          }
         },
         {
           "templateOptions": { "label": "Загальні відомості" },
@@ -2824,7 +2849,8 @@
                 "type": "autocomplete",
                 "templateOptions": {
                   "required": true,
-                  "placeholder": "Вид господарської діяльності"
+                  "placeholder": "Вид господарської діяльності",
+                  "dataService": "typesOfBusiness"
                 }
               }
             },
@@ -2873,7 +2899,7 @@
             },
             {
               "className": "col-4",
-              "key": "MounthIncome",
+              "key": "MonthIncome",
               "type": "input",
               "templateOptions": {
                 "type": "number",
@@ -2882,7 +2908,7 @@
             },
             {
               "className": "col-4",
-              "key": "ClearMounthIncome",
+              "key": "ClearMonthIncome",
               "type": "input",
               "templateOptions": {
                 "type": "number",
@@ -2971,6 +2997,25 @@
               "key": "CheckList",
               "fieldGroupClassName": "d-flex flex-wrap align-items-start justify-content-center",
               "fieldGroup": [
+                {
+                  "className": "col-6",
+                  "key": "CantDoFinmonJob",
+                  "type": "checkbox",
+                  "defaultValue": false,
+                  "templateOptions": {
+                    "label": "Неможливо виконувати згідно Закону обов’язки СПФМ або мінімізувати виявлені ризики"
+                  }
+                },
+
+                {
+                  "className": "col-6",
+                  "key": "HasContractWithFATFOwner",
+                  "type": "checkbox",
+                  "defaultValue": false,
+                  "templateOptions": {
+                    "label": "Наявність зовнішньоекономічних договорів за якими контрагент має реєстрацію, місце проживання або місцезнаходження в державі (юрисдикції) із переліку держав, що не виконують рекомендації FATF" 
+                  }
+                },
                 {
                   "className": "col-6",
                   "key": "IsTerrorist",
