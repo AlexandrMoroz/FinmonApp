@@ -1,3 +1,4 @@
+var moment = require("moment");
 const ResolvePath = (object, path, defaultValue) => {
   if (isEmpty(object) || !path) return object;
   return path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
@@ -19,24 +20,42 @@ function ClosedQuestion(nameOfField) {
   if (answer) return true;
   else return false;
 }
-function DateDiffInDays(a, b) {
-  const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+function DateDiffInDays(a) {
+  var c = moment(a);
+  return moment().diff(c, "days");
 }
-function DateDiffInMounth(dateFrom, dateTo) {
-  return (
-    dateTo.getMonth() -
-    dateFrom.getMonth() +
-    12 * (dateTo.getFullYear() - dateFrom.getFullYear()) +
-    1
-  );
+function DateDiffInMonth(dateFrom) {
+  var c = moment(dateFrom);
+  return moment().diff(c, "months");
 }
+const COMPANY = "COMPANY";
+const PERSON = "PERSON";
+const FINANSIAL_RISK = "FinansialRisk";
+const REPUTATION = "Reputation";
+const RISK = "Risk";
+
+const HIGH_RISK = "HIGHRISK";
+const VERY_HIGH_RISK = "VERYHIGHRISK";
+
 module.exports = {
   ResolvePath,
   OperationShoudinclude,
   ClosedQuestion,
   DateDiffInDays,
-  DateDiffInMounth,
+  DateDiffInMonth,
+  COMPANY,
+  PERSON,
+  VERY_HIGH_RISK,
+  HIGH_RISK,
+  FINANSIAL_RISK,
+  REPUTATION,
+  RISK,
+  getService(ServiceType) {
+    switch (ServiceType) {
+      case COMPANY:
+        return require("../services/company");
+      case PERSON:
+        return require("../services/person");
+    }
+  },
 };
