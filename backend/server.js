@@ -37,11 +37,13 @@ let initServer = (config) => {
   app.use("/api/externalbase", require("./routes/externalbase"));
   process.on("unhandledRejection", function (reason, p) {
     console.log("Caught exception: " + reason);
+    console.log(reason)
     //process.exit(1);
   });
 
   process.on("uncaughtException", function (err) {
     console.log("Caught exception: " + err);
+    console.log(err)
     //process.exit(1);
   });
 
@@ -51,11 +53,6 @@ let initServer = (config) => {
     // res.locals.error = req.app.get("env") === "development" ? err : {};
     // add this line to include winston logging
     // render the error page
-    res.status(err.status || 500).json({
-      message: err.message,
-      error: req.app.get("env") === "development" ? err : {},
-      success: false,
-    });
     winston.error(
       `REQUEST: ${req.method}; url:${req.url} - ${
         req.method == "POST"
@@ -63,14 +60,18 @@ let initServer = (config) => {
           : JSON.stringify(req.query)
       } ErrorMessage: ${JSON.stringify(err)}`
     );
+    console.log(err)
+    res.status(err.status || 500).json({
+      message: err.message,
+      error: req.app.get("env") === "development" ? err : {},
+      success: false,
+    });
     next();
   });
 
   connect(config.DB, {
-    useFindAndModify: false,
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    useCreateIndex: true,
   });
   console.log({
     message: `Successfully connected with the Database \n${config.DB}`,
