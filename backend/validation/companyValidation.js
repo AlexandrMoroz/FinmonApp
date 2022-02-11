@@ -20,23 +20,15 @@ const CompanyValidator = {
         },
       },
       "result.ShortName": {
-        exists: {
-          checkFalsy: true,
-          checkNull: true,
-          errorMessage: "Поле (Скорочене наименування) порожне",
-          bail: true,
-        },
-        isString: {
-          errorMessage: "Поле (Скорочене наименування) повинно бути строкою",
-          bail: true,
-        },
         custom: {
           options: async (value) => {
-            let company = await Company.find({ shortName: value });
-            if (company.length != 0)
-              throw new Error(
-                "Поле (Скорочене наименування) повинно бути унікальним"
-              );
+            if (value) {
+              let company = await Company.find({ shortName: value });
+              if (company.length != 0)
+                throw new Error(
+                  "Поле (Скорочене наименування) повинно бути унікальним"
+                );
+            }
             return true;
           },
         },
@@ -74,6 +66,11 @@ const CompanyValidator = {
                 throw new Error("Поле Код клієнта порожне");
               if (value.length != 8)
                 throw new Error("Поле Код клієнта повинно бути з 8 цифр");
+              let company = await Company.find({ clientCode: value });
+              if (company.length != 0)
+                throw new Error("Поле Код клієнта повинно бути унікальним");
+            }
+            if (value) {
               let company = await Company.find({ clientCode: value });
               if (company.length != 0)
                 throw new Error("Поле Код клієнта повинно бути унікальним");
@@ -153,29 +150,19 @@ const CompanyValidator = {
           bail: true,
         },
         custom: {
-          options: async (value) => {
-            
-          },
+          options: async (value) => {},
         },
       },
       "result.ShortName": {
-        exists: {
-          checkFalsy: true,
-          checkNull: true,
-          errorMessage: "Поле (Скорочене наименування) порожне",
-          bail: true,
-        },
-        isString: {
-          errorMessage: "Поле (Скорочене наименування) повинно бути строкою",
-          bail: true,
-        },
         custom: {
           options: async (value) => {
-            let company = await Company.find({ shortName: value });
-            if (company.length > 1)
-              throw new Error(
-                "Поле (Скорочене наименування) вже використовується"
-              );
+            if (value) {
+              let company = await Company.find({ shortName: value });
+              if (company.length > 1)
+                throw new Error(
+                  "Поле (Скорочене наименування) вже використовується"
+                );
+            }
           },
         },
       },
@@ -215,6 +202,8 @@ const CompanyValidator = {
               let companyById = await Company.findOne({
                 _id: req.body.result["_id"],
               });
+            }
+            if (value) {
               let companyByCode = await Company.find({ clientCode: value });
               if (
                 !companyByCode &&
@@ -347,7 +336,6 @@ const CompanyValidator = {
       },
     };
   },
-  
 };
 
 module.exports = CompanyValidator;
