@@ -1,16 +1,20 @@
 let { OPERATIONS, Formater } = require("./formater.js");
 let Cellwalker = require("./cellwalker.js");
 let XLSX = require("xlsx");
+const Translate = require("./translate");
 
 class XLSXHistory {
   constructor(translate_arr) {
-    this.translate_arr = translate_arr;
+    this.translate_arr=translate_arr;
+    this.translate = Translate(translate_arr);
     this.wb = XLSX.utils.book_new();
     this.ws = XLSX.utils.aoa_to_sheet([]);
     XLSX.utils.book_append_sheet(this.wb, this.ws, "Історія");
   }
-  Add(arr, cell, goDown = true) {
-    XLSX.utils.sheet_add_aoa(this.ws, [arr], {
+  Add(arr, cell, goDown = true, doTranslate = true) {
+    let temp = doTranslate ? this.translate(arr) : arr;
+
+    XLSX.utils.sheet_add_aoa(this.ws, [temp], {
       origin: cell.getCurrentCell(),
     });
     goDown ? cell.goDown() : "";
@@ -47,7 +51,6 @@ class XLSXHistory {
     let formater = new Formater(this.translate_arr);
 
     json.forEach((i) => {
-      let formatedJSON = formater.format(i.diff);
       this.Add(
         [
           "Користувач: ",
@@ -57,6 +60,7 @@ class XLSXHistory {
         ],
         cellwalker
       );
+      let formatedJSON = formater.format(i.diff);
       formatedJSON.forEach((item) => {
         this.Add([item.op, item.path], cellwalker, false);
         if (item.op === OPERATIONS.replace) {
