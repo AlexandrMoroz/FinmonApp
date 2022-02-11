@@ -104,13 +104,12 @@ export class CompanyComponent implements OnInit {
                       ...this.model,
                       ['ProfitabilityOfSale']: 0,
                     };
-                  }
-                  else
-                  this.model = {
-                    ...this.model,
-                    ['ProfitabilityOfSale']:
-                      (clearMonthIncome / monthIncome) * 100,
-                  };
+                  } else
+                    this.model = {
+                      ...this.model,
+                      ['ProfitabilityOfSale']:
+                        (clearMonthIncome / monthIncome) * 100,
+                    };
                 })
               )
               .subscribe();
@@ -130,13 +129,12 @@ export class CompanyComponent implements OnInit {
                       ...this.model,
                       ['ProfitabilityOfSale']: 0,
                     };
-                  }
-                  else
-                  this.model = {
-                    ...this.model,
-                    ['ProfitabilityOfSale']:
-                      (clearMonthIncome / monthIncome) * 100,
-                  };
+                  } else
+                    this.model = {
+                      ...this.model,
+                      ['ProfitabilityOfSale']:
+                        (clearMonthIncome / monthIncome) * 100,
+                    };
                 })
               )
               .subscribe();
@@ -191,6 +189,10 @@ export class CompanyComponent implements OnInit {
       this.helper.ShowError(validation);
       return;
     }
+
+    delete this.model['CheckClientRisk'];
+    delete this.model['CheckClientReputation'];
+    delete this.model['CheckClientFinansialRisk'];
     this.helper.cleanObject(model);
     console.log(model);
     //if selected item false than create person
