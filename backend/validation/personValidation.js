@@ -64,7 +64,7 @@ const PersonValidator = {
               
               if(value!="9999999999") {
                 let person = await Person.find({ INN: value });
-                if (person.length >= 1)
+                if (person.length != 0)
                   throw new Error("ИНН вже використовується");
               }
             }
@@ -319,6 +319,15 @@ const PersonValidator = {
           bail: true,
         },
       },
+      "result.FOP":{
+        custom: {
+          options: async (value, { req }) => {
+            if(value){
+              if(req.body.result["FOP"]["GovRegDocDateRelise"]){}
+              if(req.body.result["FOP"]["RegistrationNumber"]) {}
+            }
+          }}
+      }
     };
   },
   getFormDataValidation: () => {
