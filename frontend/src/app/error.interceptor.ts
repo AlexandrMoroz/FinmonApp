@@ -23,13 +23,20 @@ export class ErrorInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((err) => {
-        if ((err.status == 400 && !err.error?.validation)||err.status == 500) {
+        console.log(err);
+        if ((err.status == 400 && !err.error?.validation)) {
           let msg = err.error.error
             .map((item) => {
               return item.msg;
             })
             .join('<br/>');
           this.flashMessagesService.show(`Ошибка: <br/> ${msg}`, {
+            cssClass: 'alert-danger',
+            timeout: 5000,
+          });
+        }
+        if(err.status == 500){
+          this.flashMessagesService.show(`Ошибка: <br/> ${err.error.message}`, {
             cssClass: 'alert-danger',
             timeout: 5000,
           });
