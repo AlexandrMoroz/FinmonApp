@@ -1,9 +1,4 @@
-const diffHistory = require("mongoose-diff-history/diffHistory");
-const PersonFormDataCollection = require("../models/personFormData");
-const CompanyFormDataCollection = require("../models/companyFormData");
-const { Formater } = require("../utils/formater");
-const XLSXHistory = require("../utils/history");
-const Helper = require("../models/helper");
+const HistoryService = require("../services/history");
 
 const PersonFormCollectionName = "PersonFormData";
 const CompanyFormCollectionName = "CompanyFormData";
@@ -25,17 +20,10 @@ const CompanyXMLSHistoryGetById = async (body, res, next) => {
  */
 const getHistory = async (body, collectionName, res, next) => {
   try {
-    let history = await diffHistory.getDiffs(collectionName, body.id);
-    let translate_arr = await Helper.findOne({ name: "translate" });
-    let formater = new Formater(translate_arr.result);
-
-    let temp_history = history.map((item) => {
-      return {
-        diff: formater.format(item.diff),
-        user: item.user,
-        createdAt: item.createdAt,
-      };
-    });
+    let temp_history = await HistoryService.getJSONHistory(
+      collectionName,
+      body.id
+    );
     res.status(200).json({
       message: "History get by name was complited",
       result: temp_history,
@@ -51,12 +39,7 @@ const getHistory = async (body, collectionName, res, next) => {
  */
 const getHistoryXmls = async (body, collectionName, res, next) => {
   try {
-    let history = await diffHistory.getDiffs(collectionName, body.id);
-    let translate_arr = await Helper.findOne({ name: "translate" });
-
-    let xmls = new XLSXHistory(translate_arr.result);
-    let buf = xmls.createHistoryBuf(history);
-
+    let buf = await HistoryService.getXlSXHistory(collectionName, body.id);
     res.status(200).json({
       message: "History File was created success",
       result: buf,

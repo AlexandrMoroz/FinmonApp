@@ -1,14 +1,10 @@
-const Helper = require("../models/helper");
-
+const HelperService = require("../services/helper");
 /**
  * @description body contains name, data: json form
  */
 const Create = async (body, res, next) => {
   try {
-    const helper = await new Helper({
-      name: body.name,
-      result: body.result,
-    }).save();
+    const helper = await HelperService.create(body.name, body.result);
 
     res.status(201).json({
       message: "helper was create",
@@ -23,10 +19,10 @@ const Create = async (body, res, next) => {
 
 const GetByName = async (query, res, next) => {
   try {
-    let helper = await Helper.findOne({ name: query.name });
+    let helper = await HelperService.getByName(query.name);
     res.status(200).json({
       message: "helper get by name was complited",
-      result: helper.result,
+      result: helper,
       success: true,
     });
   } catch (err) {

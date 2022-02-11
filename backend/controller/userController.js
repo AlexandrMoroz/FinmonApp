@@ -1,33 +1,16 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/user");
-const bcrypt = require("bcryptjs");
-const { devConfig } = require("../config");
-const { serializeUser } = require("../utils/auth");
-
+const UserService = require("../services/user");
 
 /**
  * @DESC To register the user (ADMIN, SUPER_ADMIN, USER)
  */
 const Create = async (body, res, next) => {
   try {
-    // Get the hashed password
-    const password = await bcrypt.hash(body.password, 12);
     // create a new user
-    let createdUser = await new User({
-      block: false,
-      name: body.name,
-      family: body.family,
-      surname: body.surname ? body.surname : "",
-      cashboxAdress: body.cashboxAdress ? body.cashboxAdress : "",
-      email: body.email ? body.email : "",
-      role: "user",
-      username: body.username,
-      password: password,
-    }).save();
+    let createdUser = await UserService.create(body);
 
     res.status(201).json({
       message: "User was created",
-      result: serializeUser(createdUser),
+      result: createdUser,
       success: true,
     });
   } catch (err) {
@@ -41,19 +24,11 @@ const Create = async (body, res, next) => {
  */
 const Edit = async (body, res, next) => {
   try {
+    let editedUser = await UserService.edit(body);
     // Find user and edit it
-    let editedUser = await User.findOneAndUpdate(
-      { _id: body.id },
-      { ...body },
-      (err, doc, res, next) => {
-        if (err) {
-          throw err;
-        }
-      }
-    );
     res.status(200).json({
       message: "User success edited",
-      result: serializeUser(editedUser),
+      result: editedUser,
       success: true,
     });
   } catch (err) {
@@ -61,18 +36,16 @@ const Edit = async (body, res, next) => {
     next({ message: "Unable to edit account.", error: err });
   }
 };
+
 /**
  * @DESC To get all users
  */
 const All = async (res, next) => {
   try {
-    let tempUsers = await User.find();
-    tempUsers = tempUsers.map((item) => {
-      return serializeUser(item);
-    });
+    let users = await UserService.getAll();
     res.status(200).json({
       message: "User get all was succces",
-      result: tempUsers,
+      result: users,
       success: true,
     });
   } catch (error) {
@@ -85,28 +58,7 @@ const All = async (res, next) => {
  */
 const Login = async (body, res, next) => {
   try {
-    let { username } = body;
-    let user = await User.findOne({ username });
-    // First Check if the username is in the database
-    // Sign in the token and issue it to the user
-    let token = jwt.sign(
-      {
-        _id: user._id,
-        role: user.role,
-        username: user.username,
-        email: user.email,
-      },
-      devConfig.SECRET,
-      { expiresIn: "8h" }
-    );
-
-    let result = {
-      _id: user._id,
-      username: user.username,
-      role: user.role,
-      token: `Bearer ${token}`,
-      expiresIn: 28800,
-    };
+    let result = await UserService.login(body);
     res.status(200).json({
       message: "You are now logged in.",
       ...result,
