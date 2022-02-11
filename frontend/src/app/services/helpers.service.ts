@@ -62,7 +62,10 @@ export class HelperService {
       return of(JSON.parse(localStorage.getItem(this.countryHelper)));
     }
   }
-
+  getAutocompleteDataService(name:string){
+    if(name==="typesOfBusiness")return this.getTypeOfBusiness();
+    if(name==="independentTypesOfBusiness") return this.getIndependentTypeOfBusiness()
+  }
   getTranslate(name) {
     if (!localStorage.getItem(name)) {
       return this.http
@@ -95,6 +98,22 @@ export class HelperService {
       return of(JSON.parse(localStorage.getItem('TofB')));
     }
   }
+  getIndependentTypeOfBusiness() {
+    if (!localStorage.getItem('ITofB')) {
+      return this.http
+        .get(`${environment.apiUrl}helper`, {
+          params: new HttpParams().set('name', 'independentTypesOfBusiness'),
+        })
+        .pipe(
+          map((data) => {
+            localStorage.setItem('ITofB', JSON.stringify(data['result']));
+            return data['result'];
+          })
+        );
+    } else {
+      return of(JSON.parse(localStorage.getItem('ITofB')));
+    }
+  }
   cleanObject(object) {
     Object.entries(object).forEach(([k, v]) => {
       if (v && typeof v === 'object') {
@@ -103,7 +122,8 @@ export class HelperService {
       if (
         (v && typeof v === 'object' && !Object.keys(v).length) ||
         v === null ||
-        v === undefined
+        v === undefined||
+        v === ""
       ) {
         if (Array.isArray(object)) {
           object.splice(k as any, 1);
@@ -114,6 +134,7 @@ export class HelperService {
     });
     return object;
   }
+  
   isObject(x: any) {
     return x != null && typeof x === 'object';
   }
