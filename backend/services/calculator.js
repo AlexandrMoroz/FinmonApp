@@ -1,7 +1,7 @@
 const CalculatorRiskQuestions = require("../models/calculators/calculatorRiskQuestions");
 const CalculatorReputationQuestions = require("../models/calculators/calculatorReputationQuestions");
 const CalculatorFinansialRiskQuestions = require("../models/calculators/calculatorFinansialRiskQuestions");
-const { COMPANY, PERSON, getService } = require("../utils/helpers");
+const { getService } = require("../utils/helpers");
 
 class CalculatorService {
   constructor() {
