@@ -1,7 +1,4 @@
 const { serializeUser } = require("../utils/auth");
-const bcrypt = require("bcryptjs");
-const { devConfig } = require("../config/index");
-const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 class UserService {
@@ -40,29 +37,7 @@ class UserService {
       return serializeUser(item);
     });
   }
-  async login(body) {
-    let { username } = body;
-    let user = await User.findOne({ username });
-    // First Check if the username is in the database
-    // Sign in the token and issue it to the user
-    let token = jwt.sign(
-      {
-        _id: user._id,
-        role: user.role,
-        username: user.username,
-        email: user.email,
-      },
-      devConfig.SECRET,
-      { expiresIn: "8h" }
-    );
-
-    return {
-      _id: user._id,
-      username: user.username,
-      role: user.role,
-      token: `Bearer ${token}`,
-      expiresIn: 28800,
-    };
-  }
+  
+    
 }
 module.exports = new UserService();

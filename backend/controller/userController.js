@@ -1,4 +1,7 @@
 const UserService = require("../services/user");
+const bcrypt = require("bcryptjs");
+const { devConfig } = require("../config/index");
+const jwt = require("jsonwebtoken");
 
 /**
  * @DESC To register the user (ADMIN, SUPER_ADMIN, USER)
@@ -58,7 +61,29 @@ const All = async (res, next) => {
  */
 const Login = async (body, res, next) => {
   try {
-    let result = await UserService.login(body);
+    let { username } = body;
+    let user = await UserService.getUserByUsername(username);
+    // First Check if the username is in the database
+    // Sign in the token and issue it to the user
+    let token = jwt.sign(
+      {
+        _id: user._id,
+        role: user.role,
+        username: user.username,
+        email: user.email,
+      },
+      devConfig.SECRET,
+      { expiresIn: "8h" }
+    );
+
+    let result = {
+      _id: user._id,
+      username: user.username,
+      role: user.role,
+      token: `Bearer ${token}`,
+      expiresIn: 28800,
+    };
+
     res.status(200).json({
       message: "You are now logged in.",
       ...result,
