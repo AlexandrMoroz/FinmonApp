@@ -345,7 +345,7 @@
                 "key": "IsResident",
                 "type": "checkbox",
                 "defaultValue": true,
-                "templateOptions": { "label": "Чи резидент" }
+                "templateOptions": { "label": "Резидент?" }
               },
               {
                 "className": "col-6",
@@ -559,8 +559,8 @@
                 "type": "input",
                 "templateOptions": {
                   "type": "date",
-                  "label": "Дата державної реєстрації",
-                  "placeholder": "Дата державної реєстрації"
+                  "label": "Дата документа",
+                  "placeholder": "Дата документа"
                 }
               },
               {
@@ -768,7 +768,7 @@
                       "key": "IsResident",
                       "type": "checkbox",
                       "defaultValue": true,
-                      "templateOptions": { "label": "Чи резидент" }
+                      "templateOptions": { "label": "Резидент?" }
                     },
                     {
                       "className": "col-6",
@@ -982,8 +982,8 @@
                       "type": "input",
                       "templateOptions": {
                         "type": "date",
-                        "label": "Дата державної реєстрації",
-                        "placeholder": "Дата державної реєстрації"
+                        "label": "Дата документа",
+                        "placeholder": "Дата документа"
                       }
                     },
                     {
@@ -1193,7 +1193,7 @@
                 "key": "IsResident",
                 "defaultValue": true,
                 "type": "checkbox",
-                "templateOptions": { "label": "Чи резидент" }
+                "templateOptions": { "label": "Резидент?" }
               },
               {
                 "className": "col-6",
@@ -1523,7 +1523,7 @@
                       "key": "IsResident",
                       "type": "checkbox",
                       "defaultValue": true,
-                      "templateOptions": { "label": "Чи резидент" }
+                      "templateOptions": { "label": "Резидент?" }
                     },
                     {
                       "className": "col-6",
@@ -1732,8 +1732,8 @@
                       "type": "input",
                       "templateOptions": {
                         "type": "date",
-                        "label": "Дата державної реєстрації",
-                        "placeholder": "Дата державної реєстрації"
+                        "label": "Дата документа",
+                        "placeholder": "Дата документа"
                       }
                     },
                     {
@@ -2026,7 +2026,7 @@
                         "key": "IsResident",
                         "type": "checkbox",
                         "defaultValue": true,
-                        "templateOptions": { "label": "Чи резидент" }
+                        "templateOptions": { "label": "Резидент?" }
                       },
                       {
                         "className": "col-6",
@@ -2243,8 +2243,8 @@
                         "type": "input",
                         "templateOptions": {
                           "type": "date",
-                          "label": "Дата",
-                          "placeholder": "Дата"
+                          "label": "Дата документа",
+                          "placeholder": "Дата документа"
                         }
                       },
                       {
@@ -2447,7 +2447,7 @@
                               "key": "IsResident",
                               "type": "checkbox",
                               "defaultValue": true,
-                              "templateOptions": { "label": "Чи резидент" }
+                              "templateOptions": { "label": "Резидент?" }
                             },
                             {
                               "className": "col-6",
@@ -2665,8 +2665,8 @@
                               "type": "input",
                               "templateOptions": {
                                 "type": "date",
-                                "label": "Дата державної реєстрації",
-                                "placeholder": "Дата державної реєстрації"
+                                "label": "Дата документа",
+                                "placeholder": "Дата документа"
                               }
                             },
                             {
