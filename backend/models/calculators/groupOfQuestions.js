@@ -16,8 +16,5 @@ class GroupOfQuestions {
   }
 }
 
-const INDIVIDUALS = "INDIVIDUALS";
-const LEGALENTITES = "LEGALENTITES";
-const PERSON = "PERSON";
 module.exports = GroupOfQuestions;
-module.exports.Types = { INDIVIDUALS, LEGALENTITES, PERSON };
+

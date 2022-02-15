@@ -1,36 +1,14 @@
 const Helper = require("../../helper");
-function Question19() {
-  let blackList = [
-    "Албания",
-    "Барбадос",
-    "Ботсвана",
-    "Буркина-Фасо",
-    "Камбоджа",
-    "Каймановы острова",
-    "Гаити",
-    "Ямайка",
-    "Мальта",
-    "Маврикий",
-    "Марокко",
-    "Мьянма",
-    "Никарагуа",
-    "Пакистан",
-    "Панама",
-    "Филиппины",
-    "Сенегал",
-    "южный Судан",
-    "Сирия",
-    "Уганда",
-    "Йемен",
-    "Зимбабве",
-    "Гана",
-  ];
+const helperService = require("../../../services/helper");
+async function Question19() {
+
+  let list =  await helperService.getAllFATFList();
   let owners = this.result["Owner"];
-  if (owners && owners.length!=0) {
+  if (owners && owners.length != 0) {
     let flag = owners.some((item) => {
       let regCountry = item["Regist"].Country;
       let liveCountry = item["Live"].Country;
-      if (blackList?.includes(regCountry) || blackList?.includes(liveCountry)) {
+      if (list?.includes(regCountry) || list?.includes(liveCountry)) {
         return true;
       }
     });
@@ -40,48 +18,28 @@ function Question19() {
     this.result["RegistPlace"]?.Country || this.result["Regist"]?.Country;
   let liveCountry =
     this.result["ActualLocation"]?.Country || this.result["Live"]?.Country;
-
   if (
-    (registCountry && blackList.includes(registCountry)) ||
-    (liveCountry && blackList.includes(liveCountry))
+    (registCountry && list.includes(registCountry)) ||
+    (liveCountry && list.includes(liveCountry))
   ) {
     return true;
   }
 
   return false;
 }
-function Question20() {
-  let blackList = [
-    "Іран",
-    "Північна Корея",
-    "Албанія",
-    "Барбадос",
-    "Ботсвана",
-    "Камбоджа",
-    "Ямайка",
-    "Гаїті",
-    "Мальта",
-    "Маврикій",
-    "М'янма",
-    "Нікарагуа",
-    "Пакистан",
-    "Панама",
-    "Філіппіни",
-    "Південний Судан",
-    "Сирія",
-    "Уганда",
-    "Ємен",
-    "Зімбабве",
-  ];
-  let liveCountry =
-    this.result["ActualLocation"]?.Country || this.result["Live"]?.Country;
-  return liveCountry && blackList.includes(liveCountry);
+async function Question20() {
+  let blackList = await Helper.findOne({ name: "blackCountryInFATF" });
+  let grayList = await Helper.findOne({ name: "grayCountryInFATF" });
+  let list = [...blackList.result, ...grayList.result];
+  let liveCountry = this.result["ActualLocation"]?.Country;
+
+  return liveCountry && list.includes(liveCountry);
 }
 
 async function Question21() {
-  let OfshoreCountry = await Helper.findOne({ name: "OfshoreCountry" });
-  if(!OfshoreCountry && OfshoreCountry.length == 0){
-    throw Error("OfShoreCountry helper is undefided")
+  let OfshoreCountry = await Helper.findOne({ name: "ofshoreCountry" });
+  if (!OfshoreCountry && OfshoreCountry.result.length == 0) {
+    throw Error("ofShoreCountry helper is undefided");
   }
   let owners = this.result["Owner"];
   if (owners) {
@@ -112,9 +70,23 @@ async function Question21() {
 }
 
 function Question22() {
-  let shoudinclude = "Россія";
+  let shoudinclude = "Російська Федерація";
   let regist = this.result["RegistPlace"] || this.result["Regist"];
-  return regist?.Country == shoudinclude;
+  let liveCountry = this.result["ActualLocation"] || this.result["Live"];
+
+  let owners = this.result["Owner"];
+  if (owners) {
+    let flag = owners.some((item) => {
+      let regCountry = item["Regist"]?.Country;
+      let liveCountry = item["Live"]?.Country;
+      return regCountry == shoudinclude || liveCountry == shoudinclude;
+    });
+    if (flag) return true;
+  }
+  
+  return (
+    regist?.Country == shoudinclude || liveCountry?.Country == shoudinclude
+  );
 }
 
 module.exports = {

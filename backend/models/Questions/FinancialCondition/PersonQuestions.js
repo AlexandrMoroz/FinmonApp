@@ -14,21 +14,19 @@ function Question1() {
     { key: "суспільний активіст/волонтер", value: 0.25 },
   ];
   let tempEmpType = [];
-  empType.forEach((elem) => {
-    let index = order.findIndex((item, index, arr) => item.key == elem);
-    tempEmpType[index] = order[index];
+  empType.forEach((item) => {
+      let orderElem = order.find((e) => {if(e.key === item) return e});
+      tempEmpType.push(orderElem.value);
   });
-  tempEmpType = tempEmpType.filter((a) => a);
-
-  return tempEmpType[0].value;
+  tempEmpType = tempEmpType.sort((a, b) => b - a);
+  return tempEmpType[0];
 }
 function Question2() {
   let prop = this.result["Property"];
   if (!prop || prop.length == 0) {
-    return 1;
+    return 0.5 ;
   }
   let order = [
-    { key: "не має", value: 0.5 },
     { key: "обладнання", value: 0.75 },
     { key: "транспортні засоби, що належать державній реєстрації", value: 1.0 },
     { key: "нерухомість", value: 1.25 },
@@ -38,18 +36,18 @@ function Question2() {
     },
   ];
   let tempEmpType = [];
-  prop.forEach((elem) => {
-    let index = order.findIndex(
-      (item, index, arr) => item.key == elem.PropertyType
-    );
-    tempEmpType[index] = order[index];
-  });
-  tempEmpType = tempEmpType.filter((a) => a);
 
-  return tempEmpType[0].value;
+  prop.forEach((item) => {
+    item.PropertyType.forEach((elem) => {
+      let orderElem = order.find((e) => {if(e.key === elem) return e});
+      tempEmpType.push(orderElem.value);
+    });
+  });
+  tempEmpType = tempEmpType.sort((a, b) => b - a);
+  return tempEmpType[0];
 }
 function Question3() {
-  let avrprof = this.result["MounthIncome"];
+  let avrprof = this.result["MonthIncome"];
   if (!avrprof || avrprof < 2500) return 0.25;
   if (avrprof > 2500 && avrprof <= 5000) return 0.5;
   if (avrprof > 5000 && avrprof <= 10000) return 0.75;

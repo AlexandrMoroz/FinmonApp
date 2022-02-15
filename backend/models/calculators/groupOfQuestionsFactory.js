@@ -7,60 +7,68 @@ const firstGroupOfQuestions = require("../questions/risk/firstGroupQuestion");
 const secondGroupOfQuestions = require("../questions/risk/secondGroupQuestion");
 const thirdGroupOfQuestions = require("../questions/risk/thirdGroupQuestion");
 
+const exclusionQuestions = require("../questions/risk/exclusionGroupQuestion");
+
+const {
+  FINANSIAL_RISK,
+  REPUTATION,
+  RISK,
+  COMPANY,
+  PERSON,
+  HIGH_RISK,
+  VERY_HIGH_RISK,
+} = require("../../utils/helpers");
+
 const GroupOfQuestions = require("./groupOfQuestions");
 class GroupOfQuestionsFactory {
-  constructor(formData, calcType, specificType) {
+  constructor() {
+    if (GroupOfQuestionsFactory._instance) {
+      return GroupOfQuestionsFactory._instance;
+    }
+    GroupOfQuestionsFactory._instance = this;
+  }
+
+  createGroup(formData, calcType, spType) {
     if (!formData.result) {
       throw new Error("FormData is empty");
     }
-    this.formData = formData;
-    this.calcType = calcType;
-    this.specificType = specificType;
-  }
-  createGroup() {
-    if (this.calcType == "FinansialRisk") {
-      if (this.formData.result["FOP"]) {
-        return new GroupOfQuestions(this.formData, individualQuestions);
+    if (calcType === FINANSIAL_RISK) {
+      if (formData.result["FOP"]) {
+        return new GroupOfQuestions(formData, individualQuestions);
       }
-      if (this.formData.result["INN"]) {
-        return new GroupOfQuestions(this.formData, personQuestions);
+      if (formData.result["Family"]) {
+        return new GroupOfQuestions(formData, personQuestions);
       }
-      if (this.formData.result["ClientCode"]) {
-        return new GroupOfQuestions(this.formData, companyQuestions);
+      if (formData.result["ClientCode"]) {
+        return new GroupOfQuestions(formData, companyQuestions);
       }
     }
-    if (this.calcType == "Reputation") {
-      return new GroupOfQuestions(this.formData, reputationQuestions);
+    if (calcType === REPUTATION) {
+      return new GroupOfQuestions(formData, reputationQuestions);
     }
-    if (this.calcType == "Risk") {
-      if (this.specificType == "INDIVIDUALS") {
+    if (calcType === RISK) {
+      if (spType === PERSON) {
         return [
-          new GroupOfQuestions(this.formData, firstGroupOfQuestions.individual),
-          new GroupOfQuestions(
-            this.formData,
-            secondGroupOfQuestions.individual
-          ),
-          new GroupOfQuestions(this.formData, thirdGroupOfQuestions.individual),
+          new GroupOfQuestions(formData, firstGroupOfQuestions.individual),
+          new GroupOfQuestions(formData, secondGroupOfQuestions.individual),
+          new GroupOfQuestions(formData, thirdGroupOfQuestions.individual),
         ];
       }
-      if (this.specificType == "LEGALENTITES") {
+      if (spType === COMPANY) {
         return [
-          new GroupOfQuestions(
-            this.formData,
-            firstGroupOfQuestions.legalEntity
-          ),
-          new GroupOfQuestions(
-            this.formData,
-            secondGroupOfQuestions.legalEntity
-          ),
-          new GroupOfQuestions(
-            this.formData,
-            thirdGroupOfQuestions.legalEntity
-          ),
+          new GroupOfQuestions(formData, firstGroupOfQuestions.legalEntity),
+          new GroupOfQuestions(formData, secondGroupOfQuestions.legalEntity),
+          new GroupOfQuestions(formData, thirdGroupOfQuestions.legalEntity),
         ];
+      }
+      if (spType === HIGH_RISK) {
+        return new GroupOfQuestions(formData, exclusionQuestions.HighRisk);
+      }
+      if (spType === VERY_HIGH_RISK) {
+        return new GroupOfQuestions(formData, exclusionQuestions.VeryHighRisk);
       }
     }
   }
 }
 
-module.exports = GroupOfQuestionsFactory;
+module.exports = new GroupOfQuestionsFactory();

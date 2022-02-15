@@ -4,7 +4,7 @@ const {
   ClosedQuestion,
   DateDiffInDays,
 } = require("../../../utils/helpers");
-const Helper = require("../../helper");
+const helperService = require("../../../services/helper");
 const { Formater, OPERATIONS } = require("../../../utils/formater");
 const diffHistory = require("mongoose-diff-history/diffHistory");
 
@@ -115,8 +115,7 @@ function Question15() {
 function Question16() {
   let resultArr = [];
   let director = this.result["Director"];
-  if (!director || director.length == 0) resultArr.push(false);
-  else {
+  if (director && director.length != 0){
     let isFinaleOwner = director.filter((item) => item["IsFinaleOwner"])[0];
     if (isFinaleOwner) resultArr.push({ 1: true });
   }
@@ -175,7 +174,7 @@ async function Question17() {
   let director = this.result["Director"];
   let owners = this.result["Owner"];
 
-  let OfshoreCountry = await Helper.findOne({ name: "ofshoreCountry" });
+  let OfshoreCountry = await helperService.getOfshore();
   if (!OfshoreCountry && OfshoreCountry.length == 0) {
     throw Error("OfShoreCountry helper is undefided");
   }
@@ -183,7 +182,7 @@ async function Question17() {
     owners.forEach((item) => {
       let dirCountry = item["Regist"]?.Country;
       if (!dirCountry) return;
-      resultArr.push({ 2.1: OfshoreCountry?.result.includes(dirCountry) });
+      resultArr.push({ 2.1: OfshoreCountry.includes(dirCountry) });
     });
     //////////9///////////
     owners.forEach((item) => {
@@ -195,11 +194,11 @@ async function Question17() {
       });
     });
   }
-  if (director || director.length != 0) {
+  if (director && director.length != 0) {
     director.forEach((item) => {
       let dirCountry = item["Regist"]?.Country;
       if (!dirCountry) return;
-      resultArr.push({ 2.2: OfshoreCountry?.result.includes(dirCountry) });
+      resultArr.push({ 2.2: OfshoreCountry.includes(dirCountry) });
     });
     //////////5///////////
     director.forEach((item) => {
