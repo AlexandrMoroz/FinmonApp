@@ -1,4 +1,5 @@
 const { Schema, model, models, Types } = require("mongoose");
+const mongoose_fuzzy_searching = require("mongoose-fuzzy-searching");
 
 const PersonSchema = new Schema(
   {
@@ -28,4 +29,13 @@ const PersonSchema = new Schema(
   },
   { timestamps: true }
 );
+
+PersonSchema.plugin(mongoose_fuzzy_searching, {
+  fields: [
+    { name: "name", minSize: 2 },
+    { name: "family", minSize: 2 },
+    { name: "surname", minSize: 2 },
+    { name: "INN", minSize: 10 },
+  ],
+});
 module.exports = models["persons"] || model("persons", PersonSchema);

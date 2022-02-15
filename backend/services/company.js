@@ -45,9 +45,11 @@ class CompanyService {
   }
 
   async search(searchText) {
-    return await Company.find({
-      $or: [{ shortName: searchText }, { clientCode: searchText }],
-    });
+    let res = await Company.fuzzySearch(searchText).limit(30);
+    return res.sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
+    // return await Company.find({
+    //   $or: [{ shortName: searchText }, { clientCode: searchText }],
+    // });
   }
   async getFormDataById(id) {
     return (await CompanyFormData.findOne({ _id: id }));

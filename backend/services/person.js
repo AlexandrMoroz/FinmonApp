@@ -37,8 +37,10 @@ class PersonService {
     return await Person.findOneAndUpdate(
       { _id: body._id },
       {
-        shortName: body.result.ShortName,
-        clientCode: body.result.ClientCode,
+        name: body.result.Name,
+        family: body.result.Family,
+        surname: body.result.Surname,
+        INN: body.result.INN?body.result.INN:" ",
       }
     );
   }
@@ -46,14 +48,16 @@ class PersonService {
     return await Person.findOne({ _id: id });
   }
   async search(searchText) {
-    return await Person.find({
-      $or: [
-        { name: searchText },
-        { family: searchText },
-        { surname: searchText },
-        { INN: searchText },
-      ],
-    });
+    let res = await Person.fuzzySearch(searchText).limit(30);
+    return res.sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
+    // return await Person.find({
+    //   $or: [
+    //     { name: searchText },
+    //     { family: searchText },
+    //     { surname: searchText },
+    //     { INN: searchText },
+    //   ],
+    // });
   }
   async getFormDataById(id) {
     return (await PersonFormData.findOne({ _id: id }));
