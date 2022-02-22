@@ -6,15 +6,9 @@
     class="nd-card-form"
   >
     <nb-card-body>
-      <form [formGroup]="form" (ngSubmit)="Submit(model)">
-        <formly-form
-          [form]="form"
-          [fields]="fields"
-          [model]="model"
-          [options]="options"
-        ></formly-form>
-        <button type="submit" nbButton hero status="success">Затвердити</button>
-      </form>
+      <button type="button" onclick="DownloadAllClient()" nbButton hero status="success">
+        Завантажити список клієнтів
+      </button>
     </nb-card-body>
   </nb-card>
 </div>
