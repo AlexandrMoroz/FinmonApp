@@ -1,6 +1,7 @@
 const Company = require("../models/company");
+const companyFormData = require("../models/companyFormData");
 const CompanyFormData = require("../models/companyFormData");
-const UserService = require("../services/user")
+const UserService = require("../services/user");
 class CompanyService {
   constructor() {
     if (CompanyService._instance) {
@@ -52,7 +53,15 @@ class CompanyService {
     // });
   }
   async getFormDataById(id) {
-    return (await CompanyFormData.findOne({ _id: id }));
+    return await CompanyFormData.findOne({ _id: id });
+  }
+  async getAllFormData() {
+    let companeis = await CompanyFormData.find({});
+    return companeis.map((item) => item.result);
+  }
+  async deleteAll() {
+    await CompanyFormData.deleteMany({});
+    await Company.deleteMany({});
   }
 }
 

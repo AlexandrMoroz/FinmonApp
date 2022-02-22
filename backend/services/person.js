@@ -1,4 +1,5 @@
 const Person = require("../models/person");
+const personFormData = require("../models/personFormData");
 const PersonFormData = require("../models/personFormData");
 const UserService = require("./user");
 
@@ -40,7 +41,7 @@ class PersonService {
         name: body.result.Name,
         family: body.result.Family,
         surname: body.result.Surname,
-        INN: body.result.INN?body.result.INN:" ",
+        INN: body.result.INN ? body.result.INN : " ",
       }
     );
   }
@@ -60,7 +61,15 @@ class PersonService {
     // });
   }
   async getFormDataById(id) {
-    return (await PersonFormData.findOne({ _id: id }));
+    return await PersonFormData.findOne({ _id: id });
+  }
+  async getAllFormData() {
+    let persons = await personFormData.find({});
+    return persons.map((item) => item.result);
+  }
+  async deleteAll(){
+    await PersonFormData.deleteMany({})
+    await Person.deleteMany({})
   }
 }
 
