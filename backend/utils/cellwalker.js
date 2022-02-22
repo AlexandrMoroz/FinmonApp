@@ -1,7 +1,9 @@
 class CellWalker {
-  constructor() {
-    this.currentCol = "A";
-    this.currentRow = "1";
+  constructor(startCol = "A", startRow = "1") {
+    this.startCol = startCol;
+    this.startRow = startRow;
+    this.currentCol = startCol;
+    this.currentRow = startRow;
     this.startCellCode = this.currentCol + this.currentRow;
     this.currentCellCode = this.startCellCode;
   }
@@ -41,10 +43,10 @@ class CellWalker {
     return `${this.currentCol}${this.currentRow}`;
   }
   getFirstColCodeCurrentRow() {
-    return "A" + this.getCurrentRow();
+    return this.startCol + this.getCurrentRow();
   }
   setCurrentColToFirst() {
-    this.currentCol = "A"
+    this.currentCol = this.startCol;
     this.currentCellCode = this.getFirstColCodeCurrentRow();
   }
   copy() {
