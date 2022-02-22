@@ -6,6 +6,7 @@ const { userAuth, checkRole } = require("../utils/Auth");
 const {
   Create,
   GetByName,
+  GetAllClientsInXLSX
 } = require("../controller/helperController");
 
 router.post(
@@ -27,6 +28,14 @@ router.get(
   validate,
   async (req, res, next) => {
     await GetByName(req.query, res, next);
+  }
+);
+router.get(
+  "/allclients",
+  userAuth,
+  checkRole(["admin"]),
+  async (req, res, next) => {
+    await GetAllClientsInXLSX(res, next);
   }
 );
 
