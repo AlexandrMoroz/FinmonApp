@@ -20,15 +20,22 @@ const CompanyValidator = {
         },
       },
       "result.ShortName": {
+        exists: {
+          checkNull: true,
+          errorMessage: "Поле (Скорочене наименування) порожне",
+          bail: true,
+        },
+        isString: {
+          errorMessage: "Поле (Скорочене наименування) повинно бути строкою",
+          bail: true,
+        },
         custom: {
           options: async (value) => {
-            if (value) {
-              let company = await Company.find({ shortName: value });
-              if (company.length != 0)
-                throw new Error(
-                  "Поле (Скорочене наименування) повинно бути унікальним"
-                );
-            }
+            let company = await Company.find({ shortName: value });
+            if (company.length != 0)
+              throw new Error(
+                "Поле (Скорочене наименування) повинно бути унікальним"
+              );
             return true;
           },
         },
@@ -154,15 +161,24 @@ const CompanyValidator = {
         },
       },
       "result.ShortName": {
+        exists: {
+          checkNull: true,
+          errorMessage: "Поле (Скорочене наименування) порожне",
+          bail: true,
+        },
+        isString: {
+          errorMessage: "Поле (Скорочене наименування) повинно бути строкою",
+          bail: true,
+        },
         custom: {
           options: async (value) => {
-            if (value) {
-              let company = await Company.find({ shortName: value });
-              if (company.length > 1)
-                throw new Error(
-                  "Поле (Скорочене наименування) вже використовується"
-                );
-            }
+            if (!value)
+              throw new Error("Поле (Скорочене наименування) порожне");
+            let company = await Company.find({ shortName: value });
+            if (company.length > 1)
+              throw new Error(
+                "Поле (Скорочене наименування) повинно бути унікальним"
+              );
           },
         },
       },
