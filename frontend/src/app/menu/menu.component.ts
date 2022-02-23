@@ -42,10 +42,15 @@ export class MenuComponent implements OnInit {
       link: '/users',
       icon: 'user-friends',
     },
-      {
+    {
       title: 'Історія',
       link: '/history',
       icon: 'history',
+    },
+    {
+      title: 'Налаштування',
+      link: '/settings',
+      icon: 'settings',
     },
   ];
   items: Array<NbMenuItem> = [];
@@ -53,7 +58,7 @@ export class MenuComponent implements OnInit {
     public authService: AuthService,
     private menuService: NbMenuService
   ) {
-    this.authService.isAdmin ? this.items.push(...this.adminLinks):'';
+    this.authService.isAdmin ? this.items.push(...this.adminLinks) : '';
     this.items.push(...this.userLinks);
   }
 
