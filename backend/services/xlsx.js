@@ -29,7 +29,7 @@ class XLSXService {
     let formdata = await service.getFormDataById(model.formDataResultId);
     let order = await HelperService.getOrder(ServiceType);
     //Sort of elemets by sort table
-    let arr = recursFormResult(formdata, order, []);
+    let arr = recursFormResult(formdata.result, order, []);
 
     let result = {};
     arr.forEach((item) => {
