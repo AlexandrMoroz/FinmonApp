@@ -80,11 +80,11 @@ const UserValidation = {
           options: { min: 6 },
           bail: true,
         },
-        customSanitizer: {
-          options: async (value) => {
-            return await bcrypt.hash(value, 12);
-          },
-        },
+        // customSanitizer: {
+        //   options: async (value) => {
+        //     return await bcrypt.hash(value, 12);
+        //   },
+        // },
       },
       passwordConfirmation: {
         optional: {
@@ -228,11 +228,11 @@ const UserValidation = {
           options: { min: 6 },
           bail: true,
         },
-        customSanitizer: {
-          options: async (value) => {
-            return await bcrypt.hash(value, 12);
-          },
-        },
+        // customSanitizer: {
+        //   options: async (value) => {
+        //     return await bcrypt.hash(value, 12);
+        //   },
+        // },
       },
       passwordConfirmation: {
         optional: {
