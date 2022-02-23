@@ -1,5 +1,4 @@
 const Company = require("../models/company");
-const companyFormData = require("../models/companyFormData");
 const CompanyFormData = require("../models/companyFormData");
 const UserService = require("../services/user");
 class CompanyService {
@@ -38,19 +37,26 @@ class CompanyService {
       {
         shortName: body.result.ShortName,
         clientCode: body.result.ClientCode,
-      }
+      },
+      { new: true }
     );
   }
   async getById(id) {
     return await Company.findOne({ _id: id });
   }
-
   async search(searchText) {
     let res = await Company.fuzzySearch(searchText).limit(30);
-    return res.sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
-    // return await Company.find({
-    //   $or: [{ shortName: searchText }, { clientCode: searchText }],
-    // });
+    return res
+      .sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore)
+      .map((item) => {
+        return {
+          _id: item._id,
+          shortName: item.shortName,
+          clientCode: item.clientCode,
+          username: item.username,
+          formDataResultId: item.formDataResultId,
+        };
+      });
   }
   async getFormDataById(id) {
     return await CompanyFormData.findOne({ _id: id });

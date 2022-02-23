@@ -16,8 +16,8 @@ class PersonService {
     }).save();
 
     return await new Person({
-      family: result.Name,
-      name: result.Family,
+      name: result.Name,
+      family: result.Family,
       surname: result.Surname,
       INN: result.INN,
       username: username,
@@ -42,7 +42,8 @@ class PersonService {
         family: body.result.Family,
         surname: body.result.Surname,
         INN: body.result.INN ? body.result.INN : " ",
-      }
+      },
+      { new: true }
     );
   }
   async getById(id) {
@@ -50,15 +51,19 @@ class PersonService {
   }
   async search(searchText) {
     let res = await Person.fuzzySearch(searchText).limit(30);
-    return res.sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore);
-    // return await Person.find({
-    //   $or: [
-    //     { name: searchText },
-    //     { family: searchText },
-    //     { surname: searchText },
-    //     { INN: searchText },
-    //   ],
-    // });
+    return res
+      .sort((a, b) => a._doc.confidenceScore > b._doc.confidenceScore)
+      .map((item) => {
+        return {
+          name: item.name,
+          family: item.family,
+          surname: item.surname,
+          INN: item.INN,
+          username: item.username,
+          formDataResultId: item.formDataResultId,
+          id: item._id,
+        };
+      });
   }
   async getFormDataById(id) {
     return await PersonFormData.findOne({ _id: id });
@@ -67,9 +72,9 @@ class PersonService {
     let persons = await personFormData.find({});
     return persons.map((item) => item.result);
   }
-  async deleteAll(){
-    await PersonFormData.deleteMany({})
-    await Person.deleteMany({})
+  async deleteAll() {
+    await PersonFormData.deleteMany({});
+    await Person.deleteMany({});
   }
 }
 
