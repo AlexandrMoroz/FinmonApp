@@ -5,50 +5,38 @@ chai.config.includeStack = true;
 let XLSX = require("xlsx");
 
 const diffHistory = require("mongoose-diff-history/diffHistory");
-const History = require("mongoose-diff-history/diffHistoryModel").model;
-const Helper = require("../models/helper");
-const Company = require("../models/company");
-const CompanyFormData = require("../models/companyFormData");
+const historyService = require("../services/history");
+
+const helperService = require("../services/helper");
+const companyService = require("../services/company");
 let translate = require("../mock/personTranslate.json");
 
-//const server = "http://localhost:4000";
-// const { testConfig } = require("../config/index");
-// let server = require("../server")(testConfig);
 let token = "";
-const user = {
-  block: false,
-  role: "admin",
-  name: "alexandr1",
-  family: "moroz1",
-  surname: "sergeevich1",
-  cashboxAdress:
-    "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
-  email: "alexandr@gmail.com",
-  username: "alexandrMorozzz12",
-  password: "123qwe123qwe",
-};
+const user = require("../mock/adminUser.json");
 chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
+let init = async (oldCompany) => {
+  await historyService.deleteAll();
+  await companyService.deleteAll();
+  await helperService.deleteAll();
+  await helperService.create(translate.name, translate.result);
+  return await companyService.create(user.username, oldCompany.result);
+};
 module.exports = (server) => {
   describe("test company api", () => {
-    before((done) => {
-      chai
-        .request(server)
-        .post("/api/user/login")
-        .send({
-          username: user.username,
-          password: user.password,
-        })
-        .end((err, res) => {
-          token = res.body.token;
-          done();
-        });
+    before(async () => {
+      await userService.deleteAll();
+      await userService.create(user);
+      let res = await chai.request(server).post("/api/user/login").send({
+        username: user.username,
+        password: user.password,
+      });
+      token = res.body.token;
     });
     describe("company/create ", () => {
       beforeEach(async function () {
-        await Company.deleteMany({});
-        await CompanyFormData.deleteMany({});
+        await companyService.deleteAll();
       });
 
       it("it create new company ", (done) => {
@@ -124,14 +112,10 @@ module.exports = (server) => {
           });
       });
     });
-    describe("company/edit ", () => {
+    describe("company/edit ", async () => {
       let newCompany;
-      let newCompanyFormData;
       let oldCompany;
       before(async () => {
-        await CompanyFormData.deleteMany({});
-        await Company.deleteMany({});
-        await History.deleteMany({});
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
@@ -139,18 +123,10 @@ module.exports = (server) => {
             IsResident: false,
           },
         };
-        newCompanyFormData = await new CompanyFormData({
-          result: oldCompany.result,
-        }).save();
-        newCompany = await new Company({
-          shortName: oldCompany.result.ShortName,
-          clientCode: oldCompany.result.ClientCode,
-          username: user.username,
-          formDataResultId: newCompanyFormData._id,
-        }).save();
+        newCompany = await init(oldCompany);
       });
 
-      it("it edit company ", (done) => {
+      it("it edit company ", async () => {
         let editCompany = {
           result: {
             ShortName: "ТОВ ФИНОД2",
@@ -159,34 +135,27 @@ module.exports = (server) => {
             OwnershipForm: "Приватна",
             IsResident: false,
           },
-          formDataResultId: newCompanyFormData._id,
+          formDataResultId: newCompany.formDataResultId,
           _id: newCompany._id,
         };
-        chai
+        let res = await chai
           .request(server)
           .put("/api/company/edit")
           .set("Authorization", token)
-          .send(editCompany)
-          .end(async (err, res) => {
-            res.body.should.have.property("success");
-            res.body.should.have.property("result");
-            res.body.result.should
-              .excluding(["createdAt", "updatedAt", "__v"])
-              .deep.equal({
-                _id: newCompany._id.toString(),
-                shortName: editCompany.result.ShortName,
-                clientCode: editCompany.result.ClientCode,
-                username: user.username,
-                formDataResultId: newCompanyFormData._id.toString(),
-              });
-            res.should.have.status(200);
-            if (err) {
-              done(err);
-            }
-            done();
+          .send(editCompany);
+
+        res.body.result.should
+          .excluding(["createdAt", "updatedAt", "__v"])
+          .deep.equal({
+            _id: newCompany._id.toString(),
+            shortName: editCompany.result.ShortName,
+            clientCode: editCompany.result.ClientCode,
+            username: user.username,
+            formDataResultId: newCompany.formDataResultId.toString(),
           });
+        res.should.have.status(200);
       });
-      it("it edit company and cheak history ", (done) => {
+      it("it edit company and cheak history ", async () => {
         let editCompany = {
           result: {
             ShortName: "ТОВ ФИНОД2",
@@ -195,33 +164,30 @@ module.exports = (server) => {
             OwnershipForm: "Приватна",
             IsResident: false,
           },
-          formDataResultId: newCompanyFormData._id,
+          formDataResultId: newCompany.formDataResultId,
           _id: newCompany._id,
         };
-        chai
+        let res = await chai
           .request(server)
           .put("/api/company/edit")
           .set("Authorization", token)
-          .send(editCompany)
-          .end(async (err, res) => {
-            res.should.have.status(200);
-            let history = await diffHistory.getDiffs(
-              "CompanyFormData",
-              res.body.result.formDataResultId
-            );
-            let historyRes = history[0].diff.result;
-            historyRes.should.deep.equal({
-              ShortName: [
-                oldCompany.result.ShortName,
-                editCompany.result.ShortName,
-              ],
-              LegalForm: [editCompany.result.LegalForm],
-              OwnershipForm: [editCompany.result.OwnershipForm],
-            });
-            done();
-          });
+          .send(editCompany);
+        res.should.have.status(200);
+        let history = await diffHistory.getDiffs(
+          "CompanyFormData",
+          res.body.result.formDataResultId
+        );
+        let historyRes = history[0].diff.result;
+        historyRes.should.deep.equal({
+          ShortName: [
+            oldCompany.result.ShortName,
+            editCompany.result.ShortName,
+          ],
+          LegalForm: [editCompany.result.LegalForm],
+          OwnershipForm: [editCompany.result.OwnershipForm],
+        });
       });
-      it("it negative test edit company with mising field", (done) => {
+      it("it negative test edit company with mising field", async () => {
         let editCompany = {
           result: {
             ShortName2: "ТОВ ФИНОД2", //err
@@ -230,80 +196,71 @@ module.exports = (server) => {
             OwnershipForm: "Приватна",
             IsResident: false,
           },
-          formDataResultId: newCompanyFormData._id,
+          formDataResultId: newCompany.formDataResultId,
           _id: newCompany._id,
         };
-        chai
+        let res = await chai
           .request(server)
           .put("/api/company/edit")
           .set("Authorization", token)
-          .send(editCompany)
-          .end(async (err, res) => {
-            res.should.have.status(400);
-            res.body.should.have.property("message").eql("Validation error");
-            res.body.should.have.property("validation").eql(false);
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  msg: "Поле (Скорочене наименування) порожне",
-                  param: "result.ShortName",
-                  location: "body",
-                },
-              ],
-            });
-            done();
-          });
+          .send(editCompany);
+
+        res.should.have.status(400);
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              msg: "Поле (Скорочене наименування) порожне",
+              param: "result.ShortName",
+              location: "body",
+            },
+          ],
+        });
       });
-      it("it negative test edit company with wrong ShortName type ", (done) => {
-        let editCompany = {
-          result: {
-            ShortName: 12312, //err
-            ClientCode: "12341141",
-            LegalForm: "OOO",
-            OwnershipForm: "Приватна",
-            IsResident: false,
-          },
-          formDataResultId: newCompanyFormData._id,
-          _id: newCompany._id,
-        };
-        chai
-          .request(server)
-          .put("/api/company/edit")
-          .set("Authorization", token)
-          .send(editCompany)
-          .end(async (err, res) => {
-            res.should.have.status(400);
-            res.body.should.have.property("message").eql("Validation error");
-            res.body.should.have.property("validation").eql(false);
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  value: 12312,
-                  msg: "Поле (Скорочене наименування) повинно бути строкою",
-                  param: "result.ShortName",
-                  location: "body",
-                },
-              ],
-            });
-            done();
+      it("it negative test edit company with wrong ShortName type ", async () => {
+        try {
+          let editCompany = {
+            result: {
+              ShortName: 12312, //err
+              ClientCode: "12341141",
+              LegalForm: "OOO",
+              OwnershipForm: "Приватна",
+              IsResident: false,
+            },
+            formDataResultId: newCompany.formDataResultId,
+            _id: newCompany._id,
+          };
+          let res = await chai
+            .request(server)
+            .put("/api/company/edit")
+            .set("Authorization", token)
+            .send(editCompany);
+          res.should.have.status(400);
+          res.body.should.deep.equal({
+            message: "Validation error",
+            validation: false,
+            success: false,
+            error: [
+              {
+                value: 12312,
+                msg: "Поле (Скорочене наименування) повинно бути строкою",
+                param: "result.ShortName",
+                location: "body",
+              },
+            ],
           });
+        } catch (err) {
+          console.log(err);
+        }
       });
     });
-
     describe("company/search", () => {
       let oldCompany;
       let newCompany;
 
       before(async () => {
-        await CompanyFormData.deleteMany({});
-        await Company.deleteMany({});
-        await History.deleteMany({});
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
@@ -311,149 +268,109 @@ module.exports = (server) => {
             IsResident: false,
           },
         };
-        newCompanyFormData = await new CompanyFormData({
-          result: oldCompany.result,
-        }).save();
-        newCompany = await new Company({
-          shortName: oldCompany.result.ShortName,
-          clientCode: oldCompany.result.ClientCode,
-          username: user.username,
-          formDataResultId: newCompanyFormData._id,
-        }).save();
+        newCompany = await init(oldCompany);
       });
-      it("it search company ", (done) => {
+      it("it search company ", async () => {
         let searchCompany = {
           searchText: "12341141",
         };
-        chai
+        let res = await chai
           .request(server)
           .get("/api/company/search")
           .set("Authorization", token)
-          .query(searchCompany)
-          .end(async (err, res) => {
-            res.should.have.status(200);
-            res.body.result.should
-              .excluding(["createdAt", "updatedAt", "__v"])
-              .deep.equal([
-                {
-                  _id: newCompany._id.toString(),
-                  shortName: oldCompany.result.ShortName,
-                  clientCode: oldCompany.result.ClientCode,
-                  username: user.username,
-                  formDataResultId: newCompanyFormData._id.toString(),
-                },
-              ]);
-            if (err) {
-              done(err);
-            }
-            done();
-          });
+          .query(searchCompany);
+
+        res.should.have.status(200);
+        res.body.result.should
+          .excluding(["createdAt", "updatedAt", "__v"])
+          .deep.equal([
+            {
+              _id: newCompany._id.toString(),
+              shortName: newCompany.shortName,
+              clientCode: newCompany.clientCode,
+              username: user.username,
+              formDataResultId: newCompany.formDataResultId.toString(),
+            },
+          ]);
       });
-      it("it negative test search company with empty searchtext ", (done) => {
+      it("it negative test search company with empty searchtext ", async () => {
         let searchCompany = {
           searchText: "",
         };
-        chai
+        let res = await chai
           .request(server)
           .get("/api/company/search")
           .set("Authorization", token)
-          .query(searchCompany)
-          .end(async (err, res) => {
-            res.should.have.status(400);
-            res.body.should.have.property("message").eql("Validation error");
-            res.body.should.have.property("validation").eql(false);
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  value: "",
-                  msg: "Поле Пошуку повинно містити більше 2 символів",
-                  param: "searchText",
-                  location: "query",
-                },
-              ],
-            });
-            if (err) {
-              done(err);
-            }
-            done();
-          });
+          .query(searchCompany);
+        res.should.have.status(400);
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              value: "",
+              msg: "Поле Пошуку повинно містити більше 2 символів",
+              param: "searchText",
+              location: "query",
+            },
+          ],
+        });
       });
-      it("it negative test search company with wrong searchtext name ", (done) => {
+      it("it negative test search company with wrong searchtext name ", async () => {
         let searchCompany = {
           searchText1: "1234567", //err
         };
-        chai
+        let res = await chai
           .request(server)
           .get("/api/company/search")
           .set("Authorization", token)
-          .query(searchCompany)
-          .end(async (err, res) => {
-            res.should.have.status(400);
-            res.body.should.have.property("message").eql("Validation error");
-            res.body.should.have.property("validation").eql(false);
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  msg: "Поле Пошуку порожне",
-                  param: "searchText",
-                  location: "query",
-                },
-              ],
-            });
-            if (err) {
-              done(err);
-            }
-            done();
-          });
+          .query(searchCompany);
+        res.should.have.status(400);
+        res.body.should.have.property("message").eql("Validation error");
+        res.body.should.have.property("validation").eql(false);
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              msg: "Поле Пошуку порожне",
+              param: "searchText",
+              location: "query",
+            },
+          ],
+        });
       });
-      it("it negative test search company with 1 charter searchtext lenght   ", (done) => {
+      it("it negative test search company with 1 charter searchtext lenght   ", async () => {
         let searchCompany = {
           searchText: "1",
         };
-        chai
+        let res = await chai
           .request(server)
           .get("/api/company/search")
           .set("Authorization", token)
-          .query(searchCompany)
-          .end(async (err, res) => {
-            res.should.have.status(400);
-            res.body.should.have.property("message").eql("Validation error");
-            res.body.should.have.property("validation").eql(false);
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  value: "1",
-                  msg: "Поле Пошуку повинно містити більше 2 символів",
-                  param: "searchText",
-                  location: "query",
-                },
-              ],
-            });
-            if (err) {
-              done(err);
-            }
-            done();
-          });
+          .query(searchCompany);
+        res.should.have.status(400);
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              value: "1",
+              msg: "Поле Пошуку повинно містити більше 2 символів",
+              param: "searchText",
+              location: "query",
+            },
+          ],
+        });
       });
     });
-
     describe("company/getById", () => {
-      let oldCompany = null;
-      let newCompany = null;
-      let newCompanyFormData = null;
+      let oldCompany;
+      let newCompany;
       before(async () => {
-        await CompanyFormData.deleteMany({});
-        await Company.deleteMany({});
-        await History.deleteMany({});
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
@@ -461,15 +378,7 @@ module.exports = (server) => {
             IsResident: false,
           },
         };
-        newCompanyFormData = await new CompanyFormData({
-          result: oldCompany.result,
-        }).save();
-        newCompany = await new Company({
-          shortName: oldCompany.result.ShortName,
-          clientCode: oldCompany.result.ClientCode,
-          username: user.username,
-          formDataResultId: newCompanyFormData._id.toString(),
-        }).save();
+        newCompany = await init(oldCompany);
       });
       it("it get company form data by id", (done) => {
         chai
@@ -539,20 +448,11 @@ module.exports = (server) => {
           });
       });
     });
-
     describe("company/file", () => {
       let oldCompany;
       let newCompany;
 
       before(async () => {
-        await CompanyFormData.deleteMany({});
-        await Company.deleteMany({});
-        await Helper.deleteMany({});
-        await new Helper({
-          name: translate.name,
-          result: translate.result,
-        }).save();
-
         oldCompany = {
           result: {
             ShortName: "ТОВ ФИНОД",
@@ -560,127 +460,106 @@ module.exports = (server) => {
             IsResident: false,
           },
         };
-        newCompanyFormData = await new CompanyFormData({
-          result: oldCompany.result,
-        }).save();
-        newCompany = await new Company({
-          shortName: oldCompany.result.ShortName,
-          clientCode: oldCompany.result.ClientCode,
-          username: user.username,
-          formDataResultId: newCompanyFormData._id,
-        }).save();
+        newCompany = await init(oldCompany);
       });
-      it("it get company buf of file  ", (done) => {
-        chai
+      it("it get company buf of file  ", async () => {
+        let res = await chai
           .request(server)
           .get("/api/company/file")
           .set("Authorization", token)
-          .query({ id: newCompany._id.toString() })
-          .end(async (err, res) => {
-            const wb = XLSX.read(res.body.result, { type: "base64" });
-            let obj = {
-              Анкета: {
-                '!ref': 'A1:D4',
-                A1: {
-                  t: 's',
-                  v: 'Анкета юридичної особи Не резидента',
-                  h: 'Анкета юридичної особи Не резидента',
-                  w: 'Анкета юридичної особи Не резидента'
-                },
-                A2: {
-                  t: 's',
-                  v: 'Створенно користувачем',
-                  h: 'Створенно користувачем',
-                  w: 'Створенно користувачем'
-                },
-                B2: {
-                  t: 's',
-                  v: 'moroz1 alexandr2 sergeevich1',
-                  h: 'moroz1 alexandr2 sergeevich1',
-                  w: 'moroz1 alexandr2 sergeevich1'
-                },
-                C2: {
-                  t: 's',
-                  v: 'Дата створення:',
-                  h: 'Дата створення:',
-                  w: 'Дата створення:'
-                },
-                D2: {
-                  t: 's',
-                  v: '03.12.2021, 16:04:01',
-                  h: '03.12.2021, 16:04:01',
-                  w: '03.12.2021, 16:04:01'
-                },
-                A3: {
-                  t: 's',
-                  v: 'Скорочене найменування (за наявності)',
-                  h: 'Скорочене найменування (за наявності)',
-                  w: 'Скорочене найменування (за наявності)'
-                },
-                B3: { t: 's', v: 'ТОВ ФИНОД', h: 'ТОВ ФИНОД', w: 'ТОВ ФИНОД' },
-                A4: {
-                  t: 's',
-                  v: 'Код (за наявності) клієнта',
-                  h: 'Код (за наявності) клієнта',
-                  w: 'Код (за наявності) клієнта'
-                },
-                B4: { t: 's', v: '12341141', h: '12341141', w: '12341141' }
-              }
-            };
-            wb.Sheets["Анкета"].should
-              .excluding(["D2"])
-              .deep.equal(obj["Анкета"]);
-            res.should.have.status(200);
-            done();
-          });
+          .query({ id: newCompany._id.toString() });
+        const wb = XLSX.read(res.body.result, { type: "base64" });
+        let shouldEquals = {
+          "!ref": "A1:D4",
+          A1: {
+            t: "s",
+            v: "Анкета Юридичної особи Не резидента",
+            h: "Анкета Юридичної особи Не резидента",
+            w: "Анкета Юридичної особи Не резидента",
+          },
+          A2: {
+            t: "s",
+            v: "Створенно користувачем",
+            h: "Створенно користувачем",
+            w: "Створенно користувачем",
+          },
+          B2: {
+            t: "s",
+            v: "moroz1 alexandr1 sergeevich1",
+            h: "moroz1 alexandr1 sergeevich1",
+            w: "moroz1 alexandr1 sergeevich1",
+          },
+          C2: {
+            t: "s",
+            v: "Дата створення:",
+            h: "Дата створення:",
+            w: "Дата створення:",
+          },
+          D2: {
+            t: "s",
+            v: "23/02/2022, 11:19:46",
+            h: "23/02/2022, 11:19:46",
+            w: "23/02/2022, 11:19:46",
+          },
+          A3: {
+            t: "s",
+            v: "Скорочене найменування (за наявності)",
+            h: "Скорочене найменування (за наявності)",
+            w: "Скорочене найменування (за наявності)",
+          },
+          B3: { t: "s", v: "ТОВ ФИНОД", h: "ТОВ ФИНОД", w: "ТОВ ФИНОД" },
+          A4: {
+            t: "s",
+            v: "Код (за наявності) клієнта",
+            h: "Код (за наявності) клієнта",
+            w: "Код (за наявності) клієнта",
+          },
+          B4: { t: "s", v: "12341141", h: "12341141", w: "12341141" },
+        };
+        wb.Sheets["Анкета"].should.excluding(["D2"]).deep.equal(shouldEquals);
+        res.should.have.status(200);
       });
-      it("it negative test get company buf of file with wrong id  ", (done) => {
-        chai
+      it("it negative test get company buf of file with wrong id  ", async () => {
+        let res = await chai
           .request(server)
           .get("/api/company/file")
           .set("Authorization", token)
-          .query({ id: "60a6240e9874e015b03b25f2" })
-          .end(async (err, res) => {
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  value: "60a6240e9874e015b03b25f2",
-                  msg: "Невірний id",
-                  param: "id",
-                  location: "query",
-                },
-              ],
-            });
-            res.should.have.status(400);
-            done();
-          });
+          .query({ id: "60a6240e9874e015b03b25f2" });
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              value: "60a6240e9874e015b03b25f2",
+              msg: "Невірний id",
+              param: "id",
+              location: "query",
+            },
+          ],
+        });
+        res.should.have.status(400);
       });
-      it("it negative test get company buf of file with empty id  ", (done) => {
-        chai
+      it("it negative test get company buf of file with empty id  ", async () => {
+        let res = await chai
           .request(server)
           .get("/api/company/file")
           .set("Authorization", token)
-          .query({ id: "" })
-          .end(async (err, res) => {
-            res.body.should.deep.equal({
-              message: "Validation error",
-              validation: false,
-              success: false,
-              error: [
-                {
-                  value: "",
-                  msg: "Невірний тип id",
-                  param: "id",
-                  location: "query",
-                },
-              ],
-            });
-            res.should.have.status(400);
-            done();
-          });
+          .query({ id: "" });
+        res.body.should.deep.equal({
+          message: "Validation error",
+          validation: false,
+          success: false,
+          error: [
+            {
+              value: "",
+              msg: "Невірний тип id",
+              param: "id",
+              location: "query",
+            },
+          ],
+        });
+        res.should.have.status(400);
       });
     });
   });

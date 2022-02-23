@@ -2,23 +2,11 @@ const chai = require("chai");
 const chaihttp = require("chai-http");
 const chaiExclude = require("chai-exclude");
 chai.config.includeStack = true;
-const bcrypt = require("bcryptjs");
-const User = require("../models/user");
+const userService = require("../services/user");
 
-// const server = "http://localhost:4000";
 let token = "";
-const user = {
-  block: false,
-  role: "admin",
-  name: "alexandr2",
-  family: "moroz1",
-  surname: "sergeevich1",
-  cashboxAdress:
-    "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
-  email: "alexandr@gmail.com",
-  username: "alexandrMorozzz12",
-  password: "123qwe123qwe",
-};
+const user = require("../mock/adminUser.json");
+
 let newuser;
 chai.should();
 chai.use(chaihttp);
@@ -29,9 +17,9 @@ let test = (server) => {
     describe("user/create ", () => {
       before(async () => {
         try {
-          await User.deleteMany({});
-          let password = await bcrypt.hash(user.password, 12);
-          newuser = await new User({ ...user, password }).save();
+          await userService.deleteAll();
+          newuser = await userService.create(user);
+
           let res = await chai.request(server).post("/api/user/login").send({
             username: user.username,
             password: user.password,
@@ -60,21 +48,10 @@ let test = (server) => {
           .set("Authorization", token)
           .send(CreateUser);
 
-        res.body.should.excluding(["result"]).deep.equal({
-          message: "User was created",
-          success: true,
-        });
-        res.body.result.should.excluding(["id", "password"]).deep.equal({
-          block: false,
-          role: "user",
-          name: "vadim",
-          family: "tkalenko",
-          surname: "anatolievich",
-          cashboxAdress:
-            "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
-          email: "vadim@gmail.com",
-          username: "vadim",
-        });
+        delete CreateUser.password;
+        res.body.result.should
+          .excluding(["id", "password"])
+          .deep.equal(CreateUser);
         res.should.have.status(201);
       });
       it("it create new user with auth err ", async () => {
@@ -208,24 +185,37 @@ let test = (server) => {
 
     describe("user/edit", () => {
       let newCreatedUser;
-      before(async () => {
-        let res = await chai
-          .request(server)
-          .post("/api/user/create")
-          .set("Authorization", token)
-          .send({
-            block: false,
-            role: "admin",
-            name: "vadim23",
-            family: "tkalenko23",
-            surname: "anatolievich23",
-            cashboxAdress:
-              "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
-            email: "vadim@gmail.com",
-            username: "vadim23",
-            password: "123qwe123qwe",
+      beforeEach(async () => {
+        try {
+          await userService.deleteAll();
+          newuser = await userService.create(user);
+
+          let res = await chai.request(server).post("/api/user/login").send({
+            username: user.username,
+            password: user.password,
           });
-        newCreatedUser = res.body.result;
+          token = res.body.token;
+
+          res = await chai
+            .request(server)
+            .post("/api/user/create")
+            .set("Authorization", token)
+            .send({
+              block: false,
+              role: "admin",
+              name: "vadim23",
+              family: "tkalenko23",
+              surname: "anatolievich23",
+              cashboxAdress:
+                "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
+              email: "vadim@gmail.com",
+              username: "vadim23",
+              password: "123qwe123qwe",
+            });
+          newCreatedUser = res.body.result;
+        } catch (err) {
+          console.log(err);
+        }
       });
       it("it edit user", async () => {
         const EditUser = {
@@ -234,11 +224,11 @@ let test = (server) => {
           role: "admin",
           name: "vadim2",
           family: "tkalenko2",
-          surname: "anatolievich3",
+          surname: "anatolievich2",
           cashboxAdress:
             "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
           email: "vadim3@gmail.com",
-          username: "vadim1",
+          username: "vadim2",
           password: "123qwe123qwe",
         };
         let res = await chai

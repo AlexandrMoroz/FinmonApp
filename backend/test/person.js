@@ -3,37 +3,27 @@ const chaihttp = require("chai-http");
 const chaiExclude = require("chai-exclude");
 chai.config.includeStack = true;
 let XLSX = require("xlsx");
-
 const diffHistory = require("mongoose-diff-history/diffHistory");
-const History = require("mongoose-diff-history/diffHistoryModel").model;
-const Helper = require("../models/helper");
-const Person = require("../models/person");
-const PersonFormData = require("../models/personFormData");
+const historyService = require("../services/history");
+const helperService = require("../services/helper");
+const personService = require("../services/person");
+const userService = require("../services/user");
 let translate = require("../mock/personTranslate.json");
 
-// const { testConfig } = require("../config/index");
-// let server = require("../server")(testConfig);
-
 let token = "";
-const user = {
-  block: false,
-  role: "admin",
-  name: "alexandr1",
-  family: "moroz1",
-  surname: "sergeevich1",
-  cashboxAdress:
-    "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
-  email: "alexandr@gmail.com",
-  username: "alexandrMorozzz12",
-  password: "123qwe123qwe",
-};
+const user = require("../mock/adminUser.json");
 chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
-
+let init = async (oldPerson) => {
+  await personService.deleteAll();
+  return await personService.create(user.username, oldPerson);
+};
 let test = (server) => {
   describe("test Person api", () => {
     before(async () => {
+      await userService.deleteAll();
+      await userService.create(user);
       let res = await chai.request(server).post("/api/user/login").send({
         username: user.username,
         password: user.password,
@@ -42,8 +32,7 @@ let test = (server) => {
     });
     describe("Person/create ", () => {
       beforeEach(async function () {
-        await Person.deleteMany({});
-        await PersonFormData.deleteMany({});
+        await personService.deleteAll();
       });
 
       it("it create new Person ", async () => {
@@ -52,6 +41,14 @@ let test = (server) => {
             Name: "Alexandr",
             Family: "Moroz",
             Surname: "Sergeevich",
+            Regist: {
+              Country: "Україна",
+              Adress: "123123",
+            },
+            Live: {
+              Country: "Україна",
+              Adress: "123123",
+            },
             INN: "2312234312",
             IsResident: true,
           },
@@ -61,7 +58,6 @@ let test = (server) => {
           .post("/api/person/create")
           .set("Authorization", token)
           .send(CreatePerson);
-
         res.should.have.status(201);
         res.body.result.should
           .excluding([
@@ -118,14 +114,49 @@ let test = (server) => {
           success: false,
           error: [
             {
-              msg: "Поле Резидент порожне",
+              msg: "Поле Резидент порожнє",
               param: "result.IsResident",
               location: "body",
             },
             {
-              msg: "Поле Имя порожне",
+              msg: "Поле Имя порожнє",
               param: "result.Name",
               location: "body",
+            },
+            {
+              location: "body",
+              msg: "Поле місце реєстрації порожнє",
+              param: "result.Regist",
+            },
+            {
+              location: "body",
+              msg: "Поле країна порожнє",
+              param: "result.Regist.Country",
+            },
+            {
+              location: "body",
+              msg: "Поле адресс порожнє",
+              param: "result.Regist.Adress",
+            },
+            {
+              location: "body",
+              msg: "Поле місце проживання порожнє",
+              param: "result.Live",
+            },
+            {
+              location: "body",
+              msg: "Поле країна порожнє",
+              param: "result.Live.Country",
+            },
+            {
+              location: "body",
+              msg: "Поле адресс порожнє",
+              param: "result.Live.Adress",
+            },
+            {
+              location: "body",
+              msg: "В не резидента повинено бути громадянство",
+              param: "result.Citizen",
             },
           ],
         });
@@ -147,19 +178,54 @@ let test = (server) => {
           success: false,
           error: [
             {
-              msg: "Поле Резидент порожне",
+              msg: "Поле Резидент порожнє",
               param: "result.IsResident",
               location: "body",
             },
             {
-              msg: "Поле Имя порожне",
+              msg: "Поле Имя порожнє",
               param: "result.Name",
               location: "body",
             },
             {
-              msg: "Поле Фамилия порожне",
+              msg: "Поле Фамилия порожнє",
               param: "result.Family",
               location: "body",
+            },
+            {
+              location: "body",
+              msg: "Поле місце реєстрації порожнє",
+              param: "result.Regist",
+            },
+            {
+              location: "body",
+              msg: "Поле країна порожнє",
+              param: "result.Regist.Country",
+            },
+            {
+              location: "body",
+              msg: "Поле адресс порожнє",
+              param: "result.Regist.Adress",
+            },
+            {
+              location: "body",
+              msg: "Поле місце проживання порожнє",
+              param: "result.Live",
+            },
+            {
+              location: "body",
+              msg: "Поле країна порожнє",
+              param: "result.Live.Country",
+            },
+            {
+              location: "body",
+              msg: "Поле адресс порожнє",
+              param: "result.Live.Adress",
+            },
+            {
+              location: "body",
+              msg: "В не резидента повинено бути громадянство",
+              param: "result.Citizen",
             },
           ],
         });
@@ -167,31 +233,27 @@ let test = (server) => {
     });
     describe("Person/edit ", () => {
       let newPerson;
-      let newPersonFormData;
       let oldPerson;
       before(async () => {
-        await PersonFormData.deleteMany({});
-        await Person.deleteMany({});
-        await History.deleteMany({});
+        await historyService.deleteAll();
         oldPerson = {
           result: {
             Name: "Alexandr",
             Family: "Moroz",
             Surname: "Sergeevich",
+            Regist: {
+              Country: "Україна",
+              Adress: "123123",
+            },
+            Live: {
+              Country: "Україна",
+              Adress: "123123",
+            },
             INN: "2312234312",
+            IsResident: true,
           },
         };
-        newPersonFormData = await new PersonFormData({
-          result: oldPerson.result,
-        }).save();
-        newPerson = await new Person({
-          name: oldPerson.result.Name,
-          family: oldPerson.result.Family,
-          surname: oldPerson.result.Surname,
-          INN: oldPerson.result.INN,
-          username: user.username,
-          formDataResultId: newPersonFormData._id,
-        }).save();
+        newPerson = await init(oldPerson.result);
       });
 
       it("it edit Person ", async () => {
@@ -200,10 +262,18 @@ let test = (server) => {
             Name: "Alexandr2",
             Family: "Moroz2",
             Surname: "Sergeevich2",
-            DateOfFirstSigned: "12.12.2021",
+            Regist: {
+              Country: "Україна",
+              Adress: "123123",
+            },
+            Live: {
+              Country: "Україна",
+              Adress: "123123",
+            },
             INN: "2312234312",
+            IsResident: true,
           },
-          formDataResultId: newPersonFormData._id,
+          formDataResultId: newPerson.formDataResultId,
           _id: newPerson._id,
         };
         let res = await chai
@@ -230,10 +300,18 @@ let test = (server) => {
             Name: "Alexandr2",
             Family: "Moroz2",
             Surname: "Sergeevich2",
-            DateOfFirstSigned: "12.12.2021",
+            Regist: {
+              Country: "Україна",
+              Adress: "123123",
+            },
+            Live: {
+              Country: "Україна",
+              Adress: "123123",
+            },
             INN: "2312234312",
+            IsResident: true,
           },
-          formDataResultId: newPersonFormData._id,
+          formDataResultId: newPerson.formDataResultId,
           _id: newPerson._id,
         };
         let res = await chai
@@ -253,19 +331,26 @@ let test = (server) => {
           Name: [oldPerson.result.Name, editPerson.result.Name],
           Family: [oldPerson.result.Family, editPerson.result.Family],
           Surname: [oldPerson.result.Surname, editPerson.result.Surname],
-          DateOfFirstSigned: [editPerson.result.DateOfFirstSigned],
         });
       });
       it("it negative test edit Person with mising field", async () => {
         let editPerson = {
           result: {
-            //Name2: "Alexandr2",
+            // Name: "Alexandr2",
             Family: "Moroz2",
             Surname: "Sergeevich2",
-            DateOfFirstSigned: "12.12.2021",
+            Regist: {
+              Country: "Україна",
+              Adress: "123123",
+            },
+            Live: {
+              Country: "Україна",
+              Adress: "123123",
+            },
             INN: "2312234312",
+            IsResident: true,
           },
-          formDataResultId: newPersonFormData._id,
+          formDataResultId: newPerson.formDataResultId,
           _id: newPerson._id,
         };
         let res = await chai
@@ -281,7 +366,7 @@ let test = (server) => {
           success: false,
           error: [
             {
-              msg: "Поле Имя порожне",
+              msg: "Поле Имя порожнє",
               param: "result.Name",
               location: "body",
             },
@@ -294,10 +379,18 @@ let test = (server) => {
             Name: 123123,
             Family: "Moroz2",
             Surname: "Sergeevich2",
-            DateOfFirstSigned: "12.12.2021",
+            Regist: {
+              Country: "Україна",
+              Adress: "123123",
+            },
+            Live: {
+              Country: "Україна",
+              Adress: "123123",
+            },
             INN: "2312234312",
+            IsResident: true,
           },
-          formDataResultId: newPersonFormData._id,
+          formDataResultId: newPerson.formDataResultId,
           _id: newPerson._id,
         };
         let res = await chai
@@ -327,10 +420,18 @@ let test = (server) => {
             Name: "",
             Family: "Moroz2",
             Surname: "Sergeevich2",
-            DateOfFirstSigned: "12.12.2021",
+            Regist: {
+              Country: "Україна",
+              Adress: "123123",
+            },
+            Live: {
+              Country: "Україна",
+              Adress: "123123",
+            },
             INN: "2312234312",
+            IsResident: true,
           },
-          formDataResultId: newPersonFormData._id,
+          formDataResultId: newPerson.formDataResultId,
           _id: newPerson._id,
         };
         let res = await chai
@@ -358,31 +459,27 @@ let test = (server) => {
 
     describe("Person/search", () => {
       let newPerson;
-      let newPersonFormData;
       let oldPerson;
       before(async () => {
-        await PersonFormData.deleteMany({});
-        await Person.deleteMany({});
-        await History.deleteMany({});
+        await historyService.deleteAll();
         oldPerson = {
           result: {
             Name: "Alexandr",
             Family: "Moroz",
             Surname: "Sergeevich",
+            Regist: {
+              Country: "Україна",
+              Adress: "123123",
+            },
+            Live: {
+              Country: "Україна",
+              Adress: "123123",
+            },
             INN: "2312234312",
+            IsResident: true,
           },
         };
-        newPersonFormData = await new PersonFormData({
-          result: oldPerson.result,
-        }).save();
-        newPerson = await new Person({
-          name: oldPerson.result.Name,
-          family: oldPerson.result.Family,
-          surname: oldPerson.result.Surname,
-          INN: oldPerson.result.INN,
-          username: user.username,
-          formDataResultId: newPersonFormData._id,
-        }).save();
+        newPerson = await init(oldPerson.result);
       });
       it("it search Person ", async () => {
         let searchPerson = {
@@ -399,13 +496,13 @@ let test = (server) => {
           .excluding(["createdAt", "updatedAt", "__v"])
           .deep.equal([
             {
-              _id: newPerson._id.toString(),
+              id: newPerson._id.toString(),
               name: oldPerson.result.Name,
               family: oldPerson.result.Family,
               surname: oldPerson.result.Surname,
               INN: oldPerson.result.INN,
               username: user.username,
-              formDataResultId: newPersonFormData._id.toString(),
+              formDataResultId: newPerson.formDataResultId.toString(),
             },
           ]);
       });
@@ -452,7 +549,7 @@ let test = (server) => {
           error: [
             {
               location: "query",
-              msg: "Поле Поиска порожне",
+              msg: "Поле Поиска порожнє",
               param: "searchText",
             },
           ],
@@ -487,31 +584,27 @@ let test = (server) => {
 
     describe("Person/getById", () => {
       let newPerson;
-      let newPersonFormData;
       let oldPerson;
       before(async () => {
-        await PersonFormData.deleteMany({});
-        await Person.deleteMany({});
-        await History.deleteMany({});
+        await historyService.deleteAll();
         oldPerson = {
           result: {
             Name: "Alexandr",
             Family: "Moroz",
             Surname: "Sergeevich",
+            Regist: {
+              Country: "Україна",
+              Adress: "123123",
+            },
+            Live: {
+              Country: "Україна",
+              Adress: "123123",
+            },
             INN: "2312234312",
+            IsResident: true,
           },
         };
-        newPersonFormData = await new PersonFormData({
-          result: oldPerson.result,
-        }).save();
-        newPerson = await new Person({
-          name: oldPerson.result.Name,
-          family: oldPerson.result.Family,
-          surname: oldPerson.result.Surname,
-          INN: oldPerson.result.INN,
-          username: user.username,
-          formDataResultId: newPersonFormData._id,
-        }).save();
+        newPerson = await init(oldPerson.result);
       });
       it("it get Person form data by id", async () => {
         let res = await chai
@@ -533,6 +626,9 @@ let test = (server) => {
             Name: oldPerson.result.Name,
             Family: oldPerson.result.Family,
             Surname: oldPerson.result.Surname,
+            Regist: oldPerson.result.Regist,
+            Live: oldPerson.result.Live,
+            IsResident: oldPerson.result.IsResident,
             INN: oldPerson.result.INN,
           });
       });
@@ -544,8 +640,6 @@ let test = (server) => {
           .query({ id: "60a6240e9874e015b03b25f2" }); //wrong id
 
         res.should.have.status(400);
-        res.body.should.have.property("message").eql("Validation error");
-        res.body.should.have.property("validation").eql(false);
         res.body.should.have.property("error").deep.equal([
           {
             value: "60a6240e9874e015b03b25f2",
@@ -577,25 +671,15 @@ let test = (server) => {
     });
     describe("Person/file", async () => {
       let newPerson;
-      let newPersonFormData;
       let oldPerson;
       before(async () => {
-        await History.deleteMany({});
-        await PersonFormData.deleteMany({});
-        await Person.deleteMany({});
-        await Helper.deleteMany({});
-        await new Helper({
-          name: translate.name,
-          result: translate.result,
-        }).save();
+        await helperService.deleteAll();
+        await helperService.create(translate.name, translate.result);
         oldPerson = {
           result: {
             Live: {
               Country: "Україна",
-              State: "-",
-              District: "-",
-              Adress: "м.Київ, вул. Бандери Степана, буд. 1, к.1, кв.1",
-              IsEqualsToLive: true,
+              Adress: "123123123",
             },
             Name: "Олександр",
             Family: "Олександров",
@@ -611,17 +695,8 @@ let test = (server) => {
             ],
           },
         };
-        newPersonFormData = await new PersonFormData({
-          result: oldPerson.result,
-        }).save();
-        newPerson = await new Person({
-          name: oldPerson.result.Name,
-          family: oldPerson.result.Family,
-          surname: oldPerson.result.Surname,
-          INN: oldPerson.result.INN,
-          username: user.username,
-          formDataResultId: newPersonFormData._id,
-        }).save();
+        await historyService.deleteAll();
+        newPerson = await init(oldPerson.result);
       });
       it("it get Person buf of file  ", async () => {
         let res = await chai
@@ -630,136 +705,121 @@ let test = (server) => {
           .set("Authorization", token)
           .query({ id: newPerson._id.toString() });
         const wb = XLSX.read(res.body.result, { type: "base64" });
-        let obj = {
-          '!ref': 'A1:D16',
+        let shoudEquals = {
+          "!ref": "A1:D14",
           A1: {
-            t: 's',
-            v: 'Анкета фізичной особи Не резидента',
-            h: 'Анкета фізичной особи Не резидента',
-            w: 'Анкета фізичной особи Не резидента'
+            t: "s",
+            v: "Анкета Фізичної особи Не резидента",
+            h: "Анкета Фізичної особи Не резидента",
+            w: "Анкета Фізичної особи Не резидента",
           },
           A2: {
-            t: 's',
-            v: 'Створенно користувачем',
-            h: 'Створенно користувачем',
-            w: 'Створенно користувачем'
+            t: "s",
+            v: "Створенно користувачем",
+            h: "Створенно користувачем",
+            w: "Створенно користувачем",
           },
           B2: {
-            t: 's',
-            v: 'moroz1 alexandr2 sergeevich1',
-            h: 'moroz1 alexandr2 sergeevich1',
-            w: 'moroz1 alexandr2 sergeevich1'
+            t: "s",
+            v: "moroz1 alexandr1 sergeevich1",
+            h: "moroz1 alexandr1 sergeevich1",
+            w: "moroz1 alexandr1 sergeevich1",
           },
           C2: {
-            t: 's',
-            v: 'Дата створення:',
-            h: 'Дата створення:',
-            w: 'Дата створення:'
+            t: "s",
+            v: "Дата створення:",
+            h: "Дата створення:",
+            w: "Дата створення:",
           },
-          A3: { t: 's', v: 'Прізвище', h: 'Прізвище', w: 'Прізвище' },
-          B3: { t: 's', v: 'Олександров', h: 'Олександров', w: 'Олександров' },
-          A4: { t: 's', v: "Ім'я", h: 'Ім&apos;я', w: "Ім'я" },
-          B4: { t: 's', v: 'Олександр', h: 'Олександр', w: 'Олександр' },
-          A5: { t: 's', v: 'По батькові', h: 'По батькові', w: 'По батькові' },
+          D2: {
+            t: "s",
+            v: "23/02/2022, 12:36:15",
+            h: "23/02/2022, 12:36:15",
+            w: "23/02/2022, 12:36:15",
+          },
+          A3: { t: "s", v: "Прізвище", h: "Прізвище", w: "Прізвище" },
+          B3: { t: "s", v: "Олександров", h: "Олександров", w: "Олександров" },
+          A4: { t: "s", v: "Ім'я", h: "Ім&apos;я", w: "Ім'я" },
+          B4: { t: "s", v: "Олександр", h: "Олександр", w: "Олександр" },
+          A5: { t: "s", v: "По батькові", h: "По батькові", w: "По батькові" },
           B5: {
-            t: 's',
-            v: 'Олександрович',
-            h: 'Олександрович',
-            w: 'Олександрович'
+            t: "s",
+            v: "Олександрович",
+            h: "Олександрович",
+            w: "Олександрович",
           },
           A6: {
-            t: 's',
-            v: 'Унікальний номер запису в реєстрі',
-            h: 'Унікальний номер запису в реєстрі',
-            w: 'Унікальний номер запису в реєстрі'
+            t: "s",
+            v: "Унікальний номер запису в реєстрі",
+            h: "Унікальний номер запису в реєстрі",
+            w: "Унікальний номер запису в реєстрі",
           },
-          B6: { t: 's', v: '12345678910', h: '12345678910', w: '12345678910' },
+          B6: { t: "s", v: "12345678910", h: "12345678910", w: "12345678910" },
           A7: {
-            t: 's',
-            v: 'Дата нарождения',
-            h: 'Дата нарождения',
-            w: 'Дата нарождения'
+            t: "s",
+            v: "Дата нарождения",
+            h: "Дата нарождения",
+            w: "Дата нарождения",
           },
-          B7: { t: 's', v: '2000-01-01', h: '2000-01-01', w: '2000-01-01' },
+          B7: { t: "s", v: "2000-01-01", h: "2000-01-01", w: "2000-01-01" },
           A8: {
-            t: 's',
-            v: 'Документ що засвідчує особу',
-            h: 'Документ що засвідчує особу',
-            w: 'Документ що засвідчує особу'
+            t: "s",
+            v: "Документ що засвідчує особу",
+            h: "Документ що засвідчує особу",
+            w: "Документ що засвідчує особу",
           },
           B8: {
-            t: 's',
-            v: 'паспорт громадянина України',
-            h: 'паспорт громадянина України',
-            w: 'паспорт громадянина України'
+            t: "s",
+            v: "паспорт громадянина України",
+            h: "паспорт громадянина України",
+            w: "паспорт громадянина України",
           },
-          A9: { t: 's', v: 'Номер', h: 'Номер', w: 'Номер' },
-          B9: { t: 's', v: '123456', h: '123456', w: '123456' },
+          A9: { t: "s", v: "Номер", h: "Номер", w: "Номер" },
+          B9: { t: "s", v: "123456", h: "123456", w: "123456" },
           A10: {
-            t: 's',
-            v: 'Орган що видав документ',
-            h: 'Орган що видав документ',
-            w: 'Орган що видав документ'
+            t: "s",
+            v: "Орган що видав документ",
+            h: "Орган що видав документ",
+            w: "Орган що видав документ",
           },
           B10: {
-            t: 's',
-            v: 'Київський РВ УМВС',
-            h: 'Київський РВ УМВС',
-            w: 'Київський РВ УМВС'
+            t: "s",
+            v: "Київський РВ УМВС",
+            h: "Київський РВ УМВС",
+            w: "Київський РВ УМВС",
           },
           A11: {
-            t: 's',
-            v: 'Дата видачі документу',
-            h: 'Дата видачі документу',
-            w: 'Дата видачі документу'
+            t: "s",
+            v: "Дата видачі документу",
+            h: "Дата видачі документу",
+            w: "Дата видачі документу",
           },
-          B11: { t: 's', v: '2016-02-01', h: '2016-02-01', w: '2016-02-01' },
+          B11: { t: "s", v: "2016-02-01", h: "2016-02-01", w: "2016-02-01" },
           A12: {
-            t: 's',
-            v: 'Місце перебування',
-            h: 'Місце перебування',
-            w: 'Місце перебування'
+            t: "s",
+            v: "Місце перебування",
+            h: "Місце перебування",
+            w: "Місце перебування",
           },
-          B12: { t: 's', v: 'Країна', h: 'Країна', w: 'Країна' },
-          C12: { t: 's', v: 'Україна', h: 'Україна', w: 'Україна' },
-          B13: {
-            t: 's',
-            v: 'Область (за наявності)',
-            h: 'Область (за наявності)',
-            w: 'Область (за наявності)'
+          B12: { t: "s", v: "Країна", h: "Країна", w: "Країна" },
+          C12: { t: "s", v: "Україна", h: "Україна", w: "Україна" },
+          B13: { t: "s", v: "Адреса", h: "Адреса", w: "Адреса" },
+          C13: { t: "s", v: "123123123", h: "123123123", w: "123123123" },
+          A14: {
+            t: "s",
+            v: "Фінансовий стан ",
+            h: "Фінансовий стан ",
+            w: "Фінансовий стан ",
           },
-          C13: { t: 's', v: '-', h: '-', w: '-' },
           B14: {
-            t: 's',
-            v: 'Район (за наявності)',
-            h: 'Район (за наявності)',
-            w: 'Район (за наявності)'
+            t: "s",
+            v: "Дата розрахунку",
+            h: "Дата розрахунку",
+            w: "Дата розрахунку",
           },
-          C14: { t: 's', v: '-', h: '-', w: '-' },
-          B15: { t: 's', v: 'Адреса', h: 'Адреса', w: 'Адреса' },
-          C15: {
-            t: 's',
-            v: 'м.Київ, вул. Бандери Степана, буд. 1, к.1, кв.1',
-            h: 'м.Київ, вул. Бандери Степана, буд. 1, к.1, кв.1',
-            w: 'м.Київ, вул. Бандери Степана, буд. 1, к.1, кв.1'
-          },
-          A16: {
-            t: 's',
-            v: 'Фінансовий стан ',
-            h: 'Фінансовий стан ',
-            w: 'Фінансовий стан '
-          },
-          B16: {
-            t: 's',
-            v: 'Дата розрахунку',
-            h: 'Дата розрахунку',
-            w: 'Дата розрахунку'
-          },
-          C16: { t: 's', v: '2021-07-06', h: '2021-07-06', w: '2021-07-06' }
+          C14: { t: "s", v: "2021-07-06", h: "2021-07-06", w: "2021-07-06" },
         };
-        wb.Sheets["Анкета"].should
-          .excluding(["D2"])
-          .deep.equal(obj);
+        wb.Sheets["Анкета"].should.excluding(["D2"]).deep.equal(shoudEquals);
         res.should.have.status(200);
       });
       it("it negative test get Person buf of file with wrong id  ", async () => {
