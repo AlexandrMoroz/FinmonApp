@@ -6,20 +6,8 @@ let XLSX = require("xlsx");
 
 const Form = require("../models/form");
 
-//const server = "http://localhost:4000";
 let token = "";
-const user = {
-  block: false,
-  role: "admin",
-  name: "alexandr1",
-  family: "moroz1",
-  surname: "sergeevich1",
-  cashboxAdress:
-    "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
-  email: "alexandr@gmail.com",
-  username: "alexandrMorozzz12",
-  password: "123qwe123qwe",
-};
+const user = require("../mock/adminUser.json");
 chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
@@ -776,9 +764,7 @@ let test = (server) => {
                 content: EditForm.content,
                 __v: 0,
               });
-            } catch (err) {
-              
-            }
+            } catch (err) {}
             if (err) {
               done(err);
             }
