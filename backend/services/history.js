@@ -2,6 +2,7 @@ const diffHistory = require("mongoose-diff-history/diffHistory");
 const { Formater } = require("../utils/formater");
 const XLSXHistory = require("../utils/history");
 const HelperService = require("../services/helper");
+const History = require("mongoose-diff-history/diffHistoryModel").model;
 
 class HistoryService {
   constructor() {
@@ -14,7 +15,7 @@ class HistoryService {
     let history = await diffHistory.getDiffs(collectionName, id);
     let translate_arr = await HelperService.getTranslate();
     let formater = new Formater(translate_arr);
-    
+
     return history.map((item) => {
       return {
         diff: formater.format(item.diff),
@@ -28,6 +29,9 @@ class HistoryService {
     let translate_arr = await HelperService.getTranslate();
     let xmls = new XLSXHistory(translate_arr);
     return xmls.createHistoryBuf(history);
+  }
+  async deleteAll() {
+    await History.deleteMany({});
   }
 }
 
