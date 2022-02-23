@@ -1,5 +1,5 @@
 const Helper = require("../models/helper");
-const { COMPANY,PERSON } = require("./serviceshelpers");
+const { COMPANY, PERSON } = require("./serviceshelpers");
 class HelperService {
   constructor() {
     if (HelperService._instance) {
@@ -40,6 +40,9 @@ class HelperService {
       case PERSON:
         return require("../mock/personOrder.json");
     }
+  }
+  async deleteAll() {
+    await Helper.deleteMany({});
   }
 }
 module.exports = new HelperService();
