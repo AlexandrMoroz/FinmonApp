@@ -27,11 +27,7 @@ const Edit = async (body, res, next) => {
         name: body.name,
         content: body.content,
       },
-      (err, doc, res, next) => {
-        if (err) {
-          throw err;
-        }
-      }
+      { new: true }
     );
     res.status(200).json({
       message: "Form was edite",
