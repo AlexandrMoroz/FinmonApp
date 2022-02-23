@@ -6,30 +6,19 @@ const CalculatorReputationQuestions = require("../models/calculators/calculatorR
 const CalculatorFinansialRiskQuestions = require("../models/calculators/calculatorFinansialRiskQuestions");
 const mockNegativePerson = require("../mock/personWIthNegativeAnswers.json");
 const mockNegativeCompany = require("../mock/companyWithNegativeAnswers.json");
-const Helper = require("../models/helper");
-const PersonFormData = require("../models/personFormData");
-const Person = require("../models/person");
-const bcrypt = require("bcryptjs");
-const User = require("../models/user");
-const CompanyFormData = require("../models/companyFormData");
-const Company = require("../models/company");
-const History = require("mongoose-diff-history/diffHistoryModel").model;
-const { INDIVIDUALS, LEGALENTITES, PERSON } =
-  require("../models/calculators/groupOfQuestions").Types;
+const helperService = require("../services/helper");
+const personService = require("../services/person");
+const userService = require("../services/user");
+const companyService = require("../services/company");
+const historyService = require("../services/history");
+const ofshore = require("../mock/ofshoreCountry.json");
+const translate = require("../mock/personTranslate.json");
+const blackList = require("../mock/blackFATF.json");
+const grayList = require("../mock/grayFATF.json");
+const { PERSON, COMPANY } = require("../utils/helpers");
 
 let token = "";
-const user = {
-  block: false,
-  role: "admin",
-  name: "alexandr1",
-  family: "moroz1",
-  surname: "sergeevich1",
-  cashboxAdress:
-    "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
-  email: "alexandr@gmail.com",
-  username: "alexandrMorozzz12",
-  password: "123qwe123qwe",
-};
+const user = require("../mock/adminUser.json");
 chai.should();
 chai.use(chaihttp);
 chai.use(chaiExclude);
@@ -38,27 +27,15 @@ let newCompany;
 module.exports = (server) => {
   describe("test risk calculator", () => {
     before(async () => {
-      await Helper.deleteMany({});
-      let ofshore = require("../mock/ofshoreCountry.json");
-      await new Helper({ name: ofshore.name, result: ofshore.result }).save();
-      let translate = require("../mock/personTranslate.json");
-      await new Helper({
-        name: translate.name,
-        result: translate.result,
-      }).save();
-      await CompanyFormData.deleteMany({});
-      await Company.deleteMany({});
-      await History.deleteMany({});
-      oldCompany = mockNegativeCompany;
-      newCompanyFormData = await new CompanyFormData({
-        result: oldCompany.result,
-      }).save();
-      newCompany = await new Company({
-        shortName: oldCompany.result.ShortName,
-        clientCode: oldCompany.result.ClientCode,
-        username: user.username,
-        formDataResultId: newCompanyFormData._id,
-      }).save();
+      await helperService.deleteAll();
+      await helperService.create(ofshore.name, ofshore.result);
+      await helperService.create(translate.name, translate.result);
+      await helperService.create(blackList.name, blackList.result);
+      await helperService.create(grayList.name, grayList.result);
+      await companyService.deleteAll();
+      await historyService.deleteAll();
+      await personService.deleteAll();
+      companyService.create(user.username, mockNegativeCompany.result);
       let editedCompany = {
         result: {
           Director: [
@@ -138,99 +115,66 @@ module.exports = (server) => {
           ],
         },
       };
-      await CompanyFormData.findOneAndUpdate(
-        { _id: newCompany.formDataResultId },
-        { result: editedCompany.result },
-        {
-          new: true,
-          __user: `${user.username}`,
-          __reason: `${user.username} updated`,
-        }
-      );
-      await Company.findOneAndUpdate(
-        { _id: newCompany._id.toString() },
-        {
-          shortName: oldCompany.result.ShortName,
-          clientCode: oldCompany.result.ClientCode.toString(),
-        },
-        (err, doc, res, next) => {
-          if (err) {
-            throw err;
-          }
-        }
-      );
+      companyService.edit(user.username, editedCompany);
     });
     it("risk calculator for test func with only all negative person answers  ", async () => {
-      let union = new CalculatorRiskQuestions(mockNegativePerson, INDIVIDUALS);
+      let union = new CalculatorRiskQuestions(mockNegativePerson, PERSON);
       let answers = await union.calcGroupsForTest();
-      const expect = [
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        false,
-        true,
-        false,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
+      let expect = [
+        [true, true, true, true, false, true, true, true, true, true],
+        [false, true, false],
+        [true, true, true, true],
       ];
+      expect = expect.flat();
       answers.flat().forEach((item, i, arr) => {
         item.should.equals(expect[i]);
       });
     });
     it("risk calculator with only all negative person answers  ", async () => {
-      let union = new CalculatorRiskQuestions(mockNegativePerson, INDIVIDUALS);
+      let union = new CalculatorRiskQuestions(mockNegativePerson, PERSON);
       let answers = await union.calcGroups();
-      answers.should.equals("Високий");
+      answers.should.equals("Високий (Винятковий список)");
     });
     it("risk calculator for test func with only all negative company answers  ", async () => {
-      let union = new CalculatorRiskQuestions(newCompanyFormData, LEGALENTITES);
+      let union = new CalculatorRiskQuestions(mockNegativeCompany, COMPANY);
       let answers = await union.calcGroupsForTest();
-      const expect = [
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
+      let expect = [
+        [
+          true,
+          false,
+          true,
+          true,
+          true,
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+        ],
+        [true, false, true, false],
+        [true, true],
       ];
+      expect = expect.flat();
       answers.flat().forEach((item, i, arr) => {
         item.should.equals(expect[i]);
       });
     });
     it("risk calculator with only all negative company answers", async () => {
-      let union = new CalculatorRiskQuestions(newCompanyFormData, LEGALENTITES);
+      let union = new CalculatorRiskQuestions(mockNegativeCompany, COMPANY);
       let answers = await union.calcGroups();
-      answers.should.equals("Високий");
+      answers.should.equals("Неприйнятно високий (Винятковий список)");
     });
     it("negative risk calculator with empty formdata", async () => {
       try {
-        let union = new CalculatorRiskQuestions({}, LEGALENTITES);
+        let union = new CalculatorRiskQuestions({}, COMPANY);
         let answers = await union.calcGroups();
       } catch (err) {
         err.message.should.equals("FormData is empty");
@@ -239,7 +183,7 @@ module.exports = (server) => {
   });
   describe("test reputation calculator", () => {
     it("reputation calculator for test func with only all negative company answers", async () => {
-      let union = new CalculatorReputationQuestions(newCompanyFormData);
+      let union = new CalculatorReputationQuestions(mockNegativeCompany);
       let answers = await union.calcGroupsForTest();
       let expect = [true, true, true];
       answers.forEach((item, i) => {
@@ -247,7 +191,7 @@ module.exports = (server) => {
       });
     });
     it("reputation calculator with only all negative company answers", async () => {
-      let union = new CalculatorReputationQuestions(newCompanyFormData);
+      let union = new CalculatorReputationQuestions(mockNegativeCompany);
       let answers = await union.calcGroups();
       answers.should.equals("Негативна");
     });
@@ -275,37 +219,37 @@ module.exports = (server) => {
   });
   describe("test finansial risk calculator", () => {
     it("finansial risk calculator for test func with company answers", async () => {
-      let union = new CalculatorFinansialRiskQuestions(newCompanyFormData);
+      let union = new CalculatorFinansialRiskQuestions(mockNegativeCompany);
       let answers = await union.calcGroupsForTest();
-      let expect = [0.5, 0.75, 1, 0.5, 0.5, 1];
+      let expect = [0.5, 0.75, 0.5, 0.5, 0.5, 1];
       answers.forEach((item, i) => {
         item.should.equals(expect[i]);
       });
     });
     it("finansial risk calculator with company answers", async () => {
-      let union = new CalculatorFinansialRiskQuestions(newCompanyFormData);
+      let union = new CalculatorFinansialRiskQuestions(mockNegativeCompany);
       let answers = await union.calcGroups();
       answers.should.equals("Незадовільно");
     });
-    it("finansial risk calculator for test func with individual answers", async () => {
+    it("finansial risk calculator for test func with person answers", async () => {
       let union = new CalculatorFinansialRiskQuestions(mockNegativePerson);
       let answers = await union.calcGroupsForTest();
-      let expect = [0.75, 0.5, 1, 0.5];
+      let expect = [0.75, 0.5, 0.5, 0.5];
       answers.forEach((item, i) => {
         item.should.equals(expect[i]);
       });
     });
-    it("finansial risk calculator with  individual answers", async () => {
+    it("finansial risk calculator with person answers", async () => {
       let union = new CalculatorFinansialRiskQuestions(mockNegativePerson);
       let answers = await union.calcGroups();
       answers.should.equals("Незадовільно");
     });
-    it("finansial risk calculator for test func with  person answers", async () => {
+    it("finansial risk calculator for test func with person answers", async () => {
       let newMock = JSON.parse(JSON.stringify(mockNegativePerson));
       delete newMock.result["FOP"];
       let union = new CalculatorFinansialRiskQuestions(newMock);
       let answers = await union.calcGroupsForTest();
-      let expect = [1.75, 1, 0.25];
+      let expect = [1.75, 0.5, 0.25];
       answers.forEach((item, i) => {
         item.should.equals(expect[i]);
       });
@@ -329,61 +273,27 @@ module.exports = (server) => {
   });
   describe("test risk api", () => {
     before(async () => {
-      await User.deleteMany({});
-      let password = await bcrypt.hash(user.password, 12);
-      newuser = await new User({ ...user, password }).save();
+      await userService.deleteAll();
+      await userService.create(user);
+      let res = await chai.request(server).post("/api/user/login").send({
+        username: user.username,
+        password: user.password,
+      });
+      token = res.body.token;
+      await personService.deleteAll();
+      await helperService.deleteAll();
+      await helperService.create(ofshore.name, ofshore.result);
+      await helperService.create(translate.name, translate.result);
+      await helperService.create(blackList.name, blackList.result);
+      await helperService.create(grayList.name, grayList.result);
 
-      try {
-        let res = await chai.request(server).post("/api/user/login").send({
-          username: user.username,
-          password: user.password,
-        });
-        res.status;
-        token = res.body.token;
-
-        await PersonFormData.deleteMany({});
-        await Person.deleteMany({});
-        await Helper.deleteMany({});
-        let ofshore = require("../mock/ofshoreCountry.json");
-        await new Helper({
-          name: ofshore.name,
-          result: ofshore.result,
-        }).save();
-        let translate = require("../mock/personTranslate.json");
-        await new Helper({
-          name: translate.name,
-          result: translate.result,
-        }).save();
-        let oldPerson =
-          require("../mock/personWIthNegativeAnswers.json").result;
-
-        let newPersonFormData = await new PersonFormData({
-          result: oldPerson,
-        }).save();
-        newPerson = await new Person({
-          name: oldPerson.Name,
-          family: oldPerson.Family,
-          surname: oldPerson.Surname,
-          INN: oldPerson.INN,
-          username: user.username,
-          formDataResultId: newPersonFormData._id,
-        }).save();
-        let oldCompany =
-          require("../mock/companyWithNegativeAnswers.json").result;
-        await CompanyFormData.deleteMany({});
-        await Company.deleteMany({});
-        let newCompanyFormData = await new CompanyFormData({
-          result: oldCompany,
-        }).save();
-        newCompany = await new Company({
-          shortName: oldCompany.ShortName,
-          clientCode: oldCompany.ClientCode,
-          username: user.username,
-          formDataResultId: newCompanyFormData._id,
-        }).save();
-      } catch (err) {
-        console.log(err);
-      }
+      let oldPerson = require("../mock/personWIthNegativeAnswers.json");
+      let oldCompany = require("../mock/companyWithNegativeAnswers.json");
+      newPerson = await personService.create(user.username, oldPerson.result);
+      newCompany = await companyService.create(
+        user.username,
+        oldCompany.result
+      );
     });
     it("it get Person risk", async () => {
       let res = await chai
@@ -391,69 +301,22 @@ module.exports = (server) => {
         .get("/api/person/risk")
         .set("Authorization", token)
         .query({ id: newPerson.formDataResultId.toString() });
-      const expect = [
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        false,
-        true,
-        false,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-      ];
+
       res.should.have.status(200);
-      res.body.result.flat().forEach((item, i, arr) => {
-        item.should.equals(expect[i]);
-      });
+      res.body.result.should.equal("Високий (Винятковий список)");
     });
     it("it get Company risk", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/company/risk")
         .set("Authorization", token)
         .query({ id: newCompany.formDataResultId.toString() });
 
       res.should.have.status(200);
-      const expect = [
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        false,
-        true,
-        true,
-      ];
-      res.body.result.flat().forEach((item, i, arr) => {
-        item.should.equals(expect[i]);
-      });
+      res.body.result.should.equal("Неприйнятно високий (Винятковий список)");
     });
     it("it negative test get company risk with wrong id", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/company/risk")
         .set("Authorization", token)
@@ -475,7 +338,7 @@ module.exports = (server) => {
       });
     });
     it("it negative test get company risk without id", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/company/risk")
         .set("Authorization", token)
@@ -499,81 +362,48 @@ module.exports = (server) => {
   });
   describe("test reputation api", () => {
     before(async () => {
-      await User.deleteMany({});
-      let password = await bcrypt.hash(user.password, 12);
-      newuser = await new User({ ...user, password }).save();
-      try {
-        let res = await chai.request(server).post("/api/user/login").send({
-          username: user.username,
-          password: user.password,
-        });
-        res.status;
-        token = res.body.token;
-      } catch (err) {
-        err; //?
-      }
-      await PersonFormData.deleteMany({});
-      await Person.deleteMany({});
-      await Helper.deleteMany({});
-      let ofshore = require("../mock/ofshoreCountry.json");
-      await new Helper({ name: ofshore.name, result: ofshore.result }).save();
-      let translate = require("../mock/personTranslate.json");
-      await new Helper({
-        name: translate.name,
-        result: translate.result,
-      }).save();
-      let oldPerson = require("../mock/personWIthNegativeAnswers.json").result;
-      let newPersonFormData = await new PersonFormData({
-        result: oldPerson,
-      }).save();
-      newPerson = await new Person({
-        name: oldPerson.Name,
-        family: oldPerson.Family,
-        surname: oldPerson.Surname,
-        INN: oldPerson.INN,
+      await userService.deleteAll();
+      await userService.create(user);
+      let res = await chai.request(server).post("/api/user/login").send({
         username: user.username,
-        formDataResultId: newPersonFormData._id,
-      }).save();
-      let oldCompany =
-        require("../mock/companyWithNegativeAnswers.json").result;
-      await CompanyFormData.deleteMany({});
-      await Company.deleteMany({});
-      let newCompanyFormData = await new CompanyFormData({
-        result: oldCompany,
-      }).save();
-      newCompany = await new Company({
-        shortName: oldCompany.ShortName,
-        clientCode: oldCompany.ClientCode,
-        username: user.username,
-        formDataResultId: newCompanyFormData._id,
-      }).save();
+        password: user.password,
+      });
+      token = res.body.token;
+      await personService.deleteAll();
+      await helperService.deleteAll();
+      await helperService.create(ofshore.name, ofshore.result);
+      await helperService.create(translate.name, translate.result);
+      await helperService.create(blackList.name, blackList.result);
+      await helperService.create(grayList.name, grayList.result);
+
+      let oldPerson = require("../mock/personWIthNegativeAnswers.json");
+      let oldCompany = require("../mock/companyWithNegativeAnswers.json");
+      newPerson = await personService.create(user.username, oldPerson.result);
+      newCompany = await companyService.create(
+        user.username,
+        oldCompany.result
+      );
     });
     it("it get Person reputation", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/person/reputation")
         .set("Authorization", token)
         .query({ id: newPerson.formDataResultId.toString() });
       res.should.have.status(200);
-      let expect = [true, true, true];
-      res.body.result.flat().forEach((item, i, arr) => {
-        item.should.equals(expect[i]);
-      });
+      res.body.result.should.equal("Негативна");
     });
     it("it get Company reputation", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/company/reputation")
         .set("Authorization", token)
         .query({ id: newCompany.formDataResultId.toString() });
       res.should.have.status(200);
-      let expect = [true, true, true];
-      res.body.result.flat().forEach((item, i, arr) => {
-        item.should.equals(expect[i]);
-      });
+      res.body.result.should.equal("Негативна");
     });
     it("it negative test get Person reputation without id", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/person/reputation")
         .set("Authorization", token)
@@ -594,7 +424,7 @@ module.exports = (server) => {
       });
     });
     it("it negative test get Company reputation without id", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/company/reputation")
         .set("Authorization", token)
@@ -617,81 +447,49 @@ module.exports = (server) => {
   });
   describe("test finansial risk api", () => {
     before(async () => {
-      await User.deleteMany({});
-      let password = await bcrypt.hash(user.password, 12);
-      newuser = await new User({ ...user, password }).save();
-      try {
-        let res = await chai.request(server).post("/api/user/login").send({
-          username: user.username,
-          password: user.password,
-        });
-        res.status;
-        token = res.body.token;
-      } catch (err) {
-        err; //?
-      }
-      await PersonFormData.deleteMany({});
-      await Person.deleteMany({});
-      await Helper.deleteMany({});
-      let ofshore = require("../mock/ofshoreCountry.json");
-      await new Helper({ name: ofshore.name, result: ofshore.result }).save();
-      let translate = require("../mock/personTranslate.json");
-      await new Helper({
-        name: translate.name,
-        result: translate.result,
-      }).save();
-      let oldPerson = require("../mock/personWIthNegativeAnswers.json").result;
-      let newPersonFormData = await new PersonFormData({
-        result: oldPerson,
-      }).save();
-      newPerson = await new Person({
-        name: oldPerson.Name,
-        family: oldPerson.Family,
-        surname: oldPerson.Surname,
-        INN: oldPerson.INN,
+      await userService.deleteAll();
+      await userService.create(user);
+      let res = await chai.request(server).post("/api/user/login").send({
         username: user.username,
-        formDataResultId: newPersonFormData._id,
-      }).save();
-      let oldCompany =
-        require("../mock/companyWithNegativeAnswers.json").result;
-      await CompanyFormData.deleteMany({});
-      await Company.deleteMany({});
-      let newCompanyFormData = await new CompanyFormData({
-        result: oldCompany,
-      }).save();
-      newCompany = await new Company({
-        shortName: oldCompany.ShortName,
-        clientCode: oldCompany.ClientCode,
-        username: user.username,
-        formDataResultId: newCompanyFormData._id,
-      }).save();
+        password: user.password,
+      });
+      token = res.body.token;
+      await personService.deleteAll();
+      await helperService.deleteAll();
+      await helperService.create(ofshore.name, ofshore.result);
+      await helperService.create(translate.name, translate.result);
+      await helperService.create(blackList.name, blackList.result);
+      await helperService.create(grayList.name, grayList.result);
+
+      let oldPerson = require("../mock/personWIthNegativeAnswers.json");
+      let oldCompany = require("../mock/companyWithNegativeAnswers.json");
+      newPerson = await personService.create(user.username, oldPerson.result);
+      newCompany = await companyService.create(
+        user.username,
+        oldCompany.result
+      );
     });
     it("it get Person finansial risk", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/person/finansial-risk")
         .set("Authorization", token)
         .query({ id: newPerson.formDataResultId.toString() });
       res.should.have.status(200);
-      let expect = [0.75, 0.5, 1, 0.5];
-      res.body.result.flat().forEach((item, i, arr) => {
-        item.should.equals(expect[i]);
-      });
+
+      res.body.result.should.equal("Незадовільно");
     });
     it("it get Company finansial risk", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/company/finansial-risk")
         .set("Authorization", token)
         .query({ id: newCompany.formDataResultId.toString() });
       res.should.have.status(200);
-      let expect = [0.5, 0.75, 1, 0.5, 0.5, 1];
-      res.body.result.flat().forEach((item, i, arr) => {
-        item.should.equals(expect[i]);
-      });
+      res.body.result.should.equal("Незадовільно");
     });
     it("it negative test get Person finansial risk without id", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/person/finansial-risk")
         .set("Authorization", token)
@@ -712,7 +510,7 @@ module.exports = (server) => {
       });
     });
     it("it negative test get Company finansial risk without id", async () => {
-      let res  = await chai
+      let res = await chai
         .request(server)
         .get("/api/company/finansial-risk")
         .set("Authorization", token)

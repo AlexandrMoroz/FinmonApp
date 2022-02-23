@@ -9,6 +9,7 @@ const historyService = require("../services/history");
 
 const helperService = require("../services/helper");
 const companyService = require("../services/company");
+const userService = require("../services/user");
 let translate = require("../mock/personTranslate.json");
 
 let token = "";
