@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import {
   NbIconLibraries,
-  NbMenuService,
   NbSidebarService,
 } from '@nebular/theme';
 
