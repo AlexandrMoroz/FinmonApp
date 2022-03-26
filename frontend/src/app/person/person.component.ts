@@ -257,7 +257,7 @@ export class PersonComponent implements OnInit {
           this.isLoading = false;
           this.list = [
             data.result,
-            ...this.list.filter((item) => item._id !== data.result._id),
+            ...this.list.filter((item) => item.id !== data.result.id),
           ];
           this.SelectedItem = data.result;
         },
@@ -270,7 +270,7 @@ export class PersonComponent implements OnInit {
     else {
       this.helper.cleanObject(model);
       let submitModel = {
-        _id: this.SelectedItem._id,
+        id: this.SelectedItem.id,
         formDataResultId: this.SelectedItem.formDataResultId,
         result: model,
       };
@@ -280,7 +280,7 @@ export class PersonComponent implements OnInit {
         this.isLoading = false;
         this.list = [
           data.result,
-          ...this.list.filter((item) => item._id !== data.result._id),
+          ...this.list.filter((item) => item.id !== data.result.id),
         ];
         this.SelectedItem = data.result;
       });
@@ -323,7 +323,7 @@ export class PersonComponent implements OnInit {
   }
   Download() {
     this.isLoading = true;
-    this.dataService.getFile(this.SelectedItem._id).subscribe((data: any) => {
+    this.dataService.getFile(this.SelectedItem.id).subscribe((data: any) => {
       const wb = XLSX.read(data.result, { type: 'base64' });
       XLSX.writeFile(
         wb,
