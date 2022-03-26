@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NbMenuItem, NbMenuService } from '@nebular/theme';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
@@ -50,7 +49,7 @@ export class MenuComponent implements OnInit {
     {
       title: 'Налаштування',
       link: '/settings',
-      icon: 'settings',
+      icon: 'cogs',
     },
   ];
   items: Array<NbMenuItem> = [];
