@@ -29,8 +29,8 @@ function ClientSerialize(client) {
       code: client.ClientCode,
       organizationForm: "юридична особа",
       resident: client.isResident ? "резидент" : "нерезидент",
-      regist: client.RegistPlace.Country,
-      live: client.ActualLocation.Country,
+      regist: client?.RegistPlace?.Country,
+      live: client?.ActualLocation?.Country,
       ...temp,
     };
   } else {
