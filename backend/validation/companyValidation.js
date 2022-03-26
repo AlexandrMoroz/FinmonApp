@@ -239,6 +239,54 @@ const CompanyValidator = {
           },
         },
       },
+      "result.RegistPlace": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле місце реєстрації прожнє",
+          bail: true,
+        },
+      },
+      "result.RegistPlace.Country": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле країна місця реєстрації порожнє",
+          bail: true,
+        },
+      },
+      "result.RegistPlace.Adress": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле адрес місця реєстрації порожнє",
+          bail: true,
+        },
+      },
+      "result.ActualLocation": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле місце фактичного місцезнаходження порожнє",
+          bail: true,
+        },
+      },
+      "result.ActualLocation.Country": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле країна фактичного місцезнаходження порожнє",
+          bail: true,
+        },
+      },
+      "result.ActualLocation.Adress": {
+        exists: {
+          checkFalsy: true,
+          checkNull: true,
+          errorMessage: "Поле адрес фактичного місцезнаходження  порожнє",
+          bail: true,
+        },
+      },
     };
   },
   getFormDataValidation: () => {

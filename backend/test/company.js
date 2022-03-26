@@ -122,6 +122,14 @@ module.exports = (server) => {
             ShortName: "ТОВ ФИНОД",
             ClientCode: "12341141",
             IsResident: false,
+            RegistPlace: {
+              Country: "123",
+              Adress: "123",
+            },
+            ActualLocation: {
+              Country: "123",
+              Adress: "123",
+            },
           },
         };
         newCompany = await init(oldCompany);
@@ -135,6 +143,14 @@ module.exports = (server) => {
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
             IsResident: false,
+            RegistPlace: {
+              Country: "123",
+              Adress: "123",
+            },
+            ActualLocation: {
+              Country: "123",
+              Adress: "123",
+            },
           },
           formDataResultId: newCompany.formDataResultId,
           _id: newCompany._id,
@@ -164,6 +180,14 @@ module.exports = (server) => {
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
             IsResident: false,
+            RegistPlace: {
+              Country: "123",
+              Adress: "123",
+            },
+            ActualLocation: {
+              Country: "123",
+              Adress: "123",
+            },
           },
           formDataResultId: newCompany.formDataResultId,
           _id: newCompany._id,
@@ -196,6 +220,14 @@ module.exports = (server) => {
             LegalForm: "OOO",
             OwnershipForm: "Приватна",
             IsResident: false,
+            RegistPlace: {
+              Country: "123",
+              Adress: "123",
+            },
+            ActualLocation: {
+              Country: "123",
+              Adress: "123",
+            },
           },
           formDataResultId: newCompany.formDataResultId,
           _id: newCompany._id,
@@ -229,6 +261,14 @@ module.exports = (server) => {
               LegalForm: "OOO",
               OwnershipForm: "Приватна",
               IsResident: false,
+              RegistPlace: {
+                Country: "123",
+                Adress: "123",
+              },
+              ActualLocation: {
+                Country: "123",
+                Adress: "123",
+              },
             },
             formDataResultId: newCompany.formDataResultId,
             _id: newCompany._id,
@@ -267,6 +307,14 @@ module.exports = (server) => {
             ShortName: "ТОВ ФИНОД",
             ClientCode: "12341141",
             IsResident: false,
+            RegistPlace: {
+              Country: "123",
+              Adress: "123",
+            },
+            ActualLocation: {
+              Country: "123",
+              Adress: "123",
+            },
           },
         };
         newCompany = await init(oldCompany);
@@ -377,6 +425,14 @@ module.exports = (server) => {
             ShortName: "ТОВ ФИНОД",
             ClientCode: "12341141",
             IsResident: false,
+            RegistPlace: {
+              Country: "123",
+              Adress: "123",
+            },
+            ActualLocation: {
+              Country: "123",
+              Adress: "123",
+            },
           },
         };
         newCompany = await init(oldCompany);
@@ -392,6 +448,8 @@ module.exports = (server) => {
               ShortName: oldCompany.result.ShortName,
               ClientCode: oldCompany.result.ClientCode,
               IsResident: false,
+              RegistPlace: oldCompany.result.RegistPlace,
+              ActualLocation: oldCompany.result.ActualLocation,
             });
             if (err) {
               done(err);
@@ -459,6 +517,14 @@ module.exports = (server) => {
             ShortName: "ТОВ ФИНОД",
             ClientCode: "12341141",
             IsResident: false,
+            RegistPlace: {
+              Country: "123",
+              Adress: "123",
+            },
+            ActualLocation: {
+              Country: "123",
+              Adress: "123",
+            },
           },
         };
         newCompany = await init(oldCompany);
@@ -471,7 +537,7 @@ module.exports = (server) => {
           .query({ id: newCompany._id.toString() });
         const wb = XLSX.read(res.body.result, { type: "base64" });
         let shouldEquals = {
-          "!ref": "A1:D4",
+          "!ref": "A1:D8",
           A1: {
             t: "s",
             v: "Анкета Юридичної особи Не резидента",
@@ -498,9 +564,9 @@ module.exports = (server) => {
           },
           D2: {
             t: "s",
-            v: "23/02/2022, 11:19:46",
-            h: "23/02/2022, 11:19:46",
-            w: "23/02/2022, 11:19:46",
+            v: "24/02/2022, 15:37:12",
+            h: "24/02/2022, 15:37:12",
+            w: "24/02/2022, 15:37:12",
           },
           A3: {
             t: "s",
@@ -516,6 +582,26 @@ module.exports = (server) => {
             w: "Код (за наявності) клієнта",
           },
           B4: { t: "s", v: "12341141", h: "12341141", w: "12341141" },
+          A5: {
+            t: "s",
+            v: "Місце реєстрації",
+            h: "Місце реєстрації",
+            w: "Місце реєстрації",
+          },
+          B5: { t: "s", v: "Країна", h: "Країна", w: "Країна" },
+          C5: { t: "s", v: "123", h: "123", w: "123" },
+          B6: { t: "s", v: "Адреса", h: "Адреса", w: "Адреса" },
+          C6: { t: "s", v: "123", h: "123", w: "123" },
+          A7: {
+            t: "s",
+            v: "Фактичне місцезнаходження",
+            h: "Фактичне місцезнаходження",
+            w: "Фактичне місцезнаходження",
+          },
+          B7: { t: "s", v: "Країна", h: "Країна", w: "Країна" },
+          C7: { t: "s", v: "123", h: "123", w: "123" },
+          B8: { t: "s", v: "Адреса", h: "Адреса", w: "Адреса" },
+          C8: { t: "s", v: "123", h: "123", w: "123" },
         };
         wb.Sheets["Анкета"].should.excluding(["D2"]).deep.equal(shouldEquals);
         res.should.have.status(200);
