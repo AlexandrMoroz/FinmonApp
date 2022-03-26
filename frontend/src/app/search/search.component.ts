@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
-import { CompanyService } from '../services/company.service';
-import { PersonService } from '../services/person.service';
 import { SearchService } from '../services/search.service';
 
 @Component({
@@ -12,6 +10,8 @@ import { SearchService } from '../services/search.service';
 })
 export class SearchComponent implements OnInit {
   isLoading: boolean = false;
+  terrorist: Array<string>;
+  sanction: Array<string>;
   form = new FormGroup({});
   model = {};
   options: FormlyFormOptions = {};
@@ -47,43 +47,10 @@ export class SearchComponent implements OnInit {
             .externalBaseSearch(type, event.target.value)
             .subscribe((data) => {
               console.log(data);
-
-              this.model = {
-                ...this.model,
-                TerroristSearchResult: JSON.stringify(data['result']['terrorist']),
-                SanctionSearchResult: JSON.stringify(data["result"]['sanction']),
-              };
-              console.log(this.model);
+              this.terrorist = data['terrorist'];
+              this.sanction = data['sanction'];
             });
         },
-      },
-      expressionProperties: {
-        'templateOptions.disabled': (model: any) => {
-          return !model['Category'];
-        },
-      },
-    },
-    {
-      className: 'col-6 p-3',
-      key: 'TerroristSearchResult',
-      type: 'textarea',
-      templateOptions: {
-        label: 'Результат пошуку в базі террорістів',
-        rows: 5,
-      },
-      expressionProperties: {
-        'templateOptions.disabled': (model: any) => {
-          return !model['Category'];
-        },
-      },
-    },
-    {
-      className: 'col-6 p-3',
-      key: 'SanctionSearchResult',
-      type: 'textarea',
-      templateOptions: {
-        label: 'Результат пошуку в базі підсанкційних осіб',
-        rows: 5,
       },
       expressionProperties: {
         'templateOptions.disabled': (model: any) => {
