@@ -176,23 +176,23 @@ const PersonValidator = {
           },
         },
       },
-      _id: {
+      id: {
         exists: {
           checkFalsy: true,
           checkNull: true,
-          errorMessage: "Поле _id порожнє",
+          errorMessage: "Поле id порожнє",
           bail: true,
         },
         isString: {
-          errorMessage: "Поле _id повинно бути строкою",
+          errorMessage: "Поле id повинно бути строкою",
           bail: true,
         },
         custom: {
           options: async (value) => {
             if (!mongoose.Types.ObjectId.isValid(value))
-              throw new Error("Помилковый тип _id");
+              throw new Error("Помилковый тип id");
             let flag = await Person.exists({ _id: value });
-            if (!flag) throw new Error("Особу за _id не знайденно");
+            if (!flag) throw new Error("Особу за id не знайденно");
             return true;
           },
         },
@@ -239,7 +239,7 @@ const PersonValidator = {
               if (value.toString().length != 10)
                 throw new Error("Поле ИНН повинно містити 10 символів");
               let personById = await Person.findOne({
-                _id: req.body.result["_id"],
+                _id: req.body.result["id"],
               });
               let personByCode = await Person.find({ INN: value });
               if (
