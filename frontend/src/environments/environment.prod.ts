@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl:'/api/',
+  apiUrl:'demo.finmon-app.net/api/',
 };
