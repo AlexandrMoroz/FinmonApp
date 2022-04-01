@@ -34,11 +34,12 @@ export class FormService {
   }
   mapFormFields(fields, name) {
     fields = cloneDeepWith(fields, this.fieldsMap);
-    if (name == 'personForm') {
-      return cloneDeepWith(fields, this.personFieldsMap);
-    }
-    if (name == 'companyForm') {
-      return cloneDeepWith(fields, this.companyFieldsMap);
+    switch (name) {
+      case 'personForm':
+        // return cloneDeepWith(fields, this.personFieldsMap);
+        return fields;
+      case 'companyForm':
+        return cloneDeepWith(fields, this.companyFieldsMap);
     }
   }
   private fieldsMap = (item) => {
@@ -67,9 +68,7 @@ export class FormService {
     }
   };
 
-  private personFieldsMap = (item) => {
-   
-  };
+  private personFieldsMap = (item) => {};
 
   private companyFieldsMap = (item) => {
     if (item !== undefined) {

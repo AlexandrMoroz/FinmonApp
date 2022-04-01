@@ -99,7 +99,7 @@ export class PersonComponent implements OnInit {
         };
       }
       
-      if (item.key == 'BankAccount') {
+      if (item?.key == 'BankAccount') {
         item.validators = {
           arrcount: {
             expression: (c: FormControl) => {
