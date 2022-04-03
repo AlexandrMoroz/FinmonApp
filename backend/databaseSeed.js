@@ -35,7 +35,6 @@ const { devConfig } = require("./config/index");
     let newForm = await new CompanyFormData({
       result: seed,
     }).save();
-    console.log(newForm)
     await new Company({
       shortName: seed.ShortName,
       clientCode: seed.ClientCode,
@@ -59,7 +58,7 @@ const { devConfig } = require("./config/index");
       surname: "sergeevich1",
       cashboxAdress:
         "68000, Одеська обл., м. Чорноморськ, проспект Миру, буд. 29-п/1",
-      email: "alexandr@gmail.com",
+      email: "admin@admin.com",
       role: "admin",
       username: "Alexandr",
       password: password,
