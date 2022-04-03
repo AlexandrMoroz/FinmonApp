@@ -9,10 +9,8 @@ const { connect } = require("mongoose");
 const { devConfig } = require("./config/index");
 (async function () {
   connect(devConfig.DB, {
-    useFindAndModify: false,
     useUnifiedTopology: true,
     useNewUrlParser: true,
-    useCreateIndex: true,
   });
   console.log({
     message: `Successfully connected with the Database \n${devConfig.DB}`,
