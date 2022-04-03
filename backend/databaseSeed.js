@@ -41,13 +41,13 @@ const { devConfig } = require("./config/index");
     }).save();
     await new Helper({
       name: "countries",
-      result: require("./mock/countries.json").content,
+      result: require("./mock/countries.json").result,
     }).save();
     await new Helper({
       name: "translate",
-      result: require("./mock/personTranslate.json").content,
+      result: require("./mock/personTranslate.json").result,
     }).save();
-    const password = await bcrypt.hash("123qwe123", 12);
+    const password = await bcrypt.hash("admin", 12);
     // create a new user
     let createdUser = await new User({
       block: false,
@@ -61,6 +61,7 @@ const { devConfig } = require("./config/index");
       username: "Alexandr",
       password: password,
     }).save();
+    console.log("Seeding is finifed succese");
   } catch (err) {
     console.log(err);
   }
