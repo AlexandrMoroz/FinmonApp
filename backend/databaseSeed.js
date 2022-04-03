@@ -47,7 +47,7 @@ const { devConfig } = require("./config/index");
       name: "translate",
       result: require("./mock/personTranslate.json").result,
     }).save();
-    const password = await bcrypt.hash("admin", 12);
+    const password = await bcrypt.hash("12345678", 12);
     // create a new user
     let createdUser = await new User({
       block: false,
