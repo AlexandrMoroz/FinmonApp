@@ -25,7 +25,7 @@ class HelperService {
     return (await Helper.findOne({ name: "grayCountryInFATF" })).result;
   }
   async getCountries() {
-    return (await Helper.findOne({ name: "grayCountryInFATF" })).result;
+    return (await Helper.findOne({ name: "countries" })).result;
   }
   async getOfshore() {
     return (await Helper.findOne({ name: "ofshoreCountry" })).result;
