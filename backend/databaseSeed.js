@@ -44,6 +44,26 @@ const { devConfig } = require("./config/index");
       result: require("./mock/countries.json").result,
     }).save();
     await new Helper({
+      name: "typesOfBusiness",
+      result: require("./mock/typesOfBusiness.json").result,
+    }).save();
+    await new Helper({
+      name: "independentTypesOfBusiness",
+      result: require("./mock/independentTypesOfBusiness.json").result,
+    }).save();
+    await new Helper({
+      name: "ofshoreCountry",
+      result: require("./mock/ofshoreCountry.json").result,
+    }).save();
+    await new Helper({
+      name: "blackCountryInFATF",
+      result: require("./mock/blackFATF.json").result,
+    }).save();
+    await new Helper({
+      name: "grayCountryInFATF",
+      result: require("./mock/grayFATF.json").result,
+    }).save();
+    await new Helper({
       name: "translate",
       result: require("./mock/personTranslate.json").result,
     }).save();
