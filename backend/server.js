@@ -3,7 +3,7 @@ const exp = require("express");
 const passport = require("passport");
 const { connect } = require("mongoose");
 var winston = require("./config/winston");
-var morgan = require("morgan");
+// var morgan = require("morgan");
 let initServer = (config) => {
   console.log("init serv config");
   // Initialize the application
@@ -36,31 +36,27 @@ let initServer = (config) => {
   app.use("/api/person", require("./routes/person"));
   app.use("/api/externalbase", require("./routes/externalbase"));
   process.on("unhandledRejection", function (reason, p) {
-    console.log("Caught exception: " + reason);
-    console.log(reason)
-    //process.exit(1);
+    // console.log("Caught exception: " + reason);
+    // console.log(reason)
+    winston.error(reason);
+    process.exit(1);
   });
 
   process.on("uncaughtException", function (err) {
-    console.log("Caught exception: " + err);
-    console.log(err)
-    //process.exit(1);
+    // console.log("Caught exception: " + err);
+    // console.log(err);
+    winston.error(reason);
+    process.exit(1);
   });
 
   app.use((err, req, res, next) => {
-    // // set locals, only providing error in development
-    // res.locals.message = err.message;
-    // res.locals.error = req.app.get("env") === "development" ? err : {};
-    // add this line to include winston logging
-    // render the error page
     winston.error(
       `REQUEST: ${req.method}; url:${req.url} - ${
         req.method == "POST"
           ? JSON.stringify(req.body)
           : JSON.stringify(req.query)
-      } ErrorMessage: ${JSON.stringify(err)}`
+      } ErrorMessage: ${err}`
     );
-    console.log(err)
     res.status(err.status || 500).json({
       message: err.message,
       error: req.app.get("env") === "development" ? err : {},
