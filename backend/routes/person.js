@@ -3,7 +3,7 @@ const PersonValidator = require("../validation/personValidation");
 const validate = require("../middlewares/validation");
 const { checkSchema } = require("express-validator");
 const Person = require("../models/person");
-const { userAuth, checkRole } = require("../utils/Auth");
+const { userAuth, checkRole } = require("../utils/auth");
 const {
   FormDataById,
   Create,

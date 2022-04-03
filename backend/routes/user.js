@@ -3,7 +3,7 @@ const User = require("../models/user");
 const UserValidator = require("../validation/userValidation");
 const validate = require("../middlewares/validation");
 // Bring in the User Registration function
-const { userAuth, checkRole } = require("../utils/Auth");
+const { userAuth, checkRole } = require("../utils/auth");
 const { checkSchema } = require("express-validator");
 const { Create, Edit, Login, All } = require("../controller/userController");
 

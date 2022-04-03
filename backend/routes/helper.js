@@ -2,7 +2,7 @@ const router = require("express").Router();
 const HelperValidator = require("../validation/helperValidation");
 const validate = require("../middlewares/validation");
 const {checkSchema} = require("express-validator");
-const { userAuth, checkRole } = require("../utils/Auth");
+const { userAuth, checkRole } = require("../utils/auth");
 const {
   Create,
   GetByName,

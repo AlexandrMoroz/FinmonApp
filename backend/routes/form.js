@@ -3,7 +3,7 @@ const Form = require("../models/form");
 const { checkSchema } = require("express-validator");
 const validate = require("../middlewares/validation");
 const FormValidation = require("../validation/formValidation");
-const { userAuth, checkRole } = require("../utils/Auth");
+const { userAuth, checkRole } = require("../utils/auth");
 const { Create, Edit, GetByName } = require("../controller/formController");
 
 router.post(
