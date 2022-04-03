@@ -95,18 +95,18 @@ const FormValidation = {
           options: { min: 1 },
           bail: true,
         },
-        customSanitizer: {
-          options: (value) => {
-            return value.toString();
-          },
-        },
-        custom: {
-          options: async (value) => {
-            let flag = await Form.exists({ name: value });
-            if (!flag) throw new Error("Форма не найденна");
-            return true;
-          },
-        },
+        // customSanitizer: {
+        //   options: (value) => {
+        //     return value.toString();
+        //   },
+        // },
+        // custom: {
+        //   options: async (value) => {
+        //     let flag = await Form.exists({ name: value });
+        //     if (!flag) throw new Error("Форма не найденна");
+        //     return true;
+        //   },
+        // },
       },
     };
   },
