@@ -1,5 +1,5 @@
 const Company = require("../models/company");
-const CompanyFormData = require("../models/CompanyFormData");
+const CompanyFormData = require("../models/companyFormData");
 const mongoose = require("mongoose");
 
 const CompanyValidator = {
