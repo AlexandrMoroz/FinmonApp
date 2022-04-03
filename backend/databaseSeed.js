@@ -61,9 +61,7 @@ const { devConfig } = require("./config/index");
       username: "Alexandr",
       password: password,
     }).save();
-    await new Form({
-      
-    })
+  
     console.log("Seeding is finifed succese");
   } catch (err) {
     console.log(err);
