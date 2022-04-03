@@ -49,7 +49,7 @@ const { devConfig } = require("./config/index");
     }).save();
     const password = await bcrypt.hash("12345678", 12);
     // create a new user
-    let createdUser = await new User({
+    await new User({
       block: false,
       name: "Alexandr",
       family: "Moroz",
@@ -61,6 +61,9 @@ const { devConfig } = require("./config/index");
       username: "Alexandr",
       password: password,
     }).save();
+    await new Form({
+      
+    })
     console.log("Seeding is finifed succese");
   } catch (err) {
     console.log(err);
