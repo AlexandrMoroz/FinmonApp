@@ -1,6 +1,6 @@
 const { DateDiffInMonth } = require("../../../utils/helpers");
 function Question1() {
-  let regDate = this.result["FOP"]?.GovRegDocDateRelise;
+  let regDate = this.result.FOP?.GovRegDocDateRelise;
   if (!regDate) {
     return 1;
   }
@@ -13,7 +13,7 @@ function Question1() {
   if (Month > 36) return 1.5;
 }
 function Question2() {
-  let empNum = this.result["EmployersNum"];
+  let empNum = this.result.EmployersNum;
   if (!empNum) return 0.5;
   if (empNum >= 1 && empNum <= 2) return 0.75;
   if (empNum >= 3 && empNum <= 4) return 1.0;
@@ -21,7 +21,7 @@ function Question2() {
   if (empNum > 10) return 1.5;
 }
 function Question3() {
-  let prop = this.result["Property"];
+  let prop = this.result.Property;
   if (!prop || prop.length == 0) {
     return 0.5;
   }
@@ -48,7 +48,7 @@ function Question3() {
   return tempEmpType[0];
 }
 function Question4() {
-  let avrprof = this.result["MonthIncome"];
+  let avrprof = this.result.MonthIncome;
   if (!avrprof || avrprof < 500000) return 0.5;
   if (avrprof > 500000 && avrprof <= 1000000) return 0.75;
   if (avrprof > 1000000 && avrprof <= 5000000) return 1.0;

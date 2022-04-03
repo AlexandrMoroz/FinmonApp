@@ -29,7 +29,7 @@ class TerroristService {
         let persons = [];
         let companeis = [];
 
-        result["list-terror"]["acount-list"].forEach((el) => {
+        result?.list-terror?.acount-list.forEach((el) => {
           if (el["type-entry"] == 2) {
             persons.push(this.mapAkaList(el["aka-list"]));
           } else if (el["type-entry"] == 1) {

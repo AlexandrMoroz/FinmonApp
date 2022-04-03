@@ -10,7 +10,7 @@ function isEmpty(obj) {
 }
 
 function OperationShoudinclude(nameOfField) {
-  let answer = this.result["Operations"];
+  let answer = this.result.Operations;
   if (answer == undefined || answer.lenght == 0) return false;
   return answer.map((item) => item.Operation == nameOfField).includes(true);
 }

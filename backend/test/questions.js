@@ -246,7 +246,7 @@ module.exports = (server) => {
     });
     it("finansial risk calculator for test func with person answers", async () => {
       let newMock = JSON.parse(JSON.stringify(mockNegativePerson));
-      delete newMock.result["FOP"];
+      delete newMock.result.FOP;
       let union = new CalculatorFinansialRiskQuestions(newMock);
       let answers = await union.calcGroupsForTest();
       let expect = [1.75, 0.5, 0.25];
@@ -256,7 +256,7 @@ module.exports = (server) => {
     });
     it("finansial risk calculator with person answers", async () => {
       let newMock = JSON.parse(JSON.stringify(mockNegativePerson));
-      delete newMock.result["FOP"];
+      delete newMock.result.FOP;
       let union = new CalculatorFinansialRiskQuestions(newMock);
       let answers = await union.calcGroups();
       answers.should.equals("Незадовільно");

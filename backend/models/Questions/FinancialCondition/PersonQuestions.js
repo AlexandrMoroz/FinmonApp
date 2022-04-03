@@ -1,5 +1,5 @@
 function Question1() {
-  let empType = this.result["EmploymentType"];
+  let empType = this.result.EmploymentType;
   if (!empType || empType.length == 0) {
     return 1;
   }
@@ -22,7 +22,7 @@ function Question1() {
   return tempEmpType[0];
 }
 function Question2() {
-  let prop = this.result["Property"];
+  let prop = this.result.Property;
   if (!prop || prop.length == 0) {
     return 0.5 ;
   }
@@ -47,7 +47,7 @@ function Question2() {
   return tempEmpType[0];
 }
 function Question3() {
-  let avrprof = this.result["MonthIncome"];
+  let avrprof = this.result.MonthIncome;
   if (!avrprof || avrprof < 2500) return 0.25;
   if (avrprof > 2500 && avrprof <= 5000) return 0.5;
   if (avrprof > 5000 && avrprof <= 10000) return 0.75;

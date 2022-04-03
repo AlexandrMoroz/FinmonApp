@@ -33,13 +33,13 @@ class GroupOfQuestionsFactory {
       throw new Error("FormData is empty");
     }
     if (calcType === FINANSIAL_RISK) {
-      if (formData.result["FOP"]) {
+      if (formData.result.FOP) {
         return new GroupOfQuestions(formData, individualQuestions);
       }
-      if (formData.result["Family"]) {
+      if (formData.result.Family) {
         return new GroupOfQuestions(formData, personQuestions);
       }
-      if (formData.result["ClientCode"]) {
+      if (formData.result.ClientCode) {
         return new GroupOfQuestions(formData, companyQuestions);
       }
     }

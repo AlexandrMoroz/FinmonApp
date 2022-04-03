@@ -43,7 +43,7 @@ const CompanyValidator = {
       "result.RegistNumber": {
         custom: {
           options: async (value, { req }) => {
-            if (req.body.result["IsResident"]) {
+            if (req.body.result.IsResident) {
               if (!value || value.length == 0)
                 throw new Error(
                   "Поле Поле Реєстраційний (обліковий) номер порожне"
@@ -68,7 +68,7 @@ const CompanyValidator = {
       "result.ClientCode": {
         custom: {
           options: async (value, { req }) => {
-            if (req.body.result["IsResident"]) {
+            if (req.body.result.IsResident) {
               if (!value || value.length == 0)
                 throw new Error("Поле Код клієнта порожне");
               if (value.length != 8)
@@ -185,7 +185,7 @@ const CompanyValidator = {
       "result.RegistNumber": {
         custom: {
           options: async (value, { req }) => {
-            if (req.body.result["IsResident"]) {
+            if (req.body.result.IsResident) {
               if (!value || value.length == 0)
                 throw new Error(
                   "Поле Поле Реєстраційний (обліковий) номер порожне"
@@ -210,13 +210,13 @@ const CompanyValidator = {
       "result.ClientCode": {
         custom: {
           options: async (value, { req }) => {
-            if (req.body.result["IsResident"]) {
+            if (req.body.result.IsResident) {
               if (!value || value.length == 0)
                 throw new Error("Поле Код клієнта порожне");
               if (value.toString().length != 8)
                 throw new Error("Поле Код клієнта повинно бути з 8 цифр");
               let companyById = await Company.findOne({
-                _id: req.body.result["_id"],
+                _id: req.body.result._id,
               });
             }
             if (value) {

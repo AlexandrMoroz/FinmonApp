@@ -55,7 +55,7 @@ const PersonValidator = {
       "result.INN": {
         custom: {
           options: async (value, { req }) => {
-            if (req.body.result["IsResident"]) {
+            if (req.body.result.IsResident) {
               if (!value || value.length == 0)
                 throw new Error("Поле ИНН порожнє");
               
@@ -132,7 +132,7 @@ const PersonValidator = {
       "result.Citizen": {
         custom: {
           options: async (value, { req }) => {
-           if(!req.body.result["IsResident"]&&!value){
+           if(!req.body.result.IsResident&&!value){
             throw new Error("В не резидента повинено бути громадянство")
            }
            return true;
@@ -234,12 +234,12 @@ const PersonValidator = {
       "result.INN": {
         custom: {
           options: async (value, { req }) => {
-            if (req.body.result["IsResident"]) {
+            if (req.body.result.IsResident) {
               if (!value) throw new Error("Поле ИНН порожнє");
               if (value.toString().length != 10)
                 throw new Error("Поле ИНН повинно містити 10 символів");
               let personById = await Person.findOne({
-                _id: req.body.result["id"],
+                _id: req.body.result.id,
               });
               let personByCode = await Person.find({ INN: value });
               if (
@@ -311,7 +311,7 @@ const PersonValidator = {
       "result.Citizen": {
         custom: {
           options: async (value, { req }) => {
-           if(!req.body.result["IsResident"]&&!value){
+           if(!req.body.result.IsResident&&!value){
             throw new Error("В не резидента повинено бути громадянство")
            }
            return true;
@@ -323,8 +323,8 @@ const PersonValidator = {
         custom: {
           options: async (value, { req }) => {
             if(value){
-              if(req.body.result["FOP"]["GovRegDocDateRelise"]){}
-              if(req.body.result["FOP"]["RegistrationNumber"]) {}
+              if(req.body.result.FOP?.GovRegDocDateRelise){}
+              if(req.body.result.FOP?.RegistrationNumber) {}
             }
           }}
       }

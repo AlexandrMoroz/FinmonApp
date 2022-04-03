@@ -13,9 +13,9 @@ async function Question3() {
   let list = await helperService.getAllFATFList();
 
   let registCountry =
-    this.result["RegistPlace"]?.Country || this.result["Regist"]?.Country;
+    this.result.RegistPlace?.Country || this.result.Regist?.Country;
   let liveCountry =
-    this.result["ActualLocation"]?.Country || this.result["Live"]?.Country;
+    this.result.ActualLocation?.Country || this.result.Live?.Country;
 
   return (
     (registCountry && list.includes(registCountry)) ||
@@ -26,16 +26,16 @@ function Question4() {
   return ClosedQuestion.call(this, "CheckList.IsTerrorist");
 }
 function Question5() {
-  let isResident = this.result["IsResident"];
-  let typesOfBusiness=    this.result["TypesOfBusiness"] || this.result["FOP"]?.TypesOfBusiness;
+  let isResident = this.result.IsResident;
+  let typesOfBusiness=    this.result.TypesOfBusiness || this.result.FOP?.TypesOfBusiness;
   if (!typesOfBusiness) {
     return false;
   }
   return typesOfBusiness.includes("фінансові послуги") && !isResident;
 }
 function Question6() {
-  let isResident = this.result["IsResident"];
-  let pep = this.result["PEP"];
+  let isResident = this.result.IsResident;
+  let pep = this.result.PEP;
   if (!pep) {
     return false;
   }
@@ -48,15 +48,15 @@ async function Question8() {
   let ofshore = await helperService.getOfshore();
 
   let registCountry =
-    this.result["RegistPlace"]?.Country || this.result["Regist"]?.Country;
+    this.result.RegistPlace?.Country || this.result.Regist?.Country;
   let liveCountry =
-    this.result["ActualLocation"]?.Country || this.result["Live"]?.Country;
+    this.result.ActualLocation?.Country || this.result.Live?.Country;
   if (registCountry && liveCountry)
     return ofshore.includes(registCountry) || ofshore.includes(liveCountry);
 }
 function Question9() {
   let typesOfBusiness =
-    this.result["TypesOfBusiness"] || this.result["FOP"]?.TypesOfBusiness;
+    this.result.TypesOfBusiness || this.result.FOP?.TypesOfBusiness;
 
   if (!typesOfBusiness) return false;
 

@@ -16,13 +16,13 @@ function Question1() {
     "послуги із відкриття рахунку в банку від свого імені для здійснення фінансових операцій від імені клієнта",
   ];
   let answer =
-    this.result["TypesOfBusiness"] ||
+    this.result.TypesOfBusiness ||
     ResolvePath(this.result, "FOP.TypesOfBusiness");
   if (!answer) return false;
   return answer.some((item) => shoudInclude.includes(item.trim()));
 }
 function Question2() {
-  let regDate = this.result["DateOfRegistration"];
+  let regDate = this.result.DateOfRegistration;
   if (!regDate) return false;
   let result = DateDiffInDays(regDate);
   return result <= 180;
@@ -49,7 +49,7 @@ function Question4() {
     "діяльність неприбуткових організацій, у тому числі благодійна діяльність, діяльність релігійних організацій, політичних партій (крім ОСББ)",
   ];
   let answer =
-    this.result["TypesOfBusiness"] ||
+    this.result.TypesOfBusiness ||
     ResolvePath(this.result, "FOP.TypesOfBusiness");
 
   if (!answer) return false;
@@ -65,14 +65,14 @@ function Question5() {
     "державні закупівлі",
   ];
   let answer = //?
-    this.result["TypesOfBusiness"] ||
+    this.result.TypesOfBusiness ||
     ResolvePath(this.result, "FOP.TypesOfBusiness");
 
   if (!answer) return false;
   return answer.some((item) => shoudInclude.includes(item.trim()));
 }
 function Question6() {
-  let answer = this.result["DateOfFirstBissnesContact"];
+  let answer = this.result.DateOfFirstBissnesContact;
   if (!answer) return false;
   let result = DateDiffInDays(answer);
   return result <= 92;
@@ -114,13 +114,13 @@ function Question15() {
 }
 function Question16() {
   let resultArr = [];
-  let director = this.result["Director"];
+  let director = this.result.Director;
   if (director && director.length != 0){
     let isFinaleOwner = director.filter((item) => item["IsFinaleOwner"])[0];
     if (isFinaleOwner) resultArr.push({ 1: true });
   }
 
-  let owners = this.result["Owner"];
+  let owners = this.result.Owner;
   if (owners && owners.length != 0) {
     let connectedPerson = owners.filter((item) => {
       if (item["ConnectedPerson"] && item["ConnectedPerson"].length != 0) {
@@ -171,8 +171,8 @@ async function Question17() {
     ),
   });
   //////////2/////////
-  let director = this.result["Director"];
-  let owners = this.result["Owner"];
+  let director = this.result.Director;
+  let owners = this.result.Owner;
 
   let OfshoreCountry = await helperService.getOfshore();
   if (!OfshoreCountry && OfshoreCountry.length == 0) {
@@ -308,7 +308,7 @@ function Question18() {
     4: ClosedQuestion.call(this, "CheckList.CompanyPayByBarter"),
   });
   //////////5///////////
-  if (!this.result["MonthIncome"]) {
+  if (!this.result.MonthIncome) {
     resultArr.push({ 5: true });
   }
   //////////6///////////
@@ -323,11 +323,11 @@ function Question18() {
   return resultArr.map((item) => Object.entries(item)[0][1]).includes(true);
 }
 function Question18FOP() {
-  let fop = this.result["FOP"];
+  let fop = this.result.FOP;
   if (!fop) return false;
   let resultArr = [];
   //////////5///////////
-  if (!this.result["MonthIncome"]) {
+  if (!this.result.MonthIncome) {
     resultArr.push(true);
   }
   resultArr.push(ClosedQuestion.call(this, "CheckList.HasNotIncome"));
