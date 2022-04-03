@@ -38,14 +38,14 @@ let initServer = (config) => {
   process.on("unhandledRejection", function (reason, p) {
     // console.log("Caught exception: " + reason);
     // console.log(reason)
-    winston.error(reason);
+    winston.error(reason.stack);
     process.exit(1);
   });
 
-  process.on("uncaughtException", function (err) {
+  process.on("uncaughtException", function (err, origin) {
     // console.log("Caught exception: " + err);
     // console.log(err);
-    winston.error(reason);
+    winston.error(err.stack);
     process.exit(1);
   });
 
@@ -55,7 +55,7 @@ let initServer = (config) => {
         req.method == "POST"
           ? JSON.stringify(req.body)
           : JSON.stringify(req.query)
-      } ErrorMessage: ${err}`
+      } ErrorMessage: ${err.stack}`
     );
     res.status(err.status || 500).json({
       message: err.message,
