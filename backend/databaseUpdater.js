@@ -5,10 +5,8 @@ const { devConfig } = require("./config/index");
 
 (async function () {
    try{ connect(devConfig.DB, {
-        useFindAndModify: false,
         useUnifiedTopology: true,
-        useNewUrlParser: true,
-        useCreateIndex: true,
+        useNewUrlParser: true
       });
       console.log({
         message: `Successfully connected with the Database \n${devConfig.DB}`,
