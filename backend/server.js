@@ -2,12 +2,16 @@ const cors = require("cors");
 const exp = require("express");
 const passport = require("passport");
 const { connect } = require("mongoose");
-var winston = require("./config/winston");
+let winston = require("./config/winston");
+const helmet = require("helmet");
+
 // var morgan = require("morgan");
 let initServer = (config) => {
   console.log("init serv config");
   // Initialize the application
   const app = exp();
+  app.disable("x-powered-by");
+  app.use(helmet());
 
   // Middlewares
   app.use(cors());
