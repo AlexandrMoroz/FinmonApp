@@ -3,6 +3,7 @@
 
 It's web project for automatizate financial monitoring work in financial companies in Ukraine. 
 It allows users to track client data and helps employees research/check the latest financial monitoring requirements
+
 ![img1](https://github.com/user-attachments/assets/34b2d55c-b77d-4abd-9eba-80d00226a117)
 
 ![img2](https://github.com/user-attachments/assets/885e791f-a33d-4059-b00f-c5a020cfa72b)
