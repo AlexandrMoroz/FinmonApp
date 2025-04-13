@@ -1,8 +1,10 @@
 Веб-проект для автоматизації роботи фінансового моніторингу в фінансових компаніях України. 
-Це дозволяє користувачам відстежувати дані клієнтів і допомагає співробітникам досліджувати/перевіряти останні вимоги щодо фінансового моніторингу
+Це дозволяє користувачам відстежувати дані клієнтів і допомагає співробітникам досліджувати/перевіряти клієнтів згідно останніх вимоги щодо фінансового моніторингу. 
+Веб застосунок також має функціонал щодо перевірки осіб/компаній в підсанкційних та террористичних реєстрах  
 
 It's web project for automatizate financial monitoring work in financial companies in Ukraine. 
-It allows users to track client data and helps employees research/check the latest financial monitoring requirements
+It allows users to track client data and helps employees investigate/verify clients according to the latest financial monitoring requirements.
+The web application also has functionality to check individuals/companies in sanctioned and terrorist registers
 
 ![img1](https://github.com/user-attachments/assets/34b2d55c-b77d-4abd-9eba-80d00226a117)
 
